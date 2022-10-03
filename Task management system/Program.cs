@@ -1,6 +1,9 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Task_management_system.Data;
+using Syncfusion.Blazor;
+using Syncfusion.Blazor.Cards;
+using Microsoft.EntityFrameworkCore;
 using Syncfusion.Blazor;
 namespace Task_management_system
 {
@@ -13,6 +16,9 @@ namespace Task_management_system
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
+            //Важно
+            builder.Services.AddDbContext<Context>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
             //builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
             var app = builder.Build();
