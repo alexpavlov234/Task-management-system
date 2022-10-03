@@ -1,18 +1,18 @@
 ﻿@inherits LayoutComponentBase
 
-<PageTitle>Система за управление на задачи</PageTitle>
+<PageTitle>Task management system</PageTitle>
 
 <div class="page">
     <div class="sidebar">
-        <NavMenu />
+        <NavMenuLogin />
     </div>
 
-    <main>
+    <main class="page-background-class">
         <div class="top-row px-4">
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
         </div>
 
-        <article class="content px-4">
+        <article class="content px-4 page-background-class">
             @Body
         </article>
     </main>

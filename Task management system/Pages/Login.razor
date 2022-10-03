@@ -1,0 +1,80 @@
+﻿@page "/Login"
+
+@layout LoginLayout
+
+<div class="content-wrapper">
+	<div class="content-header">
+		<div class="container" style=" max-width: 50%;  margin: auto;  padding: 8% 0;">
+			<h2 style="text-align: center; color: white;">Вход</h2>
+			<div class="card shadow p-3 mb-5 bg-white rounded ">
+
+                <div class="card-body">
+					<EditForm Model="@signInModel" OnValidSubmit="@RegisterUser" id="loginForm">
+						<DataAnnotationsValidator />
+						<ValidationSummary />
+						<div class="modal-body">
+							<p class="validation-message">@error</p>
+							<div class="row">
+								<div class="col-12">
+									<!-- text input -->
+									<div class="form-group">
+										<label class="control-label">
+											Потребителско име:
+										</label>
+										<InputText id="UserName" class="form-control" type="text" @bind-Value="@signInModel.UserName"></InputText>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12">
+									<!-- text input -->
+									<div class="form-group">
+										<label class="control-label">
+											Парола:
+										</label>
+										<InputText id="password" class="form-control" type="password" @bind-Value="@signInModel.Password"></InputText>
+									</div>
+								</div>
+							</div>
+							@*Изграждане на функционалност за "Забравена парола"*@
+							<div align="right">
+								<a href="#" @onclick="ForgotPassword">Забравена парола</a>
+							</div>
+						</div>
+						<div class="card-footer" style="background-color: white">
+							<div class="row">
+								<div class="col-12">
+									<!-- text input -->
+									<div class="form-group">
+										<button type="submit" class="btn btn btn-primary" form="loginForm"><i class="icofont icofont-user-alt-3"></i>Вход</button>
+										<button type="button" class="btn btn-outline-primary" @onclick="(() => this.IsContinue = true)">Регистрация</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</EditForm>
+				</div>
+				
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+	@code {
+
+    public class SignInModel
+    {
+
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+      //  await localStorage.ClearAsync();
+    }
+
+}

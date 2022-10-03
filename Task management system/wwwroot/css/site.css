@@ -1,7 +1,25 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+@font-face {
+    font-family: Exo2;
+    src: url(fonts/Exo2-Regular.ttf);
+}
+@font-face {
+    font-family: Exo2Bold;
+    src: url(fonts/Exo2-Bold.ttf);
+}
+.page-background-class {
+    background-color: #04173d;
+}
+h2{
+font-family:Exo2Bold
+}
+
+label {
+    font-family: Exo2
+}
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: Exo2;
 }
 
 h1:focus {
