@@ -1,4 +1,6 @@
 ﻿@page "/Login"
+@using Microsoft.AspNetCore.Identity
+@using Task_management_system.Models
 
 @layout LoginLayout
 
@@ -9,9 +11,9 @@
 			<div class="card shadow p-3 mb-5 bg-white rounded ">
 
                 <div class="card-body">
-					<EditForm Model="@signInModel" OnValidSubmit="@RegisterUser" id="loginForm">
+					<EditForm Model="@userLogin" OnValidSubmit="@LoginUser" id="loginForm">
 						<DataAnnotationsValidator />
-						<ValidationSummary />
+						
 						<div class="modal-body">
 							<p class="validation-message">@error</p>
 							<div class="row">
@@ -21,7 +23,8 @@
 										<label class="control-label">
 											Потребителско име:
 										</label>
-										<InputText id="UserName" class="form-control" type="text" @bind-Value="@signInModel.UserName"></InputText>
+										<InputText id="UserName" class="form-control" type="text" @bind-Value="@userLogin.UserName"></InputText>
+										<ValidationMessage For="@(() => userLogin.UserName)" />
 									</div>
 								</div>
 							</div>
@@ -32,14 +35,15 @@
 										<label class="control-label">
 											Парола:
 										</label>
-										<InputText id="password" class="form-control" type="password" @bind-Value="@signInModel.Password"></InputText>
+										<InputText id="password" class="form-control" type="password" @bind-Value="@userLogin.UserPassword"></InputText>
+										<ValidationMessage For="@(() => userLogin.UserPassword)" />
 									</div>
 								</div>
 							</div>
-							@*Изграждане на функционалност за "Забравена парола"*@
-							<div align="right">
-								<a href="#" @onclick="ForgotPassword">Забравена парола</a>
-							</div>
+							@*Изграждане на функционалност за "Забравена парола"
+                            <div align="right">
+								<a href="#" @onclick="NavToRegister">Забравена парола</a>
+                            </div>*@
 						</div>
 						<div class="card-footer" style="background-color: white">
 							<div class="row">
@@ -47,7 +51,7 @@
 									<!-- text input -->
 									<div class="form-group">
 										<button type="submit" class="btn btn btn-primary" form="loginForm"><i class="icofont icofont-user-alt-3"></i>Вход</button>
-										<button type="button" class="btn btn-outline-primary" @onclick="(() => this.IsContinue = true)">Регистрация</button>
+										<button type="button" class="btn btn-outline-primary" @onclick="NavToRegister">Регистрация</button>
 									</div>
 								</div>
 							</div>
@@ -63,14 +67,16 @@
 
 
 	@code {
-
-    public class SignInModel
+		public class SignInModel
     {
 
         public string UserName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string UserEmail { get; set; }
+        public string UserPassword { get; set; }
     }
+
+   public string Password { get; set; }
+    
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

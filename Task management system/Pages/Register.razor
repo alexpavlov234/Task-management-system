@@ -9,9 +9,9 @@
             <div class="card shadow p-3 mb-5 bg-white rounded ">
 
                 <div class="card-body">
-                    <EditForm Model="@signInModel" OnValidSubmit="@RegisterUser" id="loginForm">
+                    <EditForm Model="@user" OnValidSubmit="@RegisterUser" id="loginForm">
                         <DataAnnotationsValidator />
-                        <ValidationSummary />
+                        
                         <div class="modal-body">
                             <p class="validation-message">@error</p>
                             <div class="row">
@@ -21,7 +21,8 @@
                                         <label class="control-label">
                                             Име:
                                         </label>
-                                        <InputText id="Name" class="form-control" type="text" @bind-Value="@signInModel.UserFirstName"></InputText>
+                                        <InputText id="Name" class="form-control" type="text" @bind-Value="@user.UserFirstName"></InputText>
+                                        <ValidationMessage For="@(() => user.UserFirstName)" />
                                     </div>
                                 </div>
                             </div>
@@ -32,7 +33,8 @@
                                         <label class="control-label">
                                             Фамилия:
                                         </label>
-                                        <InputText id="Surname" class="form-control" type="text" @bind-Value="@signInModel.UserLastName"></InputText>
+                                        <InputText id="Surname" class="form-control" type="text" @bind-Value="@user.UserLastName"></InputText>
+                                        <ValidationMessage For="@(() => user.UserLastName)" />
                                     </div>
                                 </div>
                             </div>
@@ -43,7 +45,8 @@
                                         <label class="control-label">
                                             Потребителско име:
                                         </label>
-                                        <InputText id="UserName" class="form-control" type="text" @bind-Value="@signInModel.UserName"></InputText>
+                                        <InputText id="UserName" class="form-control" type="text" @bind-Value="@user.UserName"></InputText>
+                                        <ValidationMessage For="@(() => user.UserName)" />
                                     </div>
                                 </div>
                             </div>
@@ -54,7 +57,8 @@
                                         <label class="control-label">
                                             Имейл:
                                         </label>
-                                        <InputText id="Email" class="form-control" type="text" @bind-Value="@signInModel.UserEmail"></InputText>
+                                        <InputText id="Email" class="form-control" type="text" @bind-Value="@user.UserEmail"></InputText>
+                                        <ValidationMessage For="@(() => user.UserEmail)" />
                                     </div>
                                 </div>
                             </div>
@@ -65,7 +69,8 @@
                                         <label class="control-label">
                                             Парола:
                                         </label>
-                                        <InputText id="password" class="form-control" type="password" @bind-Value="@signInModel.UserPassword"></InputText>
+                                        <InputText id="password" class="form-control" type="password" @bind-Value="@user.UserPassword"></InputText>
+                                        <ValidationMessage For="@(() => user.UserPassword)" />
                                     </div>
                                 </div>
                             </div>
@@ -77,6 +82,7 @@
                                             Повторете паролата:
                                         </label>
                                         <InputText id="password2" class="form-control" type="password" @bind-Value="@RepeatPass"></InputText>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -87,8 +93,8 @@
                                 <div class="col-12">
                                     <!-- text input -->
                                     <div class="form-group">
-                                        <button type="button" class="btn btn-primary" @onclick="(() => this.IsContinue = true)">Регистрация</button>
-                                        <button type="submit" class="btn btn-outline-primary" form="loginForm"><i class="icofont icofont-user-alt-3"></i>Вход</button>
+                                        <button type="submit" class="btn btn-primary" @onclick="(() => this.IsContinue = true)">Регистрация</button>
+                                        <button type="button" class="btn btn-outline-primary" form="loginForm" @onclick="NavToLogin"><i class="icofont icofont-user-alt-3"></i>Вход</button>
                                     </div>
                                 </div>
                             </div>
@@ -105,21 +111,7 @@
 
 @code {
 
-    public class SignInModel
-    {
-
-        public string UserName { get; set; }
-
-        public string UserFirstName { get; set; }
-
-        public string UserLastName { get; set; }
-
-
-        public string UserEmail { get; set; }
-
-
-        public string UserPassword { get; set; }
-    }
+   
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

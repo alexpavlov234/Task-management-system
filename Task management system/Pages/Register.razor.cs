@@ -1,10 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Components;
+using Syncfusion.Blazor.PdfViewer;
+using System.ComponentModel.DataAnnotations;
+using Task_management_system.Data;
+using Task_management_system.Models;
 
 namespace Task_management_system.Pages
 {
     public partial class Register
     {
-        private SignInModel signInModel = new SignInModel()
+        [Inject]
+        private NavigationManager NavMgr { get; set; }
+
+        [Inject]
+        private Context context { get; set; }
+        private User user = new User()
         {
             UserName = "",
             UserFirstName = "",
@@ -19,8 +28,16 @@ namespace Task_management_system.Pages
 
         private async Task RegisterUser()
         {
-        }
+      
 
-       
+            context.Add<User>(user);
+
+
+            context.SaveChanges();
+        }
+        private async Task NavToLogin()
+        {
+            NavMgr.NavigateTo($"/Login", true);
+        }
     }
 }
