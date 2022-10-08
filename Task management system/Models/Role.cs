@@ -1,8 +1,10 @@
 ﻿using Syncfusion.Blazor.TreeGrid.Internal;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Task_management_system.Models
 {
+    [Table("Role")]
     public class Role
     {
         [Key]

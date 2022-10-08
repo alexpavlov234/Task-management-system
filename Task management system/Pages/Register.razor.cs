@@ -28,10 +28,11 @@ namespace Task_management_system.Pages
 
         private async Task RegisterUser()
         {
-      
+            user.Role = context.Find<Role>(1);
 
             context.Add<User>(user);
-
+            
+            
 
             context.SaveChanges();
         }
