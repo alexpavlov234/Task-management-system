@@ -18,7 +18,7 @@ namespace Task_management_system
             builder.Services.AddServerSideBlazor();
             //Важно
             builder.Services.AddDbContext<Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection2")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection1")));
             //builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
             var app = builder.Build();
