@@ -42,7 +42,7 @@ namespace Task_management_system.Services
             }
         }
 
-        public User SingleUser(int id)
+        public User GetSingleUser(int id)
         {
             User user = context.Users.FirstOrDefault((c) => (c.UserId == id));
             return new User()
@@ -50,9 +50,24 @@ namespace Task_management_system.Services
                 UserId = user.UserId,
                 UserFirstName = user.UserFirstName,
                 UserLastName = user.UserLastName,
-                UserName = user.UserName,
+                Username = user.Username,
                 UserEmail = user.UserEmail,
-                UserPassword = user.UserPassword
+                UserPassword = user.UserPassword,
+                UserRole = user.UserRole
+            };
+        }
+        public User GetSingleUser(string username)
+        {
+            User user = context.Users.FirstOrDefault((c) => c.Username.Equals(username));
+            return new User()
+            {
+                UserId = user.UserId,
+                UserFirstName = user.UserFirstName,
+                UserLastName = user.UserLastName,
+                Username = user.Username,
+                UserEmail = user.UserEmail,
+                UserPassword = user.UserPassword,
+                UserRole = user.UserRole
             };
         }
 

@@ -1,19 +1,68 @@
-﻿@inherits LayoutComponentBase
-
+﻿@using Task_management_system.Data
+@inherits LayoutComponentBase
+@inject LoginState loginState
 <PageTitle>Система за управление на задачи</PageTitle>
 
 <div class="page">
     <div class="sidebar">
-        <NavMenu />
-    </div>
+        @if (loginState.IsLoggedIn)
+        {
+            @if (loginState.loggedUser.UserRole.RoleId == 1)
+            {
+                <AdminNavMenu />
+            }
+            else
+            {
+                <NavMenu />
+            }
 
+        }
+        else
+        {
+            <NavMenuLogin />
+        }
+    </div>
+    @if (loginState.IsLoggedIn)
+            {
     <main>
         <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            @if (loginState.IsLoggedIn)
+            {
+
+                <a href="https://docs.microsoft.com/aspnet/" target="_blank">@loginState.loggedUser.Username</a>
+            }
+
         </div>
 
         <article class="content px-4">
             @Body
         </article>
     </main>
+            } else {
+        <main class="page-background-class">
+            <div class="top-row px-4">
+                @if (loginState.IsLoggedIn)
+                {
+
+                    <a href="https://docs.microsoft.com/aspnet/" target="_blank">@loginState.loggedUser.Username</a>
+                }
+
+            </div>
+
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
+            }
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        loginState.OnChange += StateHasChanged;
+    }
+    public void Dispose()
+    {
+        loginState.OnChange -= StateHasChanged;
+    }
+}

@@ -1,6 +1,5 @@
 ﻿@page "/Register"
 
-@layout LoginLayout
 
 <div class="content-wrapper">
     <div class="content-header">
@@ -45,8 +44,8 @@
                                         <label class="control-label">
                                             Потребителско име:
                                         </label>
-                                        <InputText id="UserName" class="form-control" type="text" @bind-Value="@user.UserName"></InputText>
-                                        <ValidationMessage For="@(() => user.UserName)" />
+                                        <InputText id="UserName" class="form-control" type="text" @bind-Value="@user.Username"></InputText>
+                                        <ValidationMessage For="@(() => user.Username)" />
                                     </div>
                                 </div>
                             </div>
@@ -93,7 +92,7 @@
                                 <div class="col-12">
                                     <!-- text input -->
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-primary" @onclick="(() => this.IsContinue = true)">Регистрация</button>
+                                        <button type="submit" class="btn btn-primary" @onclick="RegisterUser">Регистрация</button>
                                         <button type="button" class="btn btn-outline-primary" form="loginForm" @onclick="NavToLogin"><i class="icofont icofont-user-alt-3"></i>Вход</button>
                                     </div>
                                 </div>

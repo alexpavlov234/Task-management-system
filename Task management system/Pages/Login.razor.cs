@@ -1,11 +1,19 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
+using System;
+using Task_management_system.Data;
+using Task_management_system.Interfaces;
 using Task_management_system.Models;
 
 namespace Task_management_system.Pages
 {
     public partial class Login
     {
+        [Inject]
+        private IUserService userService { get; set; } = default!;
+        [Inject]
+        private LoginState loginState { get; set; }
         [Inject]
         private NavigationManager NavMgr { get; set; }
 
@@ -19,37 +27,18 @@ namespace Task_management_system.Pages
 
         private async Task LoginUser()
         {
-            //var user = await userManager.FindByNameAsync(userLogin.UserName);
-          
-            //if (user == null)
-            //{
-            //    error = "Грешно потребителско име.";
-            //    clearFields();
-            //    return;
-            //}
-            
+            var user = userService.GetSingleUser(userLogin.UserName);
 
-            //if (await signInManager.CanSignInAsync(user))
-            //{
-            //    var result = await signInManager.CheckPasswordSignInAsync(user, userLogin.UserPassword, true);
-            //    if (result == Microsoft.AspNetCore.Identity.SignInResult.Success)
-            //    {
-                    
-                    
-            //    }
-            //    else
-            //    {
-            //        error = "Грешна парола.";
-            //        clearFields();
-            //    }
-            //}
-            //else
-            //{
-            //    error = "Несъществуващ акаунт!";
-            //    clearFields();
-            //}
+            if (user != null)
+            {
+                if (user.UserPassword.Equals(userLogin.UserPassword))
+                {
+                    loginState.SetLogin(true, userService.GetSingleUser(user.Username));
+                }
+            }
+
         }
-
+        
         private async Task NavToRegister()
         {
             NavMgr.NavigateTo($"/Register", true);

@@ -23,6 +23,7 @@ namespace Task_management_system.Models
         [Required]
         public bool EditTaskPermission { get; set; }
 
+        public List<User> Users { get; set; }
 
 
 

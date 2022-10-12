@@ -165,9 +165,6 @@ namespace Task_management_system.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -182,20 +179,26 @@ namespace Task_management_system.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("UserPassword")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserRoleRoleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("UserId");
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("UserRoleRoleId");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("User");
                 });
@@ -228,18 +231,23 @@ namespace Task_management_system.Migrations
                         .WithMany("ProjectUsers")
                         .HasForeignKey("ProjectId");
 
-                    b.HasOne("Task_management_system.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
+                    b.HasOne("Task_management_system.Models.Role", "UserRole")
+                        .WithMany("Users")
+                        .HasForeignKey("UserRoleRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Role");
+                    b.Navigation("UserRole");
                 });
 
             modelBuilder.Entity("Task_management_system.Models.Project", b =>
                 {
                     b.Navigation("ProjectUsers");
+                });
+
+            modelBuilder.Entity("Task_management_system.Models.Role", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

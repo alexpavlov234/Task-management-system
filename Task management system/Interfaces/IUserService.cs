@@ -7,7 +7,8 @@ namespace Task_management_system.Interfaces
         void DeleteUser(int id);
         List<User> GetUsers();
         void InsertUser(User user);
-        User SingleUser(int id);
+        User GetSingleUser(int id);
         void UpdateUser(int id, User user);
+        User GetSingleUser(string username);
     }
 }

@@ -5,6 +5,9 @@ using Syncfusion.Blazor;
 using Syncfusion.Blazor.Cards;
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.Blazor;
+using Task_management_system.Interfaces;
+using Task_management_system.Services;
+
 namespace Task_management_system
 {
     public class Program
@@ -21,6 +24,8 @@ namespace Task_management_system
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection1")));
             //builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
+            builder.Services.AddScoped<LoginState>();
+            builder.Services.AddScoped<IUserService, UserService>();
             var app = builder.Build();
 
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzI0NjE1QDMyMzAyZTMyMmUzMGorYUM4M3ljdDEvMkRNMUxBSVJ0bGRQc01uZ2RHbGVnamM0QWZ4MjJmLzg9");

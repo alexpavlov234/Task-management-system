@@ -1,16 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Task_management_system.Models
 {
     [Table("User")]
+    [Index(nameof(User.Username), IsUnique = true)]
     public class User
     {
         [Key]
         public int UserId { get; set; }
         [Required(ErrorMessage = "Полето \"Потребителско име\" е задължително!")]
         [StringLength(50, ErrorMessage = "Прекалено дълъг низ!")]
-        public string UserName { get; set; }
+        public string Username { get; set; }
         [Required(ErrorMessage = "Полето \"Име\" е задължително!")]
         [StringLength(50, ErrorMessage = "Прекалено дълъг низ!")]
         public string UserFirstName { get; set; }
@@ -25,10 +27,8 @@ namespace Task_management_system.Models
         [Required(ErrorMessage = "Полето \"Парола\" е задължително!")]
         ///TODO: Pass Validation
         public string UserPassword { get; set; }
-
-
-        public int RoleId { get; set; }
-        public Role Role { get; set; }
+        [Required]
+        public Role UserRole { get; set; }
 
 
     }
