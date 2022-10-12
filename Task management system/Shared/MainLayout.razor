@@ -7,7 +7,7 @@
     <div class="sidebar">
         @if (loginState.IsLoggedIn)
         {
-            @if (loginState.loggedUser.UserRole.RoleId == 1)
+            @if (loginState.loggedUser.RoleId==1)
             {
                 <AdminNavMenu />
             }

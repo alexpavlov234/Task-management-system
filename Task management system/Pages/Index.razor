@@ -15,3 +15,14 @@ else
     </div>
 }
 
+@code {
+    protected override void OnInitialized()
+    {
+        loginState.OnChange += StateHasChanged;
+    }
+    public void Dispose()
+    {
+        loginState.OnChange -= StateHasChanged;
+    }
+}
+

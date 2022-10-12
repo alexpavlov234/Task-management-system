@@ -165,6 +165,9 @@ namespace Task_management_system.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -183,9 +186,6 @@ namespace Task_management_system.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserRoleRoleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -195,7 +195,7 @@ namespace Task_management_system.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("UserRoleRoleId");
+                    b.HasIndex("RoleId");
 
                     b.HasIndex("Username")
                         .IsUnique();
@@ -233,7 +233,7 @@ namespace Task_management_system.Migrations
 
                     b.HasOne("Task_management_system.Models.Role", "UserRole")
                         .WithMany("Users")
-                        .HasForeignKey("UserRoleRoleId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

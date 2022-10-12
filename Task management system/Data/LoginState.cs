@@ -7,22 +7,22 @@ namespace Task_management_system.Data
     {
         public bool IsLoggedIn { get; set; }
         public User loggedUser { get; set; }
-        public event Action OnChange;
+
 
         public void SetLogin(bool login, User user)
         {
             IsLoggedIn = login;
             this.loggedUser = user;
-            NotifyStateChanged();
+            NotifyDataChanged();
         }
         //Pointless
         public void Logout()
         {
             SetLogin(false, null);          
         }
-        private void NotifyStateChanged()
-        {
-            OnChange?.Invoke();
-        }
+      
+        public event Action OnChange;
+
+        private void NotifyDataChanged() => OnChange?.Invoke();
     }
 }

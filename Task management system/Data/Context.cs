@@ -13,13 +13,12 @@ namespace Task_management_system.Data
         //Създаване на таблици в реална база данни
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<Project>();
             modelBuilder.Entity<Role>().HasData(new Role {RoleId= 1, RoleName = "Администратор", CreateProjectPermission = true, CreateTaskPermission = true, EditProjectPermission = true, EditTaskPermission = true, ManageMembersPermission = true }) ;
             modelBuilder.Entity<Status>();
             modelBuilder.Entity<Assignment>();
             modelBuilder.Entity<User>();
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Project> Projects { get; set; }

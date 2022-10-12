@@ -27,7 +27,9 @@ namespace Task_management_system.Models
         [Required(ErrorMessage = "Полето \"Парола\" е задължително!")]
         ///TODO: Pass Validation
         public string UserPassword { get; set; }
-        [Required]
+        
+        [ForeignKey(nameof(Role))]
+        public int RoleId { get; set; }
         public Role UserRole { get; set; }
 
 
