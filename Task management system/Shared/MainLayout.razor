@@ -1,11 +1,11 @@
 ﻿@using Task_management_system.Data
 @inherits LayoutComponentBase
-@inject LoginState loginState
+
 <PageTitle>Система за управление на задачи</PageTitle>
 
 <div class="page">
     <div class="sidebar">
-        @if (loginState.IsLoggedIn)
+        @*@if (loginState.IsLoggedIn)
         {
             @if (loginState.loggedUser.RoleId==1)
             {
@@ -20,8 +20,9 @@
         else
         {
             <NavMenuLogin />
-        }
+        }*@
     </div>
+    @*
     @if (loginState.IsLoggedIn)
             {
     <main>
@@ -53,16 +54,9 @@
                 @Body
             </article>
         </main>
-            }
+    }*@
 </div>
 
 @code {
-    protected override void OnInitialized()
-    {
-        loginState.OnChange += StateHasChanged;
-    }
-    public void Dispose()
-    {
-        loginState.OnChange -= StateHasChanged;
-    }
+    
 }

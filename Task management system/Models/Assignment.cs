@@ -25,7 +25,5 @@ namespace Task_management_system.Models
         [Required]
         public DateTime TaskCompletionDate { get; set; }
 
-        public int UserId { get; set; }
-        public User TaskLeader { get; set; }
     }
 }

@@ -21,10 +21,7 @@ namespace Task_management_system.Models
         public DateTime ProjectEndDate { get; set; }
 
 
-        public int UserId { get; set; }
-        public User ProjectLeader { get; set; }
-
-        public ICollection<User> ProjectUsers { get; set; }
+       
 
 
     }

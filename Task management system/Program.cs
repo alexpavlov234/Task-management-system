@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Syncfusion.Blazor;
 using Task_management_system.Interfaces;
 using Task_management_system.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace Task_management_system
 {
@@ -24,8 +25,8 @@ namespace Task_management_system
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection1")));
             //builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
-            builder.Services.AddSingleton<LoginState>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<Context>();
             var app = builder.Build();
 
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzI0NjE1QDMyMzAyZTMyMmUzMGorYUM4M3ljdDEvMkRNMUxBSVJ0bGRQc01uZ2RHbGVnamM0QWZ4MjJmLzg9");
@@ -43,6 +44,8 @@ namespace Task_management_system
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.MapBlazorHub();
             app.MapFallbackToPage("/_Host");

@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <EditForm Model="@user" OnValidSubmit="@RegisterUser" id="loginForm">
                         <DataAnnotationsValidator />
-                        
+
                         <div class="modal-body">
                             <p class="validation-message">@error</p>
                             <div class="row">
@@ -81,7 +81,7 @@
                                             Повторете паролата:
                                         </label>
                                         <InputText id="password2" class="form-control" type="password" @bind-Value="@RepeatPass"></InputText>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -110,7 +110,14 @@
 
 @code {
 
-   
+    public class User
+    {
+        public string UserEmail { get; set; }
+        public string UserFirstName { get; set; }
+        public string UserLastName { get; set; }
+        public string Username { get; set; }
+        public string UserPassword { get; set; }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

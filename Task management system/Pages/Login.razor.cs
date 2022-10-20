@@ -12,8 +12,7 @@ namespace Task_management_system.Pages
     {
         [Inject]
         private IUserService userService { get; set; } = default!;
-        [Inject]
-        private LoginState loginState { get; set; }
+  
         [Inject]
         private NavigationManager NavMgr { get; set; }
 
@@ -27,15 +26,7 @@ namespace Task_management_system.Pages
 
         private async Task LoginUser()
         {
-            var user = userService.GetSingleUser(userLogin.UserName);
-
-            if (user != null)
-            {
-                if (user.UserPassword.Equals(userLogin.UserPassword))
-                {
-                    loginState.SetLogin(true, userService.GetSingleUser(user.Username));
-                }
-            }
+            
 
         }
         

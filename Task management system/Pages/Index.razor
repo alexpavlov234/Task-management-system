@@ -2,7 +2,7 @@
 @layout UserLayout
 <PageTitle>Моят ден</PageTitle>
 
-@inject Data.LoginState loginState;
+@*
 @if (loginState.IsLoggedIn.Equals(false))
 {
     NavToLogin();
@@ -14,15 +14,8 @@ else
         <p> Thanks for logging in @loginState.loggedUser.Username!</p>
     </div>
 }
-
+*@
 @code {
-    protected override void OnInitialized()
-    {
-        loginState.OnChange += StateHasChanged;
-    }
-    public void Dispose()
-    {
-        loginState.OnChange -= StateHasChanged;
-    }
+   
 }
 

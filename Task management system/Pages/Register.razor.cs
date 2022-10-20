@@ -18,14 +18,7 @@ namespace Task_management_system.Pages
 
         [Inject]
         private Context context { get; set; }
-        private User user = new User()
-        {
-            Username = "",
-            UserFirstName = "",
-            UserLastName = "",
-            UserEmail = "",
-            UserPassword = ""
-        };
+        private User user;
         public bool IsContinue { get; set; } = false;
 
         private string RepeatPass;
@@ -33,8 +26,8 @@ namespace Task_management_system.Pages
 
         private async Task RegisterUser()
         {
-            user.UserRole = context.Find<Role>(1);
-            userService.InsertUser(user);
+            //user.UserRole = context.Find<Role>(1);
+            //userService.InsertUser(user);
    
         }
         private async Task NavToLogin()
