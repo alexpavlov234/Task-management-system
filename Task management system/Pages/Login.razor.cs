@@ -10,9 +10,7 @@ namespace Task_management_system.Pages
 {
     public partial class Login
     {
-        [Inject]
-        private IUserService userService { get; set; } = default!;
-  
+
         [Inject]
         private NavigationManager NavMgr { get; set; }
 

@@ -60,4 +60,8 @@
     <PackageReference Include="Syncfusion.Blazor" Version="20.3.0.49" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>

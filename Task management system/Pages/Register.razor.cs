@@ -14,11 +14,8 @@ namespace Task_management_system.Pages
         private NavigationManager NavMgr { get; set; }
 
         [Inject]
-        private IUserService userService { get; set; } = default!;
-
-        [Inject]
         private Context context { get; set; }
-        private User user;
+        private RegisterViewModel user = new RegisterViewModel();
         public bool IsContinue { get; set; } = false;
 
         private string RepeatPass;
@@ -28,7 +25,7 @@ namespace Task_management_system.Pages
         {
             //user.UserRole = context.Find<Role>(1);
             //userService.InsertUser(user);
-   
+
         }
         private async Task NavToLogin()
         {
