@@ -28,9 +28,9 @@ namespace Task_management_system
             {
                 options.SignIn.RequireConfirmedAccount = true;
                 options.SignIn.RequireConfirmedEmail = false;
-            }).AddErrorDescriber<LocalizedIdentityErrorDescriber>()
+            }).AddErrorDescriber<LocalizedIdentityErrorDescriber>().AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<Context>();
-          
+
             //builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
             builder.Services.AddScoped<TokenProvider>();
@@ -40,18 +40,18 @@ namespace Task_management_system
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
-                
+
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
-   
-            
-           
+
+
+
             app.UseStaticFiles();
-     
+
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

@@ -54,6 +54,13 @@
     <None Include="wwwroot\css\fonts\Exo2-SemiBoldItalic.ttf" />
     <None Include="wwwroot\css\fonts\Exo2-Thin.ttf" />
     <None Include="wwwroot\css\fonts\Exo2-ThinItalic.ttf" />
+    <None Include="wwwroot\lib\davidshimjs-qrcodejs-04f46c6\.gitignore" />
+    <None Include="wwwroot\lib\davidshimjs-qrcodejs-04f46c6\index.svg" />
+    <None Include="wwwroot\lib\davidshimjs-qrcodejs-04f46c6\jquery.min.js" />
+    <None Include="wwwroot\lib\davidshimjs-qrcodejs-04f46c6\LICENSE" />
+    <None Include="wwwroot\lib\davidshimjs-qrcodejs-04f46c6\qrcode.js" />
+    <None Include="wwwroot\lib\davidshimjs-qrcodejs-04f46c6\qrcode.min.js" />
+    <None Include="wwwroot\lib\davidshimjs-qrcodejs-04f46c6\README.md" />
   </ItemGroup>
 
   <ItemGroup>
