@@ -62,7 +62,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Невъзможно е да заредите потребител с ID '{_userManager.GetUserId(User)}'.");
             }
 
             HasAuthenticator = await _userManager.GetAuthenticatorKeyAsync(user) != null;
@@ -78,11 +78,11 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Невъзможно е да заредите потребител с ID '{_userManager.GetUserId(User)}'.");
             }
 
             await _signInManager.ForgetTwoFactorClientAsync();
-            StatusMessage = "The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.";
+            StatusMessage = "Настоящият браузър е бил забравен. Когато влезете отново от този браузър, ще бъдете подканени да въведете своя двуфакторен код.";
             return RedirectToPage();
         }
     }
