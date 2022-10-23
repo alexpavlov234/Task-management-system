@@ -2,11 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.Blazor.Cards;
 using System.Reflection.Metadata;
+using Task_management_system.Areas.Identity;
 using Task_management_system.Models;
 
 namespace Task_management_system.Data
 {
-    public class Context : IdentityDbContext
+    public class Context : IdentityDbContext<ApplicationUser>
     {
         public Context(DbContextOptions<Context> options) : base(options)
         {
