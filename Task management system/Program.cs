@@ -8,6 +8,7 @@ using Syncfusion.Blazor;
 using Microsoft.AspNetCore.Identity;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Areas;
+using Microsoft.Extensions.Hosting;
 
 namespace Task_management_system
 {
@@ -26,7 +27,7 @@ namespace Task_management_system
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = true;
+                options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
             }).AddErrorDescriber<LocalizedIdentityErrorDescriber>().AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<Context>();
@@ -37,6 +38,25 @@ namespace Task_management_system
             var app = builder.Build();
 
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzI0NjE1QDMyMzAyZTMyMmUzMGorYUM4M3ljdDEvMkRNMUxBSVJ0bGRQc01uZ2RHbGVnamM0QWZ4MjJmLzg9");
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+                try
+                {
+                    var context = services.GetRequiredService<Context>();
+                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                    ContextSeed.SeedRolesAsync(userManager, roleManager).Wait();
+                    ContextSeed.SeedAdminAsync(userManager, roleManager).Wait();
+                
+                }
+                catch (Exception ex)
+                {
+                    var logger = loggerFactory.CreateLogger<Program>();
+                    logger.LogError(ex, "Възникна грешка при запълването на базата данни с информация.");
+                }
+            }
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {

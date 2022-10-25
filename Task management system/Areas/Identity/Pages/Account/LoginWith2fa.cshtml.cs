@@ -62,7 +62,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account
             [Required]
             [StringLength(7, ErrorMessage = "Кодът на удостоверителя трябва да бъде дълъг най-малко {2} и най-много {1} символа.", MinimumLength = 6)]
             [DataType(DataType.Text)]
-            [Display(Name = "Код на удостоверителяфф")]
+            [Display(Name = "Код на удостоверителя")]
             public string TwoFactorCode { get; set; }
 
             /// <summary>
