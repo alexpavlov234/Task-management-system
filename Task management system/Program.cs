@@ -37,7 +37,7 @@ namespace Task_management_system
             builder.Services.AddScoped<TokenProvider>();
             var app = builder.Build();
 
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzI0NjE1QDMyMzAyZTMyMmUzMGorYUM4M3ljdDEvMkRNMUxBSVJ0bGRQc01uZ2RHbGVnamM0QWZ4MjJmLzg9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzQ3NTYzQDMyMzAyZTMzMmUzMGEyZkJKb2ltdWJxZTZKRDFVdmZqbW83cFZ3QzVQVFpTNlN2YUZyeVh0RVk9");
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;

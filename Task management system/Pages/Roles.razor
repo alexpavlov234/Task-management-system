@@ -1,0 +1,59 @@
+﻿@page "/Roles"
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+@using Task_management_system.Areas.Identity
+@inject RoleManager<IdentityRole> roleManager
+@inject SignInManager<ApplicationUser> signInManager
+
+<h3>Pages</h3>
+<SfGrid DataSource="@roles">
+    <GridColumns>
+        <GridColumn Type="ColumnType.Number" AllowFiltering="false" AllowEditing="false" AllowSorting="false" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" AutoFit="true">
+            <Template>
+                
+                @{
+                    var val = GetRowCounter(context as IdentityRole);
+                    @val.Result
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field=@nameof(IdentityRole.Name) HeaderText="Име на роля" ></GridColumn>
+        
+    </GridColumns>
+</SfGrid>
+
+<h3>Pages</h3>
+<SfGrid DataSource="@roles">
+    <GridColumns>
+        <GridColumn Type="ColumnType.Number" AllowFiltering="false" AllowEditing="false" AllowSorting="false" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" AutoFit="true">
+            <Template>
+                
+                @{
+                    var val = GetRowCounter(context as IdentityRole);
+                    @val.Result
+                }
+            </Template>
+        </GridColumn>
+        <GridColumn Field=@nameof(IdentityRole.Name) HeaderText="Име на роля" ></GridColumn>
+        
+    </GridColumns>
+</SfGrid>
+@code {
+    public List<IdentityRole> roles { get; set; }
+    public int RowCounter = 0;
+
+    protected override void OnInitialized()
+    {
+        
+
+
+        var roles = roleManager.Roles.ToList();
+        this.roles = roles;
+    }
+
+    public async Task<int> GetRowCounter(IdentityRole val)
+    {
+        RowCounter = roles.IndexOf(val);
+        return RowCounter + 1;
+    }
+}
