@@ -1,53 +1,61 @@
-﻿@page "/Roles"
+﻿@page "/Management"
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Identity.EntityFrameworkCore
 @using Task_management_system.Areas.Identity
+@using Task_management_system.Data
 @inject RoleManager<IdentityRole> roleManager
+@inject UserManager<ApplicationUser> userManager
 @inject SignInManager<ApplicationUser> signInManager
+@attribute [Authorize(Roles = "Admin")]
 
-<h3>Pages</h3>
+<h3>Роли</h3>
 <SfGrid DataSource="@roles">
     <GridColumns>
         <GridColumn Type="ColumnType.Number" AllowFiltering="false" AllowEditing="false" AllowSorting="false" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" AutoFit="true">
             <Template>
-                
+
                 @{
                     var val = GetRowCounter(context as IdentityRole);
                     @val.Result
                 }
             </Template>
         </GridColumn>
-        <GridColumn Field=@nameof(IdentityRole.Name) HeaderText="Име на роля" ></GridColumn>
-        
+        <GridColumn Field=@nameof(IdentityRole.Name) HeaderText="Име на роля"></GridColumn>
+
     </GridColumns>
 </SfGrid>
 
-<h3>Pages</h3>
-<SfGrid DataSource="@roles">
+<h3>Потребители</h3>
+<SfGrid DataSource="@users" @ref="sfGrid" AllowPaging="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" })" Height="315">
+    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true"></GridEditSettings>
+    <GridEvents OnActionBegin="ActionBegin" OnActionComplete="ActionComplete" TValue="ApplicationUser"></GridEvents>
     <GridColumns>
-        <GridColumn Type="ColumnType.Number" AllowFiltering="false" AllowEditing="false" AllowSorting="false" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" AutoFit="true">
-            <Template>
-                
-                @{
-                    var val = GetRowCounter(context as IdentityRole);
-                    @val.Result
-                }
-            </Template>
-        </GridColumn>
-        <GridColumn Field=@nameof(IdentityRole.Name) HeaderText="Име на роля" ></GridColumn>
-        
+        <GridColumn Field=@nameof(ApplicationUser.UserName) HeaderText="Потребителско име" IsPrimaryKey="true" TextAlign="TextAlign.Right" Width="120"></GridColumn>
+        <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" Width="120"></GridColumn>
+        <GridColumn Field=@nameof(ApplicationUser.LastName) HeaderText="Фамилия" Width="120"></GridColumn>
+        <GridColumn Field=@nameof(ApplicationUser.Email) HeaderText="Имейл" Width="120"></GridColumn>
+
     </GridColumns>
 </SfGrid>
 @code {
+    //https://learn.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-7.0
     public List<IdentityRole> roles { get; set; }
+    public List<ApplicationUser> users { get; set; }
     public int RowCounter = 0;
-
+    SfGrid<ApplicationUser> sfGrid { get; set; }
+    [Inject]
+    private Context context { get; set; }
+    [Inject]
+    private IHttpContextAccessor httpContextAccessor { get; set; }
     protected override void OnInitialized()
     {
-        
 
 
+        var users = userManager.Users.ToList();
+        var itemToRemove = 
+        users.Remove(users.Single(r => r.UserName == httpContextAccessor.HttpContext.User.Identity.Name));
         var roles = roleManager.Roles.ToList();
+        this.users = users;
         this.roles = roles;
     }
 
@@ -55,5 +63,75 @@
     {
         RowCounter = roles.IndexOf(val);
         return RowCounter + 1;
+    }
+    public async void ActionBegin(ActionEventArgs<ApplicationUser> args)
+    {
+        if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+        {
+            // Triggers before editing operation starts
+        }
+        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
+        {
+            // Triggers before add operation starts
+        }
+        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Cancel)
+        {
+            // Triggers before cancel operation starts
+        }
+        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
+        {
+            var records = (await sfGrid.GetCurrentViewRecordsAsync()).ToList();
+            foreach (var record in records)
+            {
+                if (userManager.FindByNameAsync(record.UserName) != null)
+                {
+                    await userManager.UpdateAsync(record);
+                }
+                else
+                {
+                    //TODO:Modal
+                    await userManager.CreateAsync(record, "123456789");
+                }
+            }
+        }
+        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+        {
+            var user = (await sfGrid.GetSelectedRecordsAsync()).FirstOrDefault();
+           
+                await userManager.DeleteAsync(user);
+            
+
+
+        }
+    }
+
+    public void ActionComplete(ActionEventArgs<ApplicationUser> args)
+    {
+        if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
+        {
+            // Triggers once editing operation completes
+        }
+        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
+        {
+            // Triggers once add operation completes
+        }
+        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Cancel)
+        {
+            // Triggers once cancel operation completes
+        }
+        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
+        {
+            //var records = SfDataGrid.View.Records;
+            //foreach (var record in records)
+            //{
+            //    var rowdata = record.Data;
+            //}
+
+
+        }
+        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
+        {
+            // Triggers once delete operation completes
+        }
     }
 }

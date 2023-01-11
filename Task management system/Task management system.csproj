@@ -66,11 +66,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
     <PackageReference Include="Syncfusion.Blazor" Version="20.3.0.49" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\RoleManager\" />
     <Folder Include="Views\UserRoles\" />
   </ItemGroup>
 

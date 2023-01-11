@@ -2,11 +2,11 @@
 
 @font-face {
     font-family: Exo2;
-    src: url(fonts/Exo2-Regular.ttf);
+    src: url(fonts/SEGUIVARDISPLAY.TTF);
 }
 @font-face {
     font-family: Exo2Bold;
-    src: url(fonts/Exo2-Bold.ttf);
+    src: url(fonts/SEGUIVARBOLD.TTF);
 }
 .page-background-class {
     background-color: #04173d;
