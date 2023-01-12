@@ -209,6 +209,9 @@ namespace Task_management_system.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -229,40 +232,107 @@ namespace Task_management_system.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("ProjectId");
+
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Task_management_system.Models.Assignment", b =>
+            modelBuilder.Entity("Task_management_system.Models.KeyType", b =>
                 {
-                    b.Property<int>("TaskId")
+                    b.Property<int>("IdKeyType")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdKeyType"), 1L, 1);
 
-                    b.Property<DateTime>("TaskCompletionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("TaskCreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TaskDescription")
+                    b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTime>("TaskEndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTime>("TaskLastEditedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TaskName")
+                    b.Property<string>("KeyTypeIntCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
-                    b.HasKey("TaskId");
+                    b.Property<string>("KeyTypeName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
-                    b.ToTable("Assigment");
+                    b.HasKey("IdKeyType");
+
+                    b.ToTable("KeyType");
+                });
+
+            modelBuilder.Entity("Task_management_system.Models.KeyValue", b =>
+                {
+                    b.Property<int>("IdKeyValue")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdKeyValue"), 1L, 1);
+
+                    b.Property<string>("DefaultValue1")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("DefaultValue2")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("DefaultValue3")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("DescriptionEN")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("FormattedText")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<string>("FormattedTextEN")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<int>("IdKeyType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit")
+                        .HasComment("Определя дали стойността е активна");
+
+                    b.Property<string>("KeyValueIntCode")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("NameEN")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdKeyValue");
+
+                    b.HasIndex("IdKeyType");
+
+                    b.ToTable("KeyValue");
                 });
 
             modelBuilder.Entity("Task_management_system.Models.Project", b =>
@@ -273,40 +343,174 @@ namespace Task_management_system.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectId"), 1L, 1);
 
-                    b.Property<DateTime>("ProjectCreationDate")
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ProjectDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ProjectEndDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("ProjectName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProjectOwnerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("ProjectId");
+
+                    b.HasIndex("ProjectOwnerId");
 
                     b.ToTable("Project");
                 });
 
-            modelBuilder.Entity("Task_management_system.Models.Status", b =>
+            modelBuilder.Entity("Task_management_system.Models.Subtask", b =>
                 {
-                    b.Property<int>("StatusId")
+                    b.Property<int>("SubtaskId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubtaskId"), 1L, 1);
 
-                    b.Property<string>("StatusName")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("StatusId");
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
 
-                    b.ToTable("Status");
+                    b.Property<bool>("IsAllDay")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RecurrenceException")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RecurrenceID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RecurrenceRule")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SubtaskCompletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SubtaskDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SubtaskLastEditedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SubtaskName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TaskId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SubtaskId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("Subtask");
+                });
+
+            modelBuilder.Entity("Task_management_system.Models.Task", b =>
+                {
+                    b.Property<int>("TaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskId"), 1L, 1);
+
+                    b.Property<string>("AssignedТoId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AssigneeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsAllDay")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RecurrenceException")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RecurrenceID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RecurrenceRule")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TaskCompletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TaskDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TaskLastEditedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TaskName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TaskId");
+
+                    b.HasIndex("AssignedТoId");
+
+                    b.HasIndex("AssigneeId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Task");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -358,6 +562,76 @@ namespace Task_management_system.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Task_management_system.Areas.Identity.ApplicationUser", b =>
+                {
+                    b.HasOne("Task_management_system.Models.Project", null)
+                        .WithMany("ProjectParticipants")
+                        .HasForeignKey("ProjectId");
+                });
+
+            modelBuilder.Entity("Task_management_system.Models.KeyValue", b =>
+                {
+                    b.HasOne("Task_management_system.Models.KeyType", "KeyType")
+                        .WithMany("KeyValues")
+                        .HasForeignKey("IdKeyType")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("KeyType");
+                });
+
+            modelBuilder.Entity("Task_management_system.Models.Project", b =>
+                {
+                    b.HasOne("Task_management_system.Areas.Identity.ApplicationUser", "ProjectOwner")
+                        .WithMany()
+                        .HasForeignKey("ProjectOwnerId");
+
+                    b.Navigation("ProjectOwner");
+                });
+
+            modelBuilder.Entity("Task_management_system.Models.Subtask", b =>
+                {
+                    b.HasOne("Task_management_system.Models.Task", null)
+                        .WithMany("Subtasks")
+                        .HasForeignKey("TaskId");
+                });
+
+            modelBuilder.Entity("Task_management_system.Models.Task", b =>
+                {
+                    b.HasOne("Task_management_system.Areas.Identity.ApplicationUser", "AssignedТo")
+                        .WithMany()
+                        .HasForeignKey("AssignedТoId");
+
+                    b.HasOne("Task_management_system.Areas.Identity.ApplicationUser", "Assignee")
+                        .WithMany()
+                        .HasForeignKey("AssigneeId");
+
+                    b.HasOne("Task_management_system.Models.Project", null)
+                        .WithMany("Tasks")
+                        .HasForeignKey("ProjectId");
+
+                    b.Navigation("AssignedТo");
+
+                    b.Navigation("Assignee");
+                });
+
+            modelBuilder.Entity("Task_management_system.Models.KeyType", b =>
+                {
+                    b.Navigation("KeyValues");
+                });
+
+            modelBuilder.Entity("Task_management_system.Models.Project", b =>
+                {
+                    b.Navigation("ProjectParticipants");
+
+                    b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("Task_management_system.Models.Task", b =>
+                {
+                    b.Navigation("Subtasks");
                 });
 #pragma warning restore 612, 618
         }

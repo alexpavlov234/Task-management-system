@@ -16,16 +16,20 @@ namespace Task_management_system.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Project>();
-            modelBuilder.Entity<Status>();
-            modelBuilder.Entity<Assignment>();
-           // modelBuilder.Seed();
+           
+            modelBuilder.Entity<Models.Task>();
+            modelBuilder.Entity<Subtask>();
+            modelBuilder.Entity<KeyType>();
+            modelBuilder.Entity<KeyValue>();
+            // modelBuilder.Seed();
             base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Project> Projects { get; set; }
-
-        public DbSet<Status> Statuses { get; set; }
-        public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<KeyType> KeyType { get; set; }
+        public DbSet<KeyValue> KeyValue { get; set; }
+        public DbSet<Models.Task> Tasks { get; set; }
+        public DbSet<Models.Subtask> Subtasks { get; set; }
 
     }
 }
