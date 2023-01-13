@@ -15,12 +15,13 @@ namespace Task_management_system.Data
         //Създаване на таблици в реална база данни
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Project>();
-           
+            modelBuilder.Entity<Project>().HasIndex(b => b.ProjectName)
+            .IsUnique();
             modelBuilder.Entity<Models.Task>();
             modelBuilder.Entity<Subtask>();
             modelBuilder.Entity<KeyType>();
             modelBuilder.Entity<KeyValue>();
+              
             // modelBuilder.Seed();
             base.OnModelCreating(modelBuilder);
         }

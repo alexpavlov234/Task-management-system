@@ -1,17 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Policy;
 using Task_management_system.Areas.Identity;
 
 namespace Task_management_system.Models
 {
     [Table("Project")]
     [Display(Name = "Проект")]
+    [Index(nameof(ProjectName), IsUnique = true)]
     public class Project
     {
         [Key]
         public int ProjectId { get; set; }
 
         [Required]
+        
         public string ProjectName { get; set; }
         [Required]
         public string ProjectDescription { get; set; }
