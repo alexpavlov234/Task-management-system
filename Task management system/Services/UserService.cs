@@ -51,6 +51,6 @@ public class UserService : Controller, IUserService
     }
     public void UpdateApplicationUser(ApplicationUser applicationUser)
     {
-        _userManager.UpdateAsync(applicationUser);s
+        _userManager.UpdateAsync(applicationUser);
     }
 }
