@@ -68,3 +68,7 @@ main {
         padding-right: 1.5rem !important;
     }
 }
+.px-4 {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}

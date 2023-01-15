@@ -9,4 +9,7 @@ public interface IUserService
     List<ApplicationUser> GetAllUsers();
     void DeleteApplicationUser(ApplicationUser applicationUser);
     void UpdateApplicationUser(ApplicationUser applicationUser);
+    ApplicationUser GetLoggedUser();
+    bool IsUserLoggedIn();
+    Task<bool> IsLoggedUserAdmin();
 }

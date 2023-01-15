@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Areas;
+using Task_management_system.Interfaces;
+using KeyValue_management_system.Services;
 
 namespace Task_management_system
 {
@@ -18,7 +20,7 @@ namespace Task_management_system
             builder.Services.AddServerSideBlazor();
             //Важно
             builder.Services.AddDbContext<Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection1")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection1")), ServiceLifetime.Transient);
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
@@ -30,6 +32,10 @@ namespace Task_management_system
             //builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
             builder.Services.AddScoped<TokenProvider>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ITaskService, TaskService>();
+            builder.Services.AddScoped<IProjectService, ProjectService>();
+            builder.Services.AddScoped<IKeyValueService, KeyValueService>();
             var app = builder.Build();
 
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzQ3NTYzQDMyMzAyZTMzMmUzMGEyZkJKb2ltdWJxZTZKRDFVdmZqbW83cFZ3QzVQVFpTNlN2YUZyeVh0RVk9");
