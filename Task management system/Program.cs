@@ -1,14 +1,9 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Task_management_system.Data;
 using Syncfusion.Blazor;
-using Syncfusion.Blazor.Cards;
 using Microsoft.EntityFrameworkCore;
-using Syncfusion.Blazor;
 using Microsoft.AspNetCore.Identity;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Areas;
-using Microsoft.Extensions.Hosting;
 
 namespace Task_management_system
 {
