@@ -7,6 +7,7 @@ namespace Task_management_system.Models
 {
     [Table("KeyValue")]
     [Display(Name = "Стойности на номенклатура")]
+    [Index(nameof(KeyValueIntCode), IsUnique = true)]
     public class KeyValue
     {
         [Key]

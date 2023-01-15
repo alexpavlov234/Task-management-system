@@ -20,8 +20,9 @@ namespace Task_management_system.Data
             modelBuilder.Entity<Models.Task>();
             modelBuilder.Entity<Subtask>();
             modelBuilder.Entity<KeyType>();
-            modelBuilder.Entity<KeyValue>();
-              
+            modelBuilder.Entity<KeyValue>().HasIndex(b => b.KeyValueIntCode)
+            .IsUnique();
+
             // modelBuilder.Seed();
             base.OnModelCreating(modelBuilder);
         }
