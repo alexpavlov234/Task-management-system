@@ -69,5 +69,6 @@ body {
 
 
 .form-control {
-    margin: 5px !important;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
