@@ -1,13 +1,78 @@
 ﻿@page "/Management"
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+@using Syncfusion.PdfExport
 @using Task_management_system.Areas.Identity
 @using Task_management_system.Data
+@using Task_management_system.Pages.Common
 @inject RoleManager<IdentityRole> roleManager
 @inject UserManager<ApplicationUser> userManager
 @inject SignInManager<ApplicationUser> signInManager
 @attribute [Authorize(Roles = "Admin")]
 
+<div class="content-wrapper">
+   
+    <div class="card">
+        
+        <div class="card-header">
+            <h3>Потребители</h3>
+            <nav class="navbar navbar-expand">
+                <!-- Left navbar links -->
+                <ul class="navbar-nav float">
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <SfTooltip Position="TooltipPosition.BottomCenter" Content="Добавяне на нов документ към заявлението" OpensOn="Hover">
+                            <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddNewDocumentClickHandler" disabled="@(this.DisableAllFields)">Нов потребител</button>
+                        </SfTooltip>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        &nbsp;
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <SfGrid ID="usersGrid" DataSource="users" AllowSorting="true" AllowFiltering=true EnableAltRow="true" EnableHover="false"
+                            AllowTextWrap="true" @ref="usersGrid" AllowSelection="true" Toolbar="@(new List<string>() { "ExcelExport", "PdfExport" })"
+                            AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true">
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+                        <GridPageSettings PageCount="5" PageSize=20 PageSizes="true"></GridPageSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" TValue="ApplicationUser"></GridEvents>
+                        <GridColumns>
+                            <GridColumn Width="30px">
+                                <Template>
+                                    <SfTooltip Position="TooltipPosition.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger" @onclick="(() => DeleteDocument(context as ApplicationUser))">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </SfTooltip>
+                                </Template>
+                            </GridColumn>
+                             <GridColumn Width="30px">
+                                <Template>
+                                    <SfTooltip Position="TooltipPosition.BottomCenter" Content="Редактиране" OpensOn="Hover">
+                                        <button type="button" class="btn btn-outline-warning waves-effect md-trigger" @onclick="(() => DeleteDocument(context as ApplicationUser))">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </SfTooltip>
+                                </Template>
+                            </GridColumn>
+
+                            <GridColumn Field=@nameof(ApplicationUser.UserName) HeaderText="Потребителско име" IsPrimaryKey="true" TextAlign="TextAlign.Right" Width="120"></GridColumn>
+                            <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" Width="120"></GridColumn>
+                            <GridColumn Field=@nameof(ApplicationUser.LastName) HeaderText="Фамилия" Width="120"></GridColumn>
+                            <GridColumn Field=@nameof(ApplicationUser.Email) HeaderText="Имейл" Width="120"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ToastMsg @ref="toast" />
+@*
 <h3>Роли</h3>
 <SfGrid DataSource="@roles">
     <GridColumns>
@@ -36,9 +101,31 @@
         <GridColumn Field=@nameof(ApplicationUser.Email) HeaderText="Имейл" Width="120"></GridColumn>
 
     </GridColumns>
-</SfGrid>
+</SfGrid>*@
 @code {
     //https://learn.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-7.0
+
+
+
+    private ToastMsg toast = new ToastMsg();
+    private bool documentDeleteConfirmed = false;
+    private bool showDocumentConfirmDialog = false;
+
+    private SfGrid<ApplicationUser> usersGrid = new SfGrid<ApplicationUser>();
+
+    [Parameter]
+    public bool DisableWhenProcedureIsCompleted { get; set; }
+
+    [Parameter]
+    public bool DisableAllFields { get; set; }
+
+
+    [Inject]
+    public IJSRuntime JsRuntime { get; set; }
+    [Inject]
+    public IUserService UserService { get; set; }
+
+
     public List<IdentityRole> roles { get; set; }
     public List<ApplicationUser> users { get; set; }
     public int RowCounter = 0;
@@ -47,13 +134,79 @@
     private Context context { get; set; }
     [Inject]
     private IHttpContextAccessor httpContextAccessor { get; set; }
-    protected override void OnInitialized()
+    private async Task AddNewDocumentClickHandler()
+    {
+    }
+    private async Task DeleteDocument(ApplicationUser applicationUser)
     {
 
+        await userManager.DeleteAsync(applicationUser);
+        StateHasChanged();
 
-        var users = userManager.Users.ToList();
-        var itemToRemove = 
-        users.Remove(users.Single(r => r.UserName == httpContextAccessor.HttpContext.User.Identity.Name));
+    }
+    protected async Task ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "documentsGrid_pdfexport")
+        {
+            int temp = usersGrid.PageSettings.PageSize;
+            usersGrid.PageSettings.PageSize = users.Count();
+            await usersGrid.Refresh();
+            PdfExportProperties ExportProperties = new PdfExportProperties();
+
+            List<GridColumn> ExportColumns = new List<GridColumn>();
+#pragma warning disable BL0005
+
+            ExportColumns.Add(new GridColumn() { Field = nameof(ApplicationUser.UserName), HeaderText = "Потребителско име", Width = "80", TextAlign = TextAlign.Left });
+            ExportColumns.Add(new GridColumn() { Field = nameof(ApplicationUser.FirstName), HeaderText = "Име", Width = "80", TextAlign = TextAlign.Left });
+            ExportColumns.Add(new GridColumn() { Field = nameof(ApplicationUser.LastName), HeaderText = "Фамилия", Width = "80", TextAlign = TextAlign.Left });
+            ExportColumns.Add(new GridColumn() { Field = nameof(ApplicationUser.Email), HeaderText = "Имейл", Width = "80", TextAlign = TextAlign.Left });
+
+#pragma warning restore BL0005
+
+            ExportProperties.Columns = ExportColumns;
+            ExportProperties.PageOrientation = PageOrientation.Landscape;
+            ExportProperties.IncludeTemplateColumn = true;
+            PdfTheme Theme = new PdfTheme();
+            PdfThemeStyle RecordThemeStyle = new PdfThemeStyle()
+                {
+                    Font = new PdfGridFont() { IsTrueType = true, FontStyle = PdfFontStyle.Regular, FontFamily = FontFamilyPDF.fontFamilyBase64String }
+                };
+
+            PdfThemeStyle HeaderThemeStyle = new PdfThemeStyle()
+                {
+                    Font = new PdfGridFont() { IsTrueType = true, FontStyle = PdfFontStyle.Bold, FontFamily = FontFamilyPDF.fontFamilyBase64String }
+                };
+            Theme.Record = RecordThemeStyle;
+            Theme.Header = HeaderThemeStyle;
+
+            ExportProperties.Theme = Theme;
+            ExportProperties.FileName = $"Потребители.pdf";
+
+            await this.usersGrid.ExportToPdfAsync(ExportProperties);
+            usersGrid.PageSettings.PageSize = temp;
+            await usersGrid.Refresh();
+        }
+        else if (args.Item.Id == "usersGrid_excelexport")
+        {
+            ExcelExportProperties ExportProperties = new ExcelExportProperties();
+            List<GridColumn> ExportColumns = new List<GridColumn>();
+#pragma warning disable BL0005
+            ExportColumns.Add(new GridColumn() { Field = nameof(ApplicationUser.UserName), HeaderText = "Потребителско име", Width = "80", TextAlign = TextAlign.Left });
+            ExportColumns.Add(new GridColumn() { Field = nameof(ApplicationUser.FirstName), HeaderText = "Име", Width = "80", TextAlign = TextAlign.Left });
+            ExportColumns.Add(new GridColumn() { Field = nameof(ApplicationUser.LastName), HeaderText = "Фамилия", Width = "80", TextAlign = TextAlign.Left });
+            ExportColumns.Add(new GridColumn() { Field = nameof(ApplicationUser.Email), HeaderText = "Имейл", Width = "80", TextAlign = TextAlign.Left });
+
+#pragma warning restore BL0005
+
+            ExportProperties.Columns = ExportColumns;
+            ExportProperties.FileName = $"Потребители.xlsx";
+            await this.usersGrid.ExportToExcelAsync(ExportProperties);
+        }
+    }
+    protected override void OnInitialized()
+    {
+        var users = UserService.GetAllUsers();
+        var itemToRemove = users.Remove(users.Single(r => r.UserName == httpContextAccessor.HttpContext.User.Identity.Name));
         var roles = roleManager.Roles.ToList();
         this.users = users;
         this.roles = roles;
@@ -97,9 +250,9 @@
         else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
         {
             var user = (await sfGrid.GetSelectedRecordsAsync()).FirstOrDefault();
-           
-                await userManager.DeleteAsync(user);
-            
+
+            await userManager.DeleteAsync(user);
+
 
 
         }

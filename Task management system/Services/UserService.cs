@@ -38,7 +38,8 @@ public class UserService : Controller, IUserService
 
     public List<ApplicationUser> GetAllUsers()
     {
-        return _userManager.Users.ToList();
+        return _context.Users.ToList();
+
     }
 
     public ApplicationUser? GetApplicationUserByIdAsync(string Id)
