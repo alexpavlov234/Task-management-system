@@ -6,6 +6,8 @@ using Task_management_system.Areas.Identity;
 using Task_management_system.Areas;
 using Task_management_system.Interfaces;
 using KeyValue_management_system.Services;
+using Microsoft.AspNetCore.Components.Forms;
+using Task_management_system.Pages.Common;
 
 namespace Task_management_system
 {
@@ -20,7 +22,7 @@ namespace Task_management_system
             builder.Services.AddServerSideBlazor();
             //Важно
             builder.Services.AddDbContext<Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection1")), ServiceLifetime.Transient);
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection1") ),ServiceLifetime.Transient);
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
@@ -32,10 +34,12 @@ namespace Task_management_system
             //builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
             builder.Services.AddScoped<TokenProvider>();
-            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddScoped<ITaskService, TaskService>();
             builder.Services.AddScoped<IProjectService, ProjectService>();
             builder.Services.AddScoped<IKeyValueService, KeyValueService>();
+            builder.Services.AddScoped<BaseHelper>();
+   
             var app = builder.Build();
 
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzQ3NTYzQDMyMzAyZTMzMmUzMGEyZkJKb2ltdWJxZTZKRDFVdmZqbW83cFZ3QzVQVFpTNlN2YUZyeVh0RVk9");
@@ -70,7 +74,7 @@ namespace Task_management_system
             app.UseHttpsRedirection();
 
 
-
+            
             app.UseStaticFiles();
 
             app.UseRouting();

@@ -5,30 +5,33 @@
 
 <div class="page">
     <div class="sidebar">
-        @if (userService.IsUserLoggedIn())
-        {
-            @if (isAdmin){
 
-            
-                <AdminNavMenu />
-            }
-            else
-            {
-                <NavMenu />
-            }
+        <AuthorizeView>
+            <Authorized>
+                @if (isAdmin)
+                {
 
-        }
-        else
-        {
-            <NavMenuLogin />
-        }
-        
+
+                    <AdminNavMenu />
+                }
+                else
+                {
+                    <NavMenu />
+                }
+
+
+            </Authorized>
+            <NotAuthorized>
+                @* For unauthorized users *@
+                <NavMenuLogin />
+            </NotAuthorized>
+        </AuthorizeView>
     </div>
 
     <main>
         <div class="top-row px-4">
-            <LoginDisplay/>
-         
+            <LoginDisplay />
+
         </div>
 
         <article class="content px-4">
@@ -38,11 +41,13 @@
 </div>
 
 @code {
-    bool isAdmin = false;
+    private bool isAdmin = false;
+
     [Inject]
     private IUserService userService { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        bool isAdmin = await userService.IsLoggedUserAdmin();
+
+        isAdmin = await userService.IsLoggedUserAdmin();
     }
 }

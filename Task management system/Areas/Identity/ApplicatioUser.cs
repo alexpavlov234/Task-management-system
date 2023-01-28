@@ -6,9 +6,9 @@ namespace Task_management_system.Areas.Identity
 {
     public class ApplicationUser : IdentityUser
     {
-        [Required]
+        [Required(ErrorMessage = "Полето 'Име' е задължително")]
         public string FirstName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Полето 'Фамилия' е задължително")]
         public string LastName { get; set; }
     }
 }

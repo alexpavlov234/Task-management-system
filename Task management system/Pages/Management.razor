@@ -1,6 +1,7 @@
 ﻿@page "/Management"
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+@using Syncfusion.Blazor.Popups
 @using Syncfusion.PdfExport
 @using Task_management_system.Areas.Identity
 @using Task_management_system.Data
@@ -11,24 +12,30 @@
 @attribute [Authorize(Roles = "Admin")]
 
 <div class="content-wrapper">
-   
+
     <div class="card">
-        
+
         <div class="card-header">
-            <h3>Потребители</h3>
-            <nav class="navbar navbar-expand">
-                <!-- Left navbar links -->
-                <ul class="navbar-nav float">
-                    <li class="nav-item d-none d-sm-inline-block">
-                        <SfTooltip Position="TooltipPosition.BottomCenter" Content="Добавяне на нов документ към заявлението" OpensOn="Hover">
-                            <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddNewDocumentClickHandler" disabled="@(this.DisableAllFields)">Нов потребител</button>
-                        </SfTooltip>
-                    </li>
-                    <li class="nav-item d-none d-sm-inline-block">
-                        &nbsp;
-                    </li>
-                </ul>
-            </nav>
+            <div class="frame container">
+                <img class="banner" src="img/iStock-1203930843.jpg" alt="Banner">
+                <div class="bottom-left">
+
+                    <h3>Потребители</h3>
+                    <nav class="navbar navbar-expand">
+                        <!-- Left navbar links -->
+                        <ul class="navbar-nav float">
+                            <li class="nav-item d-none d-sm-inline-block">
+
+                                <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddNewDocumentClickHandler" disabled="@(this.DisableAllFields)">Нов потребител</button>
+
+                            </li>
+                            <li class="nav-item d-none d-sm-inline-block">
+                                &nbsp;
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div class="row">
@@ -40,19 +47,19 @@
                         <GridPageSettings PageCount="5" PageSize=20 PageSizes="true"></GridPageSettings>
                         <GridEvents OnToolbarClick="ToolbarClick" TValue="ApplicationUser"></GridEvents>
                         <GridColumns>
-                            <GridColumn Width="30px">
+                            <GridColumn Width="40px">
                                 <Template>
-                                    <SfTooltip Position="TooltipPosition.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger" @onclick="(() => DeleteDocument(context as ApplicationUser))">
+                                    <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger" @onclick="(() => DeleteUser(context as ApplicationUser))">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </SfTooltip>
                                 </Template>
                             </GridColumn>
-                             <GridColumn Width="30px">
+                            <GridColumn Width="40px">
                                 <Template>
-                                    <SfTooltip Position="TooltipPosition.BottomCenter" Content="Редактиране" OpensOn="Hover">
-                                        <button type="button" class="btn btn-outline-warning waves-effect md-trigger" @onclick="(() => DeleteDocument(context as ApplicationUser))">
+                                    <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
+                                        <button type="button" class="btn btn-outline-warning waves-effect md-trigger" @onclick="(() => EditUser(context as ApplicationUser))">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </button>
                                     </SfTooltip>
@@ -63,6 +70,7 @@
                             <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" Width="120"></GridColumn>
                             <GridColumn Field=@nameof(ApplicationUser.LastName) HeaderText="Фамилия" Width="120"></GridColumn>
                             <GridColumn Field=@nameof(ApplicationUser.Email) HeaderText="Имейл" Width="120"></GridColumn>
+                            <GridColumn Field=@nameof(ApplicationUser.PhoneNumber) HeaderText="Телефон" Width="120"></GridColumn>
                         </GridColumns>
                     </SfGrid>
                 </div>
@@ -71,48 +79,29 @@
     </div>
 </div>
 
-<ToastMsg @ref="toast" />
-@*
-<h3>Роли</h3>
-<SfGrid DataSource="@roles">
-    <GridColumns>
-        <GridColumn Type="ColumnType.Number" AllowFiltering="false" AllowEditing="false" AllowSorting="false" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" AutoFit="true">
-            <Template>
 
-                @{
-                    var val = GetRowCounter(context as IdentityRole);
-                    @val.Result
-                }
-            </Template>
-        </GridColumn>
-        <GridColumn Field=@nameof(IdentityRole.Name) HeaderText="Име на роля"></GridColumn>
+<ManagementModal @ref="managementModal" CallbackAfterSubmit="UpdateAfterManagementModalSubmitAsync" />
 
-    </GridColumns>
-</SfGrid>
-
-<h3>Потребители</h3>
-<SfGrid DataSource="@users" @ref="sfGrid" AllowPaging="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" })" Height="315">
-    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true"></GridEditSettings>
-    <GridEvents OnActionBegin="ActionBegin" OnActionComplete="ActionComplete" TValue="ApplicationUser"></GridEvents>
-    <GridColumns>
-        <GridColumn Field=@nameof(ApplicationUser.UserName) HeaderText="Потребителско име" IsPrimaryKey="true" TextAlign="TextAlign.Right" Width="120"></GridColumn>
-        <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" Width="120"></GridColumn>
-        <GridColumn Field=@nameof(ApplicationUser.LastName) HeaderText="Фамилия" Width="120"></GridColumn>
-        <GridColumn Field=@nameof(ApplicationUser.Email) HeaderText="Имейл" Width="120"></GridColumn>
-
-    </GridColumns>
-</SfGrid>*@
 @code {
     //https://learn.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-7.0
 
 
 
-    private ToastMsg toast = new ToastMsg();
     private bool documentDeleteConfirmed = false;
     private bool showDocumentConfirmDialog = false;
-
+    private ManagementModal managementModal = new ManagementModal();
     private SfGrid<ApplicationUser> usersGrid = new SfGrid<ApplicationUser>();
+    private async Task UpdateAfterManagementModalSubmitAsync()
+    {
 
+        var users = UserService.GetAllUsers();
+        var itemToRemove = users.Remove(users.Single(r => r.UserName == httpContextAccessor.HttpContext.User.Identity.Name));
+        var roles = roleManager.Roles.ToList();
+        this.users = users;
+        this.roles = roles;
+        await this.usersGrid.Refresh();
+        this.StateHasChanged();
+    }
     [Parameter]
     public bool DisableWhenProcedureIsCompleted { get; set; }
 
@@ -128,6 +117,7 @@
 
     public List<IdentityRole> roles { get; set; }
     public List<ApplicationUser> users { get; set; }
+    private ManagementModal modal;
     public int RowCounter = 0;
     SfGrid<ApplicationUser> sfGrid { get; set; }
     [Inject]
@@ -136,14 +126,27 @@
     private IHttpContextAccessor httpContextAccessor { get; set; }
     private async Task AddNewDocumentClickHandler()
     {
+        managementModal.OpenDialog(new ApplicationUser());
     }
-    private async Task DeleteDocument(ApplicationUser applicationUser)
+    private async Task DeleteUser(ApplicationUser applicationUser)
     {
 
-        await userManager.DeleteAsync(applicationUser);
-        StateHasChanged();
+        await UserService.DeleteApplicationUser(applicationUser);
+        var users = UserService.GetAllUsers();
+        var itemToRemove = users.Remove(users.Single(r => r.UserName == httpContextAccessor.HttpContext.User.Identity.Name));
+        var roles = roleManager.Roles.ToList();
+        this.users = users;
+        this.roles = roles;
+        this.StateHasChanged();
 
     }
+
+    private async Task EditUser(ApplicationUser applicationUser)
+    {
+
+        managementModal.OpenDialog(applicationUser);
+    }
+
     protected async Task ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         if (args.Item.Id == "documentsGrid_pdfexport")
@@ -203,7 +206,7 @@
             await this.usersGrid.ExportToExcelAsync(ExportProperties);
         }
     }
-    protected override void OnInitialized()
+    protected async override Task OnInitializedAsync()
     {
         var users = UserService.GetAllUsers();
         var itemToRemove = users.Remove(users.Single(r => r.UserName == httpContextAccessor.HttpContext.User.Identity.Name));
@@ -217,74 +220,8 @@
         RowCounter = roles.IndexOf(val);
         return RowCounter + 1;
     }
-    public async void ActionBegin(ActionEventArgs<ApplicationUser> args)
-    {
-        if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
-        {
-            // Triggers before editing operation starts
-        }
-        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
-        {
-            // Triggers before add operation starts
-        }
-        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Cancel)
-        {
-            // Triggers before cancel operation starts
-        }
-        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
-        {
-            var records = (await sfGrid.GetCurrentViewRecordsAsync()).ToList();
-            foreach (var record in records)
-            {
-                if (userManager.FindByNameAsync(record.UserName) != null)
-                {
-                    await userManager.UpdateAsync(record);
-                }
-                else
-                {
-                    //TODO:Modal
-                    await userManager.CreateAsync(record, "123456789");
-                }
-            }
-        }
-        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
-        {
-            var user = (await sfGrid.GetSelectedRecordsAsync()).FirstOrDefault();
-
-            await userManager.DeleteAsync(user);
 
 
 
-        }
-    }
 
-    public void ActionComplete(ActionEventArgs<ApplicationUser> args)
-    {
-        if (args.RequestType == Syncfusion.Blazor.Grids.Action.BeginEdit)
-        {
-            // Triggers once editing operation completes
-        }
-        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Add)
-        {
-            // Triggers once add operation completes
-        }
-        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Cancel)
-        {
-            // Triggers once cancel operation completes
-        }
-        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Save)
-        {
-            //var records = SfDataGrid.View.Records;
-            //foreach (var record in records)
-            //{
-            //    var rowdata = record.Data;
-            //}
-
-
-        }
-        else if (args.RequestType == Syncfusion.Blazor.Grids.Action.Delete)
-        {
-            // Triggers once delete operation completes
-        }
-    }
 }

@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Transactions;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Data;
 
 public class UserService : Controller, IUserService
 {
+
     private readonly Context _context;
     private readonly IEmailSender _emailSender;
     private readonly SignInManager<ApplicationUser> _signInManager;
@@ -25,15 +29,38 @@ public class UserService : Controller, IUserService
         _emailSender = emailSender;
         _httpContextAccessor = httpContextAccessor;
     }
-
-    public void CreateApplicationUser(ApplicationUser applicationUser, String Password)
+    public async Task<string> CreateApplicationUser(ApplicationUser applicationUser, String Password)
     {
-        _userManager.CreateAsync(applicationUser, Password);
+        var result = await _userManager.CreateAsync(applicationUser, Password);
+        _context.Entry(applicationUser).State = EntityState.Detached;
+        if (!result.Succeeded)
+        {
+            return result.Errors.ToList().First().Description;
+        }
+        else
+        {
+            return "Успешно създаден потребител!";
+        }
     }
 
-    public void DeleteApplicationUser(ApplicationUser applicationUser)
+    public async Task DeleteApplicationUser(ApplicationUser applicationUser)
     {
-        _userManager.DeleteAsync(applicationUser);
+        var local = _context.Set<ApplicationUser>()
+    .Local
+    .FirstOrDefault(entry => entry.Id.Equals(applicationUser.Id));
+
+        // check if local is not null 
+        if (local != null)
+        {
+            // detach
+            _context.Entry(local).State = EntityState.Detached;
+        }
+        // set Modified flag in your entry
+        _context.Entry(applicationUser).State = EntityState.Deleted;
+
+        // save 
+        _context.SaveChanges();
+
     }
 
     public List<ApplicationUser> GetAllUsers()
@@ -42,38 +69,74 @@ public class UserService : Controller, IUserService
 
     }
 
-    public ApplicationUser? GetApplicationUserByIdAsync(string Id)
+    public async Task<ApplicationUser> GetApplicationUserByIdAsync(string Id)
     {
-        var user = _context.Users.Where<ApplicationUser>(x => x.Id == Id).FirstOrDefault();
+        var user = await _userManager.FindByIdAsync(Id);
         return user;
     }
 
-    public ApplicationUser? GetApplicationUserByUsernameAsync(string Username)
+    public async Task<ApplicationUser> GetApplicationUserByUsernameAsync(string Username)
     {
-        var user = _context.Users.Where<ApplicationUser>(x => x.UserName == Username).FirstOrDefault();
+        var user = await _userManager.FindByNameAsync(Username);
         return user;
     }
-    public void UpdateApplicationUser(ApplicationUser applicationUser)
+
+    public async Task UpdateApplicationUser(ApplicationUser applicationUser)
     {
-        _userManager.UpdateAsync(applicationUser);
+        var local = _context.Set<ApplicationUser>().Local.FirstOrDefault(entry => entry.Id.Equals(applicationUser.Id));
+        // check if local is not null
+        if (local != null)
+        {
+            // detach
+            _context.Entry(local).State = EntityState.Detached;
+        }
+        _context.Entry(applicationUser).State = EntityState.Modified;
+        _context.SaveChanges();
+
     }
 
-    public ApplicationUser? GetLoggedUser()
+
+    public async Task<ApplicationUser> GetLoggedUser()
     {
-        return _context.Users.Single(predicate: r => r.UserName == _httpContextAccessor.HttpContext.User.Identity.Name);
+        var user = await _userManager.GetUserAsync(_signInManager.Context.User);
+        _context.Entry(user).State = EntityState.Detached;
+        return user;
+
     }
 
-    public bool IsUserLoggedIn() => _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
+
 
     public async Task<bool> IsLoggedUserAdmin()
     {
-        if (IsUserLoggedIn())
+
+        return await _userManager.IsInRoleAsync(await GetLoggedUser(), "Admin");
+
+
+
+    }
+
+    public async void Login(string username, string password, bool rememberMe)
+    {
+        var result = await _signInManager.PasswordSignInAsync(username, password, rememberMe, lockoutOnFailure: true);
+        if (!result.Succeeded)
         {
-            return await _userManager.IsInRoleAsync(GetLoggedUser(), "Admin");
-        }
-        else
-        {
-            return false;
+            // handle failed login attempt
         }
     }
+    public void Logout()
+    {
+        _signInManager.SignOutAsync();
+    }
+
+    public async Task AddRoleAsync(ApplicationUser user, string role)
+    {
+        await _userManager.AddToRoleAsync(user, role);
+    }
+
+    public async Task RemoveRoleAsync(ApplicationUser user, string role)
+    {
+        await _userManager.RemoveFromRoleAsync(user, role);
+    }
+
+
 }

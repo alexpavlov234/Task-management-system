@@ -40,8 +40,17 @@ img {
     max-width: none;
 }
 
-.form-floating, .btn {
+
+
+.form-floating, .btn, input {
     margin: 5px 0 5px 0 !important;
+}
+.input-group-prepend button {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.e-rowcell button {
+    width: 100%;
 }
 
 .valid.modified:not([type=checkbox]) {

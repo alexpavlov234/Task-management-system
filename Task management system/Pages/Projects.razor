@@ -1,24 +1,32 @@
 ﻿@page "/Projects"
 <PageTitle>Проекти</PageTitle>
 <h2>Проекти</h2>
-@if (isLoggedIn)
-{
-    @if (isAdmin)
-    {
+<AuthorizeView>
+    <Authorized>
+        @if (isAdmin)
+        {
+
+        }
+
+
+    </Authorized>
+    <NotAuthorized>
+        @* For unauthorized users *@
         
-    }
+    </NotAuthorized>
+</AuthorizeView>
+   
 
 }
 <div>
 </div>
 @code {
     bool isAdmin = false;
-    bool isLoggedIn = false;
     [Inject]
     private IUserService userService { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        isLoggedIn = userService.IsUserLoggedIn();
+        
         isAdmin = await userService.IsLoggedUserAdmin();
     }
 }

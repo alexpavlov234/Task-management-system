@@ -1,0 +1,159 @@
+﻿@using Task_management_system.Areas.Identity
+@using Task_management_system.Pages.Common
+@using Task_management_system.Services.Common
+@using Syncfusion.Blazor.Popups
+@inject IUserService UserService
+
+
+<SfDialog Width="700px" Height="300px" IsModal="true" ShowCloseIcon="true" EnableResize="true" @bind-Visible="@IsVisible">
+    <DialogTemplates>
+        <Header>Данни за потребител <span style="color: #009cfc;">@this.User.FirstName @this.User.LastName</span></Header>
+        <Content>
+
+            <EditForm EditContext="editContext">
+
+                <DataAnnotationsValidator />
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="userName">Потребителско име</label>
+                        <InputText id="userName" @bind-Value="User.UserName" class="form-control"></InputText>
+                        <ValidationMessage For="@(() => User.UserName)" />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="firstName">Име</label>
+                        <InputText id="firstName" @bind-Value="User.FirstName" class="form-control"></InputText>
+                        <ValidationMessage For="@(() => User.FirstName)" />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="lastName">Фамилия</label>
+                        <InputText id="lastName" @bind-Value="User.LastName" class="form-control"></InputText>
+                        <ValidationMessage For="@(() => User.LastName)" />
+                    </div>
+                </div>
+                <div class="row">
+                    @if (IsUserNew)
+                    {
+                        <div class="col-md-4">
+                            <label for="telephone">Телефон</label>
+                            <InputText id="telephone" @bind-Value="User.PhoneNumber" class="form-control"></InputText>
+                            <ValidationMessage For="@(() => User.PhoneNumber)" />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="email">Имейл</label>
+                            <InputText id="email" @bind-Value="User.Email" class="form-control"></InputText>
+                            <ValidationMessage For="@(() => User.Email)" />
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="password">Парола</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-outline-warning waves-effect" @onclick="GeneratePassword">
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                    </button> 
+                                </div>
+                                <InputText id="password" @bind-Value="Password" class="form-control" readonly="true"></InputText>
+
+                            </div>
+                            </div>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-6">
+                            <label for="telephone">Телефон</label>
+                            <InputText id="telephone" @bind-Value="User.PhoneNumber" class="form-control"></InputText>
+                            <ValidationMessage For="@(() => User.PhoneNumber)" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email">Имейл</label>
+                            <InputText id="email" @bind-Value="User.Email" class="form-control"></InputText>
+                            <ValidationMessage For="@(() => User.Email)" />
+                        </div>
+                    }
+
+                </div>
+
+
+            </EditForm>
+        </Content>
+        <FooterTemplate>
+            <div class="form-group">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary" @onclick="SaveUser">Запиши</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CloseDialog">Отказ</button>
+                </div>
+            </div>
+        </FooterTemplate>
+    </DialogTemplates>
+</SfDialog>
+<ToastMsg @ref="toast" />
+@code {
+    private bool IsVisible = false;
+    private bool IsUserNew = false;
+    private string Password = "";
+
+    private ToastMsg toast = new ToastMsg();
+    protected EditContext editContext;
+    [Inject]
+    BaseHelper BaseHelper { get; set; }
+    public async void OpenDialog(ApplicationUser applicationUser)
+    {
+        User = applicationUser;
+        IsUserNew = User != null ? (await UserService.GetApplicationUserByIdAsync(User.Id)) == null : false;
+        this.editContext = new EditContext(this.User);
+        this.IsVisible = true;
+        this.StateHasChanged();
+    }
+    [Parameter]
+    public EventCallback CallbackAfterSubmit { get; set; }
+
+    public void GeneratePassword()
+    {
+
+        Password = BaseHelper.GeneratePassword();
+
+
+    }
+    private ApplicationUser User { get; set; }
+
+
+
+    private void CloseDialog()
+    {
+        this.IsVisible = false;
+        this.StateHasChanged();
+    }
+
+    private async void SaveUser()
+    {
+        if (editContext.Validate())
+        {
+            if ((await UserService.GetApplicationUserByIdAsync(User.Id)) != null)
+            {
+                await UserService.UpdateApplicationUser(User);
+                await this.CallbackAfterSubmit.InvokeAsync();
+                toast.sfSuccessToast.Title = "Успешно приложени промени!";
+                toast.sfSuccessToast.ShowAsync();
+                IsVisible = false;
+            }
+            else
+            {
+                string result = await UserService.CreateApplicationUser(User, Password);
+                if(result.StartsWith("Успешно")){
+                toast.sfSuccessToast.Title = result;
+                toast.sfSuccessToast.ShowAsync();
+                } else {
+                    toast.sfErrorToast.Title = result;
+                    toast.sfErrorToast.ShowAsync();
+                }
+                
+                await this.CallbackAfterSubmit.InvokeAsync();
+                IsVisible = false;
+            }
+        }
+    }
+
+}
