@@ -46,7 +46,35 @@ img {
 button.nav-link.btn.btn-link {
     margin: 5px !important;
 }
-
+.weather-temp {
+    font-size: 72px;
+}
+.weather-info {
+    font-size: 22px;
+    color: dodgerblue;
+}
+.custom-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 3px solid rgba(0,0,0,.125);
+    border-radius: 0.75rem;
+    margin: 20px;
+}
+.weather-city {
+    font-size: 20px;
+    color: gray;
+}
+.weather-icon {
+   
+    height: 80%;
+    
+  
+}
 .form-floating, .btn, input {
     margin: 5px 0 5px 0 !important;
 }

@@ -104,7 +104,7 @@ public class UserService : Controller, IUserService
 
     public async Task<ApplicationUser> GetLoggedUser()
     {
-        var user = await _userManager.GetUserAsync(_signInManager.Context.User);
+        var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
         _context.Entry(user).State = EntityState.Detached;
         return user;
 

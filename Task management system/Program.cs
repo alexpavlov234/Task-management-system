@@ -37,6 +37,7 @@ namespace Task_management_system
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddScoped<ITaskService, TaskService>();
             builder.Services.AddScoped<IProjectService, ProjectService>();
+
             builder.Services.AddScoped<IKeyValueService, KeyValueService>();
             builder.Services.AddScoped<BaseHelper>();
    

@@ -1,4 +1,10 @@
-﻿@page "/"
+﻿@using System.Text
+@using Microsoft.AspNetCore.Identity
+@using Task_management_system.Models
+@using Task_management_system.Services
+
+@page "/"
+
 <PageTitle>Моят ден</PageTitle>
 
 @*
@@ -16,16 +22,52 @@ else
 *@
 <AuthorizeView>
     <Authorized>
-   <div class="frame container">
-    <img class="banner" src="img/iStock-1203930843.jpg" alt="Banner">
+        <div class="frame container">
+            <img class="banner" src="img/iStock-1203930843.jpg" alt="Banner">
             <div class="bottom-left">Здравейте, @userFullName</div>
         </div>
+        @if (response != null)
+        {
+
+            
+            <div class="col-sm-6">
+                <div class="custom-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Времето</h5>
+                        <div class="row align-middle">
+                            <div class="col-sm-6">
+                                <p class="weather-city">София</p>
+                                <p class="weather-temp">@((int)response.Temperature.Metric.Value + "°" + response.Temperature.Metric.Unit)</p>
+                                <p class="weather-info">@response.WeatherText</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <img class="weather-icon" src="@image" alt="Banner">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <div class="form-group">
+                            <div class="text-right">
+                                <a href="@response.Link" class="btn btn-primary">По подробно</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+        }
     </Authorized>
 
     <NotAuthorized>
 
     </NotAuthorized>
-    </AuthorizeView>
+</AuthorizeView>
 
 
 
@@ -33,12 +75,35 @@ else
     String userFullName = null;
     [Inject]
     private IUserService userService { get; set; }
-    protected override async Task OnInitializedAsync()
+
+    CurrentCondition response;
+    String image = "";
+    String result = "";
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-     
-            var user = await userService.GetLoggedUser();
-            userFullName = user.FirstName + " " + user.LastName;
-        
+
+        var user = await userService.GetLoggedUser();
+        userFullName = user.FirstName + " " + user.LastName;
+        //CurrentConditions currentConditions = new CurrentConditions("bXyjKZghQjnIwBB2WKEHdNsVyZdaJECK", "bg-bg");
+        //result = await currentConditions.Get(51097, false);
+
+
+        // response = currentConditions.ConvertData(result);
+        response = new CurrentCondition();
+        response.Temperature = new Temperature();
+        response.Temperature.Metric = new Metric();
+        response.Temperature.Metric.Value = 32;
+        response.Temperature.Metric.Unit = "C";
+        response.WeatherText = "Слънчево с валежи";
+        response.WeatherIcon = 14;
+        response.Link = "https://www.accuweather.com/bg/bg/sofia/51097/weather-forecast/51097";
+        image = "img/icons/" + response.WeatherIcon + ".svg";
+
+    }
+    public async void GetWeather()
+    {
+
+        StateHasChanged();
     }
 }
 

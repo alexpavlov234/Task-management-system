@@ -47,6 +47,46 @@
     <None Include="wwwroot\css\fonts\Exo2-SemiBoldItalic.ttf" />
     <None Include="wwwroot\css\fonts\Exo2-Thin.ttf" />
     <None Include="wwwroot\css\fonts\Exo2-ThinItalic.ttf" />
+    <None Include="wwwroot\img\icons\1.svg" />
+    <None Include="wwwroot\img\icons\11.svg" />
+    <None Include="wwwroot\img\icons\12.svg" />
+    <None Include="wwwroot\img\icons\13.svg" />
+    <None Include="wwwroot\img\icons\14.svg" />
+    <None Include="wwwroot\img\icons\15.svg" />
+    <None Include="wwwroot\img\icons\16.svg" />
+    <None Include="wwwroot\img\icons\17.svg" />
+    <None Include="wwwroot\img\icons\18.svg" />
+    <None Include="wwwroot\img\icons\19.svg" />
+    <None Include="wwwroot\img\icons\2.svg" />
+    <None Include="wwwroot\img\icons\20.svg" />
+    <None Include="wwwroot\img\icons\21.svg" />
+    <None Include="wwwroot\img\icons\22.svg" />
+    <None Include="wwwroot\img\icons\23.svg" />
+    <None Include="wwwroot\img\icons\24.svg" />
+    <None Include="wwwroot\img\icons\25.svg" />
+    <None Include="wwwroot\img\icons\26.svg" />
+    <None Include="wwwroot\img\icons\27.svg" />
+    <None Include="wwwroot\img\icons\3.svg" />
+    <None Include="wwwroot\img\icons\30.svg" />
+    <None Include="wwwroot\img\icons\31.svg" />
+    <None Include="wwwroot\img\icons\32.svg" />
+    <None Include="wwwroot\img\icons\33.svg" />
+    <None Include="wwwroot\img\icons\34.svg" />
+    <None Include="wwwroot\img\icons\35.svg" />
+    <None Include="wwwroot\img\icons\36.svg" />
+    <None Include="wwwroot\img\icons\37.svg" />
+    <None Include="wwwroot\img\icons\38.svg" />
+    <None Include="wwwroot\img\icons\39.svg" />
+    <None Include="wwwroot\img\icons\4.svg" />
+    <None Include="wwwroot\img\icons\40.svg" />
+    <None Include="wwwroot\img\icons\41.svg" />
+    <None Include="wwwroot\img\icons\42.svg" />
+    <None Include="wwwroot\img\icons\43.svg" />
+    <None Include="wwwroot\img\icons\44.svg" />
+    <None Include="wwwroot\img\icons\5.svg" />
+    <None Include="wwwroot\img\icons\6.svg" />
+    <None Include="wwwroot\img\icons\7.svg" />
+    <None Include="wwwroot\img\icons\8.svg" />
     <None Include="wwwroot\OwnIdentity\js\site.js" />
     <None Include="wwwroot\OwnIdentity\lib\bootstrap\dist\css\bootstrap-theme.css.map" />
     <None Include="wwwroot\OwnIdentity\lib\bootstrap\dist\css\bootstrap-theme.min.css.map" />
@@ -78,6 +118,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Accuweather.Core" Version="1.0.1" />
+    <PackageReference Include="Accuweather.Current" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.10" />
