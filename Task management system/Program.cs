@@ -22,7 +22,7 @@ namespace Task_management_system
             builder.Services.AddServerSideBlazor();
             //Важно
             builder.Services.AddDbContext<Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection1") ),ServiceLifetime.Transient);
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection1") ),ServiceLifetime.Scoped);
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {

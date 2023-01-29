@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Task_management_system.Areas.Identity;
+using Task_management_system.Services.Common;
 
 public interface IUserService
 {
@@ -19,4 +20,6 @@ public interface IUserService
     void Logout();
     Task AddRoleAsync(ApplicationUser user, string role);
     Task RemoveRoleAsync(ApplicationUser user, string role);
+    Task<IList<string>> GetRoleAsync(ApplicationUser user);
+    Task<ApplicationUser> ToApplicationUser(InputModel inputModel);
 }

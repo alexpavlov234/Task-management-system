@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Transactions;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Data;
+using Task_management_system.Services.Common;
 
 public class UserService : Controller, IUserService
 {
@@ -71,8 +72,12 @@ public class UserService : Controller, IUserService
 
     public async Task<ApplicationUser> GetApplicationUserByIdAsync(string Id)
     {
-        var user = await _userManager.FindByIdAsync(Id);
-        return user;
+        var local = _context.Users.AsNoTracking().FirstOrDefault(entry => entry.Id.Equals(Id));
+
+       
+
+       
+        return local;
     }
 
     public async Task<ApplicationUser> GetApplicationUserByUsernameAsync(string Username)
@@ -92,6 +97,7 @@ public class UserService : Controller, IUserService
         }
         _context.Entry(applicationUser).State = EntityState.Modified;
         _context.SaveChanges();
+
 
     }
 
@@ -138,5 +144,22 @@ public class UserService : Controller, IUserService
         await _userManager.RemoveFromRoleAsync(user, role);
     }
 
+    public async Task<IList<string>> GetRoleAsync(ApplicationUser user)
+    {
+
+        return user != null ? await _userManager.GetRolesAsync(user) : new List<string>();
+    }
+
+  
+
+    public async Task<ApplicationUser> ToApplicationUser(InputModel inputModel)
+    {
+        ApplicationUser applicationUser = await GetApplicationUserByIdAsync(inputModel.Id);
+        applicationUser.PhoneNumber = inputModel.PhoneNumber;
+        applicationUser.FirstName = inputModel.FirstName;
+        applicationUser.UserName = inputModel.Username;
+        applicationUser.Email = inputModel.Email;
+        return applicationUser;
+    }
 
 }

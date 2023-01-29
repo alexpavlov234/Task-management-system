@@ -79,7 +79,6 @@
     </div>
 </div>
 
-
 <ManagementModal @ref="managementModal" CallbackAfterSubmit="UpdateAfterManagementModalSubmitAsync" />
 
 @code {
@@ -93,12 +92,12 @@
     private SfGrid<ApplicationUser> usersGrid = new SfGrid<ApplicationUser>();
     private async Task UpdateAfterManagementModalSubmitAsync()
     {
-
         var users = UserService.GetAllUsers();
         var itemToRemove = users.Remove(users.Single(r => r.UserName == httpContextAccessor.HttpContext.User.Identity.Name));
         var roles = roleManager.Roles.ToList();
         this.users = users;
         this.roles = roles;
+        
         await this.usersGrid.Refresh();
         this.StateHasChanged();
     }

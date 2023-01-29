@@ -40,7 +40,12 @@ img {
     max-width: none;
 }
 
-
+.top-row.px-4 {
+    padding: 5px !important;
+}
+button.nav-link.btn.btn-link {
+    margin: 5px !important;
+}
 
 .form-floating, .btn, input {
     margin: 5px 0 5px 0 !important;
