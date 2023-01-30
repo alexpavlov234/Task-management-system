@@ -31,10 +31,11 @@ public class UserService : Controller, IUserService
     // Създаване на нов потребител
     public async Task<string> CreateApplicationUser(ApplicationUser applicationUser, String Password)
     {
+        
         // Използване на метода CreateAsync от UserManager за създаване на нов потребител
         IdentityResult result = await _userManager.CreateAsync(applicationUser, Password);
         // Отделяне на потребителя от локалния контекст
-        _context.Entry(applicationUser).State = EntityState.Detached;
+        
         if (!result.Succeeded)
         {
             // Връщане на първата грешка от резултата
@@ -42,6 +43,7 @@ public class UserService : Controller, IUserService
         }
         else
         {
+            await _userManager.AddToRoleAsync(applicationUser, "User");
             // Успешно създаден потребител
             return "Успешно създаден потребител!";
         }
@@ -106,9 +108,24 @@ public class UserService : Controller, IUserService
             _context.Entry(local).State = EntityState.Detached;
         }
         _context.Entry(applicationUser).State = EntityState.Modified;
+
         _context.SaveChanges();
 
-
+        if(applicationUser.Role == "Admin" && !(await IsInRoleAsync(applicationUser,"Admin")))
+        {
+            if(await IsInRoleAsync(applicationUser, "User"))
+            {
+                await RemoveRoleAsync(applicationUser, "User");
+            }
+            await AddRoleAsync(applicationUser, "Admin");
+        } else if (applicationUser.Role == "User" && (await IsInRoleAsync(applicationUser, "Admin")))
+        {
+            if (await IsInRoleAsync(applicationUser, "Admin"))
+            {
+                await RemoveRoleAsync(applicationUser, "Admin");
+            }
+            await AddRoleAsync(applicationUser, "User");
+        }
     }
 
 
@@ -158,16 +175,32 @@ public class UserService : Controller, IUserService
         return user != null ? await _userManager.GetRolesAsync(user) : new List<string>();
     }
 
+    public async Task<bool> IsInRoleAsync(ApplicationUser user, string role)
+    {
+        return (await GetRoleAsync(user)).Contains(role);
+    }
 
-
-    public async Task<ApplicationUser> ToApplicationUser(InputModel inputModel)
+    public async Task<ApplicationUser> ToExistingApplicationUser(InputModel inputModel)
     {
         ApplicationUser applicationUser = await GetApplicationUserByIdAsync(inputModel.Id);
         applicationUser.PhoneNumber = inputModel.PhoneNumber;
         applicationUser.FirstName = inputModel.FirstName;
+        applicationUser.LastName = inputModel.LastName;
         applicationUser.UserName = inputModel.Username;
         applicationUser.Email = inputModel.Email;
+        applicationUser.Role = inputModel.Role;
         return applicationUser;
     }
 
+    public ApplicationUser ToApplicationUser(InputModel inputModel)
+    {
+        ApplicationUser applicationUser = new ApplicationUser();
+        applicationUser.Id = inputModel.Id;
+        applicationUser.PhoneNumber = inputModel.PhoneNumber;
+        applicationUser.FirstName = inputModel.FirstName;
+        applicationUser.UserName = inputModel.Username;
+        applicationUser.LastName = inputModel.LastName;
+        applicationUser.Email = inputModel.Email;
+        return applicationUser;
+    }
 }

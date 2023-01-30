@@ -17,5 +17,6 @@ public interface IUserService
     Task AddRoleAsync(ApplicationUser user, string role);
     Task RemoveRoleAsync(ApplicationUser user, string role);
     Task<IList<string>> GetRoleAsync(ApplicationUser user);
-    Task<ApplicationUser> ToApplicationUser(InputModel inputModel);
+    Task<ApplicationUser> ToExistingApplicationUser(InputModel inputModel);
+    ApplicationUser ToApplicationUser(InputModel inputModel);
 }

@@ -49,15 +49,6 @@
                         <GridColumns>
                             <GridColumn Width="40px">
                                 <Template>
-                                    <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger" @onclick="(() => DeleteUser(context as ApplicationUser))">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </SfTooltip>
-                                </Template>
-                            </GridColumn>
-                            <GridColumn Width="40px">
-                                <Template>
                                     <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
                                         <button type="button" class="btn btn-outline-warning waves-effect md-trigger" @onclick="(() => EditUser(context as ApplicationUser))">
                                             <i class="fa-solid fa-pen-to-square"></i>
@@ -65,6 +56,16 @@
                                     </SfTooltip>
                                 </Template>
                             </GridColumn>
+                            <GridColumn Width="40px">
+                                <Template>
+                                    <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger" @onclick="(() => DeleteUser(context as ApplicationUser))">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </SfTooltip>
+                                </Template>
+                            </GridColumn>
+                            
 
                             <GridColumn Field=@nameof(ApplicationUser.UserName) HeaderText="Потребителско име" IsPrimaryKey="true" TextAlign="TextAlign.Right" Width="120"></GridColumn>
                             <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" Width="120"></GridColumn>

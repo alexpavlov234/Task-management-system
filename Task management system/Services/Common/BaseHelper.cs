@@ -17,16 +17,25 @@
             // Масив съдържащ генерираната парола
             char[] password = new char[passwordLength];
             // Масив съдържащ всички валидни набори от символи
-            string[] chars = new[] { lowerChars, upperChars, numberChars, specialChars };
+            var chars = new[] { lowerChars, upperChars, numberChars, specialChars };
             // Инстанция на генератор за случайни числа
-            Random random = new Random();
+            var random = new Random();
+            // Поставяне на малка и голяма буква в случаен индекс
+            int lowerIndex = random.Next(0, passwordLength);
+            int upperIndex = random.Next(0, passwordLength);
+            password[lowerIndex] = lowerChars[random.Next(0, lowerChars.Length)];
+            password[upperIndex] = upperChars[random.Next(0, upperChars.Length)];
             // Цикъл за генериране на паролата
             for (int i = 0; i < passwordLength; i++)
             {
-                // Избиране на случаен набор от символи
-                string set = chars[random.Next(0, chars.Length)];
-                // Добавяне на случаен символ от избрания набор
-                password[i] = set[random.Next(0, set.Length)];
+                if (i != lowerIndex && i != upperIndex)
+                {
+                    // Избиране на случаен набор от символи
+                    string set = chars[random.Next(0, chars.Length)];
+
+                    // Добавяне на случаен символ от избрания набор
+                    password[i] = set[random.Next(0, set.Length)];
+                }
             }
             // Решултатът е паролата в случайна последователност
             return new string(password.OrderBy(x => random.Next()).ToArray());

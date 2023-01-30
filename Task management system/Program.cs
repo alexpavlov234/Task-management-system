@@ -33,7 +33,7 @@ namespace Task_management_system
             //builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
             builder.Services.AddScoped<TokenProvider>();
-            builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITaskService, TaskService>();
             builder.Services.AddScoped<IProjectService, ProjectService>();
 

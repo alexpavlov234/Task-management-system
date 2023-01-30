@@ -29,6 +29,8 @@ namespace Task_management_system.Pages
         public void GeneratePassword()
         {
             inputModel.Password = BaseHelper.GeneratePassword();
+            inputModel.ConfirmPassword = inputModel.Password;
+            inputModel.PhoneNumber = "";
         }
 
         public async void OpenDialog(ApplicationUser applicationUser)
@@ -42,7 +44,16 @@ namespace Task_management_system.Pages
             inputModel.PhoneNumber = applicationUser.PhoneNumber;
             IsUserNew = applicationUser != null ? (await UserService.GetApplicationUserByIdAsync(applicationUser.Id)) == null : false;
             editContext = new EditContext(inputModel);
-            if (IsUserNew) { GeneratePassword(); }
+            if (IsUserNew) { GeneratePassword(); } else
+            {
+              var roles =  await UserService.GetRoleAsync(applicationUser);
+                if (roles.Contains("Admin")){
+                    inputModel.Role = "Admin";
+                } else
+                {
+                    inputModel.Role = "User";
+                }
+            }
             IsVisible = true;
             StateHasChanged();
         }
@@ -56,11 +67,12 @@ namespace Task_management_system.Pages
         private async void SaveUser()
         {
             if (editContext.Validate())
+                
             {
-                ApplicationUser User = await UserService.ToApplicationUser(inputModel);
 
-                if ((await UserService.GetApplicationUserByIdAsync(User.Id)) != null)
+                if ((await UserService.GetApplicationUserByIdAsync(inputModel.Id)) != null)
                 {
+                ApplicationUser User = await UserService.ToExistingApplicationUser(inputModel);
                     await UserService.UpdateApplicationUser(User);
                     await CallbackAfterSubmit.InvokeAsync();
                     toast.sfSuccessToast.Title = "Успешно приложени промени!";
@@ -69,7 +81,7 @@ namespace Task_management_system.Pages
                 }
                 else
                 {
-                    string result = await UserService.CreateApplicationUser(User, inputModel.Password);
+                    string result = await UserService.CreateApplicationUser(UserService.ToApplicationUser(inputModel), inputModel.Password);
                     if (result.StartsWith("Успешно"))
                     {
                         toast.sfSuccessToast.Title = result;
@@ -82,7 +94,7 @@ namespace Task_management_system.Pages
                     }
 
                     await CallbackAfterSubmit.InvokeAsync();
-                    IsVisible = false;
+                    
                 }
             }
         }
