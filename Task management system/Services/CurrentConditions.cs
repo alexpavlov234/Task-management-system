@@ -1,9 +1,6 @@
 ﻿using Accuweather.Core;
 using Accuweather.Core.Helpers;
 using Newtonsoft.Json;
-using System;
-using System.Security.Policy;
-using System.Threading.Tasks;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
 
@@ -42,7 +39,7 @@ public class CurrentConditions : AccuweatherApiCore, ICurrentConditions
         };
 
         // Form the URL for the API request by appending the locationKey and API key to the base URL
-        var url = $"{_baseUrl}{locationKey}?apikey={_apiKey}&";
+        string url = $"{_baseUrl}{locationKey}?apikey={_apiKey}&";
 
         // Make the API request, URL encode the parameters, and return the JSON response
         return await SendGetRequest(UrlEncodeHelper.UrlEncode(obj, url));
@@ -62,7 +59,7 @@ public class CurrentConditions : AccuweatherApiCore, ICurrentConditions
         };
 
         // Form the URL for the API request by appending the locationKey and API key to the base URL
-        var url = $"{_baseUrl}topcities/{group}?apikey={_apiKey}&";
+        string url = $"{_baseUrl}topcities/{group}?apikey={_apiKey}&";
 
         // Make the API request, URL encode the parameters, and return the JSON response
         return System.Text.RegularExpressions.Regex.Unescape(await SendGetRequest(UrlEncodeHelper.UrlEncode(obj, url)));
@@ -84,7 +81,7 @@ public class CurrentConditions : AccuweatherApiCore, ICurrentConditions
         };
 
         // Form the URL for the API request by appending the locationKey and API key to the base URL
-        var url = $"{_baseUrl}{locationKey}/historical/24?apikey={_apiKey}&";
+        string url = $"{_baseUrl}{locationKey}/historical/24?apikey={_apiKey}&";
 
         // Make the API request, URL encode the parameters, and return the JSON response
         return System.Text.RegularExpressions.Regex.Unescape(await SendGetRequest(UrlEncodeHelper.UrlEncode(obj, url)));
@@ -106,7 +103,7 @@ public class CurrentConditions : AccuweatherApiCore, ICurrentConditions
         };
 
         // Form the URL for the API request by appending the locationKey and API key to the base URL
-        var url = $"{_baseUrl}{locationKey}/historical?apikey={_apiKey}&";
+        string url = $"{_baseUrl}{locationKey}/historical?apikey={_apiKey}&";
 
         // Make the API request, URL encode the parameters, and return the JSON response
         return System.Text.RegularExpressions.Regex.Unescape(await SendGetRequest(UrlEncodeHelper.UrlEncode(obj, url)));

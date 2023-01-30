@@ -66,7 +66,7 @@ public class ProjectService : Controller, IProjectService
 
     public void UpdateProject(Project project)
     {
-        var local = _context.Set<Project>().Local.FirstOrDefault(entry => entry.ProjectId.Equals(project.ProjectId));
+        Project? local = _context.Set<Project>().Local.FirstOrDefault(entry => entry.ProjectId.Equals(project.ProjectId));
         if (local != null)
         {
             // detach

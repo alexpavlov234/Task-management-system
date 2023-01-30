@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using Syncfusion.Blazor.Maps;
-using System.Xml.Linq;
-
-namespace Task_management_system.Models
+﻿namespace Task_management_system.Models
 {
 
 

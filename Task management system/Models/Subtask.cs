@@ -42,6 +42,6 @@ namespace Task_management_system.Models
         public string RecurrenceException { get; set; }
         public Nullable<int> RecurrenceID { get; set; }
 
-      
+
     }
 }

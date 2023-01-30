@@ -11,6 +11,6 @@ namespace Task_management_system.Pages
         {
             NavMgr.NavigateTo($"/Login", true);
         }
-        
+
     }
 }

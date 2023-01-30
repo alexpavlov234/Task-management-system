@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using System.Net.NetworkInformation;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Pages.Common;
 using Task_management_system.Services.Common;
-using Syncfusion.Blazor.Popups;
+
 namespace Task_management_system.Pages
 {
     public partial class ManagementModal
@@ -15,8 +14,8 @@ namespace Task_management_system.Pages
         private bool IsVisible = false;
 
         private List<Role> Roles = new List<Role> {
-            new Role() { ID= "Admin", Text= "Admin" },
-             new Role() { ID= "User", Text= "User" }
+            new Role() { ID= "Admin", Text= "Администратор" },
+             new Role() { ID= "User", Text= "Потребител" }
         };
 
         private ToastMsg toast = new ToastMsg();
@@ -42,16 +41,16 @@ namespace Task_management_system.Pages
             inputModel.Role = applicationUser.Role;
             inputModel.PhoneNumber = applicationUser.PhoneNumber;
             IsUserNew = applicationUser != null ? (await UserService.GetApplicationUserByIdAsync(applicationUser.Id)) == null : false;
-            this.editContext = new EditContext(this.inputModel);
+            editContext = new EditContext(inputModel);
             if (IsUserNew) { GeneratePassword(); }
-            this.IsVisible = true;
-            this.StateHasChanged();
+            IsVisible = true;
+            StateHasChanged();
         }
 
         private void CloseDialog()
         {
-            this.IsVisible = false;
-            this.StateHasChanged();
+            IsVisible = false;
+            StateHasChanged();
         }
 
         private async void SaveUser()
@@ -59,11 +58,11 @@ namespace Task_management_system.Pages
             if (editContext.Validate())
             {
                 ApplicationUser User = await UserService.ToApplicationUser(inputModel);
-                
+
                 if ((await UserService.GetApplicationUserByIdAsync(User.Id)) != null)
                 {
                     await UserService.UpdateApplicationUser(User);
-                    await this.CallbackAfterSubmit.InvokeAsync();
+                    await CallbackAfterSubmit.InvokeAsync();
                     toast.sfSuccessToast.Title = "Успешно приложени промени!";
                     toast.sfSuccessToast.ShowAsync();
                     IsVisible = false;
@@ -82,7 +81,7 @@ namespace Task_management_system.Pages
                         toast.sfErrorToast.ShowAsync();
                     }
 
-                    await this.CallbackAfterSubmit.InvokeAsync();
+                    await CallbackAfterSubmit.InvokeAsync();
                     IsVisible = false;
                 }
             }

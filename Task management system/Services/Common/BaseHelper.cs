@@ -1,7 +1,4 @@
-﻿using System.Security.Cryptography;
-using System;
-
-namespace Task_management_system.Pages.Common
+﻿namespace Task_management_system.Pages.Common
 {
     public class BaseHelper
     {
@@ -20,14 +17,14 @@ namespace Task_management_system.Pages.Common
             // Масив съдържащ генерираната парола
             char[] password = new char[passwordLength];
             // Масив съдържащ всички валидни набори от символи
-            var chars = new[] { lowerChars, upperChars, numberChars, specialChars };
+            string[] chars = new[] { lowerChars, upperChars, numberChars, specialChars };
             // Инстанция на генератор за случайни числа
-            var random = new Random();
+            Random random = new Random();
             // Цикъл за генериране на паролата
             for (int i = 0; i < passwordLength; i++)
             {
                 // Избиране на случаен набор от символи
-                var set = chars[random.Next(0, chars.Length)];
+                string set = chars[random.Next(0, chars.Length)];
                 // Добавяне на случаен символ от избрания набор
                 password[i] = set[random.Next(0, set.Length)];
             }

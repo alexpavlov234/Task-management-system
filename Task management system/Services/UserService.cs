@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Transactions;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Data;
 using Task_management_system.Services.Common;
@@ -30,65 +27,78 @@ public class UserService : Controller, IUserService
         _emailSender = emailSender;
         _httpContextAccessor = httpContextAccessor;
     }
+
+    // Създаване на нов потребител
     public async Task<string> CreateApplicationUser(ApplicationUser applicationUser, String Password)
     {
-        var result = await _userManager.CreateAsync(applicationUser, Password);
+        // Използване на метода CreateAsync от UserManager за създаване на нов потребител
+        IdentityResult result = await _userManager.CreateAsync(applicationUser, Password);
+        // Отделяне на потребителя от локалния контекст
         _context.Entry(applicationUser).State = EntityState.Detached;
         if (!result.Succeeded)
         {
+            // Връщане на първата грешка от резултата
             return result.Errors.ToList().First().Description;
         }
         else
         {
+            // Успешно създаден потребител
             return "Успешно създаден потребител!";
         }
     }
 
+    // Изтриване на потребител
     public async Task DeleteApplicationUser(ApplicationUser applicationUser)
     {
-        var local = _context.Set<ApplicationUser>()
+        // Търсене на потребителя в локалния контекст
+        ApplicationUser? local = _context.Set<ApplicationUser>()
     .Local
     .FirstOrDefault(entry => entry.Id.Equals(applicationUser.Id));
 
-        // check if local is not null 
+        // Проверка дали local не е null
         if (local != null)
         {
-            // detach
+            // Отделяне
             _context.Entry(local).State = EntityState.Detached;
         }
-        // set Modified flag in your entry
+        // Задаване на флаг за изтриване
         _context.Entry(applicationUser).State = EntityState.Deleted;
 
-        // save 
+        // Запазване на промените
         _context.SaveChanges();
 
     }
 
+
+
+
+
+
+
+    // Връща списък с всички потребители
     public List<ApplicationUser> GetAllUsers()
     {
         return _context.Users.ToList();
-
     }
 
+    // Връща един потребител по зададен Id
     public async Task<ApplicationUser> GetApplicationUserByIdAsync(string Id)
     {
+        // Търси в локалната база данни за потребител с зададеното Id
         var local = _context.Users.AsNoTracking().FirstOrDefault(entry => entry.Id.Equals(Id));
 
-       
-
-       
         return local;
     }
 
     public async Task<ApplicationUser> GetApplicationUserByUsernameAsync(string Username)
     {
-        var user = await _userManager.FindByNameAsync(Username);
+        ApplicationUser user = await _userManager.FindByNameAsync(Username);
         return user;
     }
 
     public async Task UpdateApplicationUser(ApplicationUser applicationUser)
     {
-        var local = _context.Set<ApplicationUser>().Local.FirstOrDefault(entry => entry.Id.Equals(applicationUser.Id));
+        ApplicationUser? local = _context.Set<ApplicationUser>().Local.FirstOrDefault(entry => entry.Id.Equals(applicationUser.Id));
         // check if local is not null
         if (local != null)
         {
@@ -104,26 +114,24 @@ public class UserService : Controller, IUserService
 
     public async Task<ApplicationUser> GetLoggedUser()
     {
-        var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
-        _context.Entry(user).State = EntityState.Detached;
-        return user;
+        using (Context context = _context.Clone())
+        {
+            return await context.Users.SingleOrDefaultAsync(x => x.UserName == _httpContextAccessor.HttpContext.User.Identity.Name);
+        }
 
     }
+
 
 
 
     public async Task<bool> IsLoggedUserAdmin()
     {
-
         return await _userManager.IsInRoleAsync(await GetLoggedUser(), "Admin");
-
-
-
     }
 
     public async void Login(string username, string password, bool rememberMe)
     {
-        var result = await _signInManager.PasswordSignInAsync(username, password, rememberMe, lockoutOnFailure: true);
+        Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(username, password, rememberMe, lockoutOnFailure: true);
         if (!result.Succeeded)
         {
             // handle failed login attempt
@@ -150,7 +158,7 @@ public class UserService : Controller, IUserService
         return user != null ? await _userManager.GetRolesAsync(user) : new List<string>();
     }
 
-  
+
 
     public async Task<ApplicationUser> ToApplicationUser(InputModel inputModel)
     {

@@ -1,12 +1,11 @@
-using Task_management_system.Data;
-using Syncfusion.Blazor;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using Task_management_system.Areas.Identity;
-using Task_management_system.Areas;
-using Task_management_system.Interfaces;
 using KeyValue_management_system.Services;
-using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Syncfusion.Blazor;
+using Task_management_system.Areas;
+using Task_management_system.Areas.Identity;
+using Task_management_system.Data;
+using Task_management_system.Interfaces;
 using Task_management_system.Pages.Common;
 
 namespace Task_management_system
@@ -15,14 +14,14 @@ namespace Task_management_system
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
             //Важно
             builder.Services.AddDbContext<Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection1") ),ServiceLifetime.Scoped);
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection1")), ServiceLifetime.Scoped);
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
@@ -40,26 +39,26 @@ namespace Task_management_system
 
             builder.Services.AddScoped<IKeyValueService, KeyValueService>();
             builder.Services.AddScoped<BaseHelper>();
-   
-            var app = builder.Build();
+
+            WebApplication app = builder.Build();
 
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzQ3NTYzQDMyMzAyZTMzMmUzMGEyZkJKb2ltdWJxZTZKRDFVdmZqbW83cFZ3QzVQVFpTNlN2YUZyeVh0RVk9");
-            using (var scope = app.Services.CreateScope())
+            using (IServiceScope scope = app.Services.CreateScope())
             {
-                var services = scope.ServiceProvider;
-                var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+                IServiceProvider services = scope.ServiceProvider;
+                ILoggerFactory loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 try
                 {
-                    var context = services.GetRequiredService<Context>();
-                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                    Context context = services.GetRequiredService<Context>();
+                    UserManager<ApplicationUser> userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                    RoleManager<IdentityRole> roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     ContextSeed.SeedRolesAsync(userManager, roleManager).Wait();
                     ContextSeed.SeedAdminAsync(userManager, roleManager).Wait();
-                
+
                 }
                 catch (Exception ex)
                 {
-                    var logger = loggerFactory.CreateLogger<Program>();
+                    ILogger<Program> logger = loggerFactory.CreateLogger<Program>();
                     logger.LogError(ex, "Възникна грешка при запълването на базата данни с информация.");
                 }
             }
@@ -75,7 +74,7 @@ namespace Task_management_system
             app.UseHttpsRedirection();
 
 
-            
+
             app.UseStaticFiles();
 
             app.UseRouting();

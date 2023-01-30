@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Principal;
 
 namespace Task_management_system.Models
 {
@@ -13,7 +12,7 @@ namespace Task_management_system.Models
         [Key]
         public int IdKeyValue { get; set; }
 
-        public int IdEntity => this.IdKeyValue;
+        public int IdEntity => IdKeyValue;
 
         [Required]
         [ForeignKey(nameof(KeyType))]

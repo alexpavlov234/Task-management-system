@@ -67,7 +67,7 @@ public class TaskService : Controller, ITaskService
 
     public void UpdateTask(Task task)
     {
-        var local = _context.Set<Task>().Local.FirstOrDefault(entry => entry.TaskId.Equals(task.TaskId));
+        Task? local = _context.Set<Task>().Local.FirstOrDefault(entry => entry.TaskId.Equals(task.TaskId));
         if (local != null)
         {
             // detach
@@ -92,9 +92,9 @@ public class TaskService : Controller, ITaskService
         _context.SaveChanges();
     }
 
-    public void UpdateSubtask (Subtask subtask)
+    public void UpdateSubtask(Subtask subtask)
     {
-        var local = _context.Set<Subtask>().Local.FirstOrDefault(entry => entry.SubtaskId.Equals(subtask.SubtaskId));
+        Subtask? local = _context.Set<Subtask>().Local.FirstOrDefault(entry => entry.SubtaskId.Equals(subtask.SubtaskId));
         if (local != null)
         {
             // detach

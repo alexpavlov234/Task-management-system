@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Policy;
 using Task_management_system.Areas.Identity;
 
 namespace Task_management_system.Models
@@ -15,7 +14,7 @@ namespace Task_management_system.Models
         public int ProjectId { get; set; }
 
         [Required]
-        
+
         public string ProjectName { get; set; }
         [Required]
         public string ProjectDescription { get; set; }
@@ -25,10 +24,10 @@ namespace Task_management_system.Models
 
         [Required]
         public DateTime EndDate { get; set; }
-        
-     
+
+
         public ICollection<Task> Tasks { get; set; }
-       
+
         public ApplicationUser ProjectOwner { get; set; }
 
         public ICollection<ApplicationUser> ProjectParticipants { get; set; }

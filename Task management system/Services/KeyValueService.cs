@@ -81,7 +81,7 @@ namespace KeyValue_management_system.Services
 
         public void UpdateKeyValue(KeyValue keyValue)
         {
-            var local = _context.Set<KeyValue>().Local.FirstOrDefault(entry => entry.IdKeyValue.Equals(keyValue.IdKeyValue));
+            KeyValue? local = _context.Set<KeyValue>().Local.FirstOrDefault(entry => entry.IdKeyValue.Equals(keyValue.IdKeyValue));
             if (local != null)
             {
                 // detach
@@ -120,7 +120,7 @@ namespace KeyValue_management_system.Services
 
         public void UpdateKeyType(KeyType keyType)
         {
-            var local = _context.Set<KeyType>().Local.FirstOrDefault(entry => entry.IdKeyType.Equals(keyType.IdKeyType));
+            KeyType? local = _context.Set<KeyType>().Local.FirstOrDefault(entry => entry.IdKeyType.Equals(keyType.IdKeyType));
             if (local != null)
             {
                 // detach

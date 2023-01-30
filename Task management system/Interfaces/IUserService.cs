@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Task_management_system.Areas.Identity;
+﻿using Task_management_system.Areas.Identity;
 using Task_management_system.Services.Common;
 
 public interface IUserService
@@ -14,7 +10,7 @@ public interface IUserService
     Task<ApplicationUser> GetApplicationUserByUsernameAsync(string Username);
     Task UpdateApplicationUser(ApplicationUser applicationUser);
     Task<ApplicationUser> GetLoggedUser();
-    
+
     Task<bool> IsLoggedUserAdmin();
     void Login(string username, string password, bool rememberMe);
     void Logout();

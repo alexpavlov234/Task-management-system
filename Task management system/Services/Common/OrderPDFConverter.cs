@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Task_management_system.Pages.Common
+﻿namespace Task_management_system.Pages.Common
 {
     public class FontFamilyPDF
     {

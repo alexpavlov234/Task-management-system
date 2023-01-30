@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Principal;
 
 namespace Task_management_system.Models
 {
     /// </summary>
     [Table("KeyType")]
     [Display(Name = "Тип номенклатура")]
-    public class KeyType 
+    public class KeyType
     {
         [Key]
         public int IdKeyType { get; set; }
@@ -23,9 +22,9 @@ namespace Task_management_system.Models
 
         public bool IsSystem { get; set; }
 
-        public int IdEntity => this.IdKeyType;
+        public int IdEntity => IdKeyType;
 
-        
+
         public IEnumerable<KeyValue> KeyValues { get; set; }
     }
 }

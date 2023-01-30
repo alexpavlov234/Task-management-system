@@ -81,9 +81,10 @@ else
     String result = "";
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-
+        if(await userService.GetLoggedUser() != null){
         var user = await userService.GetLoggedUser();
         userFullName = user.FirstName + " " + user.LastName;
+        }
         //CurrentConditions currentConditions = new CurrentConditions("bXyjKZghQjnIwBB2WKEHdNsVyZdaJECK", "bg-bg");
         //result = await currentConditions.Get(51097, false);
 
@@ -96,7 +97,7 @@ else
         response.Temperature.Metric.Unit = "C";
         response.WeatherText = "Слънчево с валежи";
         response.WeatherIcon = 14;
-        response.Link = "https://www.accuweather.com/bg/bg/sofia/51097/weather-forecast/51097";
+        response.Link = "https:www.accuweather.com/bg/bg/sofia/51097/weather-forecast/51097";
         image = "img/icons/" + response.WeatherIcon + ".svg";
 
     }

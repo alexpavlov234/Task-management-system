@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
 using Task_management_system.Areas.Identity;
 
 namespace Task_management_system.Data
@@ -16,7 +15,7 @@ namespace Task_management_system.Data
         public static async Task SeedAdminAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             //Seed Default User
-            var defaultUser = new ApplicationUser
+            ApplicationUser defaultUser = new ApplicationUser
             {
                 UserName = "alexpavlov234",
                 Email = "alexpavlov234@gmail.com",
@@ -26,7 +25,7 @@ namespace Task_management_system.Data
             };
             if (userManager.Users.All(u => u.Id != defaultUser.Id))
             {
-                var user = await userManager.FindByEmailAsync(defaultUser.Email);
+                ApplicationUser user = await userManager.FindByEmailAsync(defaultUser.Email);
                 if (user == null)
                 {
                     await userManager.CreateAsync(defaultUser, "Alex123@&");

@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Syncfusion.Blazor.Cards;
-using System.Reflection.Metadata;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Models;
 
@@ -9,8 +7,10 @@ namespace Task_management_system.Data
 {
     public class Context : IdentityDbContext<ApplicationUser>
     {
+        private readonly DbContextOptions<Context> _options;
         public Context(DbContextOptions<Context> options) : base(options)
         {
+            _options = options;
         }
         //Създаване на таблици в реална база данни
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,6 +32,11 @@ namespace Task_management_system.Data
         public DbSet<KeyValue> KeyValue { get; set; }
         public DbSet<Models.Task> Tasks { get; set; }
         public DbSet<Models.Subtask> Subtasks { get; set; }
+
+        public Context Clone()
+        {
+            return new Context(_options);
+        }
 
     }
 }

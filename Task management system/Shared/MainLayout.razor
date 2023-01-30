@@ -47,7 +47,9 @@
     private IUserService userService { get; set; }
     protected override async Task OnInitializedAsync()
     {
-
-        isAdmin = await userService.IsLoggedUserAdmin();
+        if (await userService.GetLoggedUser() != null)
+        {
+            isAdmin = await userService.IsLoggedUserAdmin();
+        }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Task_management_system.Areas.Identity;
 
@@ -17,14 +16,14 @@ namespace Task_management_system.Models
 
         [Required]
         public string TaskDescription { get; set; }
-       
+
         public ApplicationUser Assignee { get; set; }
 
-       
+
         public ApplicationUser AssignedТo { get; set; }
 
 
- 
+
 
         [Required]
         public DateTime TaskLastEditedDate { get; set; }
@@ -47,7 +46,7 @@ namespace Task_management_system.Models
         [Required]
         public DateTime EndTime { get; set; }
 
-   
+
 
         public string Description { get; set; }
         public bool IsAllDay { get; set; }

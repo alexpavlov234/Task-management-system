@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Task_management_system.Interfaces
+﻿namespace Task_management_system.Interfaces
 {
     /// <summary>
     /// Get Current Conditions data for a specific location.

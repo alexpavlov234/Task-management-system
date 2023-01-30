@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace Task_management_system.Services.Common
 {
@@ -25,14 +24,14 @@ namespace Task_management_system.Services.Common
         public string Email { get; set; }
 
 
-        
+
         [StringLength(100, ErrorMessage = "Дължината на паролата трябва да бъде най-малко {2} и най-много {1} символа!", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Парола")]
         public string Password { get; set; }
 
 
-        
+
         [Display(Name = "Потвърждаване на паролата")]
         [Compare("Password", ErrorMessage = "Паролите не съвпадат!")]
         public string ConfirmPassword { get; set; }
