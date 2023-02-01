@@ -32,6 +32,11 @@ namespace Task_management_system.Models
 
         public ICollection<ApplicationUser> ProjectParticipants { get; set; }
 
+       
+       
+        [Required]
+        [ForeignKey(nameof(KeyValue))]
+        public int IdProjectType { get; set; }
         public KeyValue ProjectType { get; set; }
     }
 }

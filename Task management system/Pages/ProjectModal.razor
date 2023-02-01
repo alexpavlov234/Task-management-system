@@ -1,7 +1,9 @@
-﻿@using Syncfusion.Blazor.DropDowns
+﻿@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
 @using System.ComponentModel.DataAnnotations
 @using Syncfusion.Blazor.Inputs
 @using Task_management_system.Areas.Identity
+@using Task_management_system.Models
 @using Task_management_system.Pages.Common
 @using Task_management_system.Services.Common
 @using Syncfusion.Blazor.Popups
@@ -25,18 +27,34 @@
                         <ValidationMessage For="@(() => project.ProjectName)" />
                     </div>
                     <div class="col-md-4">
-                        
-
+                        <label for="datepicker">Диапазон на проект</label>
+                        <SfDateRangePicker  ID="datepicker" TValue="DateTime" Format="dd.MM.yyyy" StartDate="@project.StartDate" EndDate="@project.EndDate" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
 
                     </div>
-                    
+                    <div class="col-md-4">
+                        <label for="type">Тип проект</label>
+                        <SfDropDownList ID="type" TValue="int" TItem="KeyValue" @bind-Value="project.IdProjectType" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете тип" DataSource="@projectTypes">
+                            <DropDownListFieldSettings Value="IdKeyValue" Text="Name"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </div>
                 </div>
                 <label for="description">Описание на проект</label>
                 <div class="multiline">
                     <SfTextBox id="description" Multiline=true Placeholder="Enter your address" Value="@project.ProjectDescription"></SfTextBox>
                 </div>
                 <div class="row">
-                    
+                    <div class="col-md-12">
+                        <label for="owner">Собственик на проекта</label>
+                        <SfDropDownList ID="owner" TValue="ApplicationUser" TItem="ApplicationUser" @bind-Value="project.ProjectOwner" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете собственик" DataSource="@users">
+                            <DropDownListFieldSettings Value="UserName" Text="FullName"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="participants">Участници в проекта</label>
+                        <SfMultiSelect TValue="ICollection<ApplicationUser>" TItem="ApplicationUser" Placeholder="Изберете участници" DataSource="@users" @bind-Value="project.ProjectParticipants">
+                            <MultiSelectFieldSettings Text="FullName" Value="UserName"></MultiSelectFieldSettings>
+                        </SfMultiSelect>
+                    </div>
                 </div>
 
 

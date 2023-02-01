@@ -12,7 +12,7 @@ using Task_management_system.Data;
 namespace Task_management_system.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230131210719_InitialCreate")]
+    [Migration("20230201204134_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -428,6 +428,9 @@ namespace Task_management_system.Migrations
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("IdProjectType")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProjectDescription")
                         .IsRequired()

@@ -427,6 +427,9 @@ namespace Task_management_system.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("IdProjectType")
+                        .HasColumnType("int");
+
                     b.Property<string>("ProjectDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

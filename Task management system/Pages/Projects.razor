@@ -71,10 +71,28 @@
                                                 AllowPaging="true"
                                                 PageSettings.PageSize="10">
                                                 <GridColumns>
-                                                    <GridColumn Field="ProjectName" HeaderText="Project Name" />
-                                                    <GridColumn Field="ProjectDescription" HeaderText="Project Description" />
-                                                    <GridColumn Field="StartDate" HeaderText="Start Date" />
-                                                    <GridColumn Field="EndDate" HeaderText="End Date" />
+                                                    <GridColumn Width="40px">
+                                                        <Template>
+                                                            <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
+                                                                <button type="button" class="btn btn-outline-warning waves-effect md-trigger" @onclick="(() => EditProject(context as Project))">
+                                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                                </button>
+                                                            </SfTooltip>
+                                                        </Template>
+                                                    </GridColumn>
+                                                    <GridColumn Width="40px">
+                                                        <Template>
+                                                            <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                                                <button type="button" class="btn btn-outline-danger waves-effect md-trigger" @onclick="(() => DeleteProject(context as Project))">
+                                                                    <i class="fa-solid fa-trash"></i>
+                                                                </button>
+                                                            </SfTooltip>
+                                                        </Template>
+                                                    </GridColumn>
+                                                    <GridColumn Field="ProjectName" HeaderText="Име" Width="100px" />
+                                                    <GridColumn Field="ProjectDescription" HeaderText="Описание" Width="150px" />
+                                                    <GridColumn Field="StartDate" HeaderText="Начална дата" Width="40px" Format="dd.MM.yyyy" />
+                                                    <GridColumn Field="EndDate" HeaderText="Крайна дата" Width="40px" Format="dd.MM.yyyy" />
                                                 </GridColumns>
                                             </SfGrid>
                                         </ContentTemplate>
@@ -110,12 +128,30 @@
     }
     private async Task AddNewProjectClickHandler()
     {
-        projectModal.OpenDialog(new Project());
+        projectModal.OpenDialog(new Project { StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(1) });
     }
     private async Task UpdateAfterManagementModalSubmitAsync()
     {
 
         this.StateHasChanged();
+    }
+    private async Task DeleteProject(Project project)
+    {
+
+        //await UserService.DeleteApplicationUser(applicationUser);
+        //var users = UserService.GetAllUsers();
+        //var itemToRemove = users.Remove(users.Single(r => r.UserName == httpContextAccessor.HttpContext.User.Identity.Name));
+        //var roles = roleManager.Roles.ToList();
+        //this.users = users;
+        //this.roles = roles;
+        this.StateHasChanged();
+
+    }
+
+    private async Task EditProject(Project project)
+    {
+
+      //  managementModal.OpenDialog(applicationUser);
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -196,6 +197,7 @@ namespace Task_management_system.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProjectOwnerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IdProjectType = table.Column<int>(type: "int", nullable: false),
                     ProjectTypeIdKeyValue = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
