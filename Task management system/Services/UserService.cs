@@ -31,11 +31,11 @@ public class UserService : Controller, IUserService
     // Създаване на нов потребител
     public async Task<string> CreateApplicationUser(ApplicationUser applicationUser, String Password)
     {
-        
+
         // Използване на метода CreateAsync от UserManager за създаване на нов потребител
         IdentityResult result = await _userManager.CreateAsync(applicationUser, Password);
         // Отделяне на потребителя от локалния контекст
-        
+
         if (!result.Succeeded)
         {
             // Връщане на първата грешка от резултата
@@ -87,7 +87,7 @@ public class UserService : Controller, IUserService
     public async Task<ApplicationUser> GetApplicationUserByIdAsync(string Id)
     {
         // Търси в локалната база данни за потребител с зададеното Id
-        var local = _context.Users.AsNoTracking().FirstOrDefault(entry => entry.Id.Equals(Id));
+        ApplicationUser? local = _context.Users.AsNoTracking().FirstOrDefault(entry => entry.Id.Equals(Id));
 
         return local;
     }
@@ -111,14 +111,15 @@ public class UserService : Controller, IUserService
 
         _context.SaveChanges();
 
-        if(applicationUser.Role == "Admin" && !(await IsInRoleAsync(applicationUser,"Admin")))
+        if (applicationUser.Role == "Admin" && !(await IsInRoleAsync(applicationUser, "Admin")))
         {
-            if(await IsInRoleAsync(applicationUser, "User"))
+            if (await IsInRoleAsync(applicationUser, "User"))
             {
                 await RemoveRoleAsync(applicationUser, "User");
             }
             await AddRoleAsync(applicationUser, "Admin");
-        } else if (applicationUser.Role == "User" && (await IsInRoleAsync(applicationUser, "Admin")))
+        }
+        else if (applicationUser.Role == "User" && (await IsInRoleAsync(applicationUser, "Admin")))
         {
             if (await IsInRoleAsync(applicationUser, "Admin"))
             {

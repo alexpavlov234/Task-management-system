@@ -1,32 +1,121 @@
 ﻿@page "/Projects"
-<PageTitle>Проекти</PageTitle>
-<h2>Проекти</h2>
-<AuthorizeView>
-    <Authorized>
-        @if (isAdmin)
-        {
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.TreeGrid
+@using Syncfusion.PdfExport
+@using Task_management_system.Areas.Identity
+@using Task_management_system.Data
+@using Task_management_system.Interfaces
+@using Task_management_system.Models
+@using Task_management_system.Pages.Common
+@using Task_management_system.Pages
+@inject RoleManager<IdentityRole> roleManager
+@inject UserManager<ApplicationUser> userManager
+@inject SignInManager<ApplicationUser> signInManager
+@inject IKeyValueService keyValueService
+@inject IProjectService projectService
+@attribute [Authorize(Roles = "Admin")]
 
-        }
+<div class="content-wrapper">
+
+    <div class="card">
+
+        <div class="card-header">
+            <div class="frame container">
+                <img class="banner" src="img/iStock-1203930843.jpg" alt="Banner">
+                <div class="bottom-left">
+
+                    <h3>Проекти</h3>
+                    <nav class="navbar navbar-expand">
+                        <!-- Left navbar links -->
+                        <ul class="navbar-nav float">
+                            <li class="nav-item d-none d-sm-inline-block">
+                                <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddNewProjectClickHandler">Нов проект</button>
 
 
-    </Authorized>
-    <NotAuthorized>
-        @* For unauthorized users *@
-        
-    </NotAuthorized>
-</AuthorizeView>
-   
+                            </li>
+                            <li class="nav-item d-none d-sm-inline-block">
+                                &nbsp;
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12">
 
-}
-<div>
+                    <div class="project-issue-list">
+                        
+                                @foreach (var projectType in projectTypes){
+                                    <SfAccordion ExpandMode="ExpandMode.Multiple" style="margin-top: 10px; margin-bottom: 10px">
+                            <AccordionItems>
+                                <AccordionItem>
+                                        <HeaderTemplate>
+                                            @if(projectType.Name == "Учебен"){
+                                            <div class="btn btn-success">@projectType.Name</div>
+
+                                            } else if (projectType.Name == "Работен"){
+                                            <div class="btn btn-warning">@projectType.Name</div>
+
+                                            } else {
+                                            <div class="btn btn-primary">@projectType.Name</div>
+
+                                            }
+                                        </HeaderTemplate>
+                                        <ContentTemplate>
+                                            <SfGrid DataSource="@projects.Where(x => x.ProjectType.KeyValueIntCode == projectType.KeyValueIntCode)"
+                                                AllowPaging="true"
+                                                PageSettings.PageSize="10">
+                                                <GridColumns>
+                                                    <GridColumn Field="ProjectName" HeaderText="Project Name" />
+                                                    <GridColumn Field="ProjectDescription" HeaderText="Project Description" />
+                                                    <GridColumn Field="StartDate" HeaderText="Start Date" />
+                                                    <GridColumn Field="EndDate" HeaderText="End Date" />
+                                                </GridColumns>
+                                            </SfGrid>
+                                        </ContentTemplate>
+                                    </AccordionItem>
+                                    </AccordionItems>
+                            </SfAccordion>
+                                }
+                           
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<ProjectModal @ref="projectModal" CallbackAfterSubmit="UpdateAfterManagementModalSubmitAsync" />
+
+
 @code {
-    bool isAdmin = false;
-    [Inject]
-    private IUserService userService { get; set; }
-    protected override async Task OnInitializedAsync()
+    //https://learn.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-7.0
+
+    private List<KeyValue> projectTypes { get; set; }
+    private List<Project> projects { get; set; }
+    private ProjectModal projectModal = new ProjectModal();
+
+
+
+    protected async override Task OnInitializedAsync()
     {
-        
-        isAdmin = await userService.IsLoggedUserAdmin();
+        projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
+        projects = projectService.GetAllProjects();
+
     }
+    private async Task AddNewProjectClickHandler()
+    {
+        projectModal.OpenDialog(new Project());
+    }
+    private async Task UpdateAfterManagementModalSubmitAsync()
+    {
+
+        this.StateHasChanged();
+    }
+
 }

@@ -17,9 +17,9 @@
             // Масив съдържащ генерираната парола
             char[] password = new char[passwordLength];
             // Масив съдържащ всички валидни набори от символи
-            var chars = new[] { lowerChars, upperChars, numberChars, specialChars };
+            string[] chars = new[] { lowerChars, upperChars, numberChars, specialChars };
             // Инстанция на генератор за случайни числа
-            var random = new Random();
+            Random random = new Random();
             // Поставяне на малка и голяма буква в случаен индекс
             int lowerIndex = random.Next(0, passwordLength);
             int upperIndex = random.Next(0, passwordLength);

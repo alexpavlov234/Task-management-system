@@ -12,8 +12,6 @@ namespace Task_management_system.Models
         [Key]
         public int IdKeyValue { get; set; }
 
-        public int IdEntity => IdKeyValue;
-
         [Required]
         [ForeignKey(nameof(KeyType))]
         public int IdKeyType { get; set; }

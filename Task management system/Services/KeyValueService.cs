@@ -69,6 +69,13 @@ namespace KeyValue_management_system.Services
             return _context.KeyValue.ToList();
         }
 
+        public List<KeyValue> GetAllKeyValuesByKeyType(string keyTypeIntCode)
+        {
+            KeyType keyType = GetKeyTypeByKeyTypeIntCode(keyTypeIntCode);
+
+            return _context.KeyValue.Where(x => x.KeyType == keyType).ToList();
+        }
+
         public KeyValue GetKeyValueById(int IdKeyValue)
         {
             return _context.KeyValue.Where(x => x.IdKeyValue == IdKeyValue).FirstOrDefault();

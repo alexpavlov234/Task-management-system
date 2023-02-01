@@ -138,4 +138,10 @@
     <Folder Include="Views\UserRoles\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Pages\Projects.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
 </Project>

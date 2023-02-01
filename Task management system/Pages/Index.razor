@@ -22,25 +22,27 @@ else
 *@
 <AuthorizeView>
     <Authorized>
+         <div class="col-sm-12">
         <div class="frame container">
-            <img class="banner" src="img/iStock-1203930843.jpg" alt="Banner">
+            <img class="banner" src="img/13186366_5125963-ai.svg" alt="Banner">
             <div class="bottom-left">Здравейте, @userFullName</div>
+        </div>
         </div>
         @if (response != null)
         {
 
-            
-            <div class="col-sm-6">
+
+            <div class="col-xxl-6 col-xl-6 col-lg-12">
                 <div class="custom-card">
                     <div class="card-body">
                         <h5 class="card-title">Времето</h5>
-                        <div class="row align-middle">
-                            <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-6 middle-align">
                                 <p class="weather-city">София</p>
                                 <p class="weather-temp">@((int)response.Temperature.Metric.Value + "°" + response.Temperature.Metric.Unit)</p>
                                 <p class="weather-info">@response.WeatherText</p>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-6 middle-align">
                                 <img class="weather-icon" src="@image" alt="Banner">
                             </div>
                         </div>
@@ -87,9 +89,8 @@ else
         }
         //CurrentConditions currentConditions = new CurrentConditions("bXyjKZghQjnIwBB2WKEHdNsVyZdaJECK", "bg-bg");
         //result = await currentConditions.Get(51097, false);
+        //response = currentConditions.ConvertData(result);
 
-
-        // response = currentConditions.ConvertData(result);
         response = new CurrentCondition();
         response.Temperature = new Temperature();
         response.Temperature.Metric = new Metric();
@@ -97,7 +98,8 @@ else
         response.Temperature.Metric.Unit = "C";
         response.WeatherText = "Слънчево с валежи";
         response.WeatherIcon = 14;
-        response.Link = "https:www.accuweather.com/bg/bg/sofia/51097/weather-forecast/51097";
+        response.Link = "https://www.accuweather.com/bg/bg/sofia/51097/weather-forecast/51097";
+
         image = "img/icons/" + response.WeatherIcon + ".svg";
 
     }

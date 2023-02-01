@@ -34,7 +34,7 @@ namespace Task_management_system
             builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
             builder.Services.AddScoped<TokenProvider>();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<ITaskService, TaskService>();
+            builder.Services.AddScoped<IUssueService, IssueService>();
             builder.Services.AddScoped<IProjectService, ProjectService>();
 
             builder.Services.AddScoped<IKeyValueService, KeyValueService>();
@@ -54,6 +54,7 @@ namespace Task_management_system
                     RoleManager<IdentityRole> roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     ContextSeed.SeedRolesAsync(userManager, roleManager).Wait();
                     ContextSeed.SeedAdminAsync(userManager, roleManager).Wait();
+                    ContextSeed.SeedKeyValuesAsync(context);
 
                 }
                 catch (Exception ex)

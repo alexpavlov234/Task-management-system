@@ -1,16 +1,16 @@
 ﻿using Task_management_system.Models;
 
-internal interface ITaskService
+internal interface IUssueService
 {
-    void CreateSubtask(Task_management_system.Models.Task task, Subtask subtask);
+    void CreateSubtask(Issue issue, Subtask subtask);
     void CreateSubtask(int TaskId, Subtask subtask);
-    void CreateTask(Task_management_system.Models.Task task);
+    void CreateTask(Issue issue);
     void DeleteSubtask(Subtask subtask);
     void DeleteTask(int TaskId);
-    List<Task_management_system.Models.Task> GetAllTasks();
+    List<Issue> GetAllTasks();
     Subtask GetSubtaskById(int SubtaskId);
     Subtask GetSubtaskByTaskName(string SubtaskName);
-    Task_management_system.Models.Task GetTaskById(int TaskId);
+    Issue GetTaskById(int TaskId);
     void UpdateSubtask(Subtask subtask);
-    void UpdateTask(Task_management_system.Models.Task task);
+    void UpdateTask(Issue issue);
 }

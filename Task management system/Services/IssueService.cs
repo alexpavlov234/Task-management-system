@@ -6,9 +6,9 @@ using Syncfusion.Blazor.Data;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Data;
 using Task_management_system.Models;
-using Task = Task_management_system.Models.Task;
+using Issue = Task_management_system.Models.Issue;
 
-public class TaskService : Controller, ITaskService
+public class IssueService : Controller, IUssueService
 {
     private readonly Context _context;
     private readonly IEmailSender _emailSender;
@@ -16,7 +16,7 @@ public class TaskService : Controller, ITaskService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IUserStore<ApplicationUser> _userStore;
 
-    public TaskService(Context context, UserManager<ApplicationUser> userManager,
+    public IssueService(Context context, UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender)
@@ -28,67 +28,67 @@ public class TaskService : Controller, ITaskService
         _emailSender = emailSender;
     }
 
-    public void CreateTask(Task task)
+    public void CreateTask(Issue issue)
     {
-        Task task1 = _context.Tasks.FirstOrDefault((c) => (c.TaskName == task.TaskName));
+        Issue task1 = _context.Tasks.FirstOrDefault((c) => (c.IssueName == issue.IssueName));
         if (task1 == null)
         {
-            _context.Tasks.Add(task);
+            _context.Tasks.Add(issue);
             _context.SaveChanges();
         }
     }
 
-    public void DeleteTask(Task task)
+    public void DeleteTask(Issue issue)
     {
-        _context.Tasks.Remove(task);
+        _context.Tasks.Remove(issue);
         _context.SaveChanges();
     }
 
-    public void DeleteTask(int TaskId)
+    public void DeleteTask(int IssueId)
     {
-        _context.Tasks.Remove(new Task { TaskId = TaskId });
+        _context.Tasks.Remove(new Issue { IssueId = IssueId });
         _context.SaveChanges();
     }
 
-    public List<Task> GetAllTasks()
+    public List<Issue> GetAllTasks()
     {
         return _context.Tasks.ToList();
     }
 
-    public Task GetTaskById(int TaskId)
+    public Issue GetTaskById(int TaskId)
     {
-        return _context.Tasks.Where(x => x.TaskId == TaskId).FirstOrDefault();
+        return _context.Tasks.Where(x => x.IssueId == TaskId).FirstOrDefault();
     }
 
-    public Task GetTaskByTaskName(string TaskName)
+    public Issue GetTaskByTaskName(string TaskName)
     {
-        return _context.Tasks.Where(x => x.TaskName == TaskName).FirstOrDefault();
+        return _context.Tasks.Where(x => x.IssueName == TaskName).FirstOrDefault();
     }
 
-    public void UpdateTask(Task task)
+    public void UpdateTask(Issue issue)
     {
-        Task? local = _context.Set<Task>().Local.FirstOrDefault(entry => entry.TaskId.Equals(task.TaskId));
+        Issue? local = _context.Set<Issue>().Local.FirstOrDefault(entry => entry.IssueId.Equals(issue.IssueId));
         if (local != null)
         {
             // detach
             _context.Entry(local).State = EntityState.Detached;
         }
-        _context.Entry(task).State = EntityState.Modified;
+        _context.Entry(issue).State = EntityState.Modified;
         _context.SaveChanges();
     }
 
-    public void CreateSubtask(Task task, Subtask subtask)
+    public void CreateSubtask(Issue issue, Subtask subtask)
     {
-        task.Subtasks.Add(subtask);
-        _context.Tasks.Update(task);
+        issue.Subtasks.Add(subtask);
+        _context.Tasks.Update(issue);
         _context.SaveChanges();
     }
 
     public void CreateSubtask(int TaskId, Subtask subtask)
     {
-        Task task = GetTaskById(TaskId);
-        task.Subtasks.Add(subtask);
-        _context.Tasks.Update(task);
+        Issue issue = GetTaskById(TaskId);
+        issue.Subtasks.Add(subtask);
+        _context.Tasks.Update(issue);
         _context.SaveChanges();
     }
 

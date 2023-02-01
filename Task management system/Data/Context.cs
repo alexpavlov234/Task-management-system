@@ -17,7 +17,7 @@ namespace Task_management_system.Data
         {
             modelBuilder.Entity<Project>().HasIndex(b => b.ProjectName)
             .IsUnique();
-            modelBuilder.Entity<Models.Task>();
+            modelBuilder.Entity<Issue>();
             modelBuilder.Entity<Subtask>();
             modelBuilder.Entity<KeyType>();
             modelBuilder.Entity<KeyValue>().HasIndex(b => b.KeyValueIntCode)
@@ -30,8 +30,8 @@ namespace Task_management_system.Data
         public DbSet<Project> Projects { get; set; }
         public DbSet<KeyType> KeyType { get; set; }
         public DbSet<KeyValue> KeyValue { get; set; }
-        public DbSet<Models.Task> Tasks { get; set; }
-        public DbSet<Models.Subtask> Subtasks { get; set; }
+        public DbSet<Issue> Tasks { get; set; }
+        public DbSet<Subtask> Subtasks { get; set; }
 
         public Context Clone()
         {

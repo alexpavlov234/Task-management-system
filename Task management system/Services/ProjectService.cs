@@ -27,13 +27,27 @@ public class ProjectService : Controller, IProjectService
         _emailSender = emailSender;
     }
 
-    public void CreateProject(Project project)
+    public string CreateProject(Project project)
     {
         Project project1 = _context.Projects.FirstOrDefault((c) => (c.ProjectName == project.ProjectName));
-        if (project1 == null)
+        try
         {
-            _context.Projects.Add(project);
-            _context.SaveChanges();
+            if (project1 == null)
+            {
+                _context.Projects.Add(project);
+                _context.SaveChanges();
+                return "Успешно създаване на проект!";
+
+            }
+            else
+            {
+                return "Вече съществува такъв проект!";
+            }
+
+        }
+        catch
+        {
+            return "Неуспешен запис!";
         }
     }
 

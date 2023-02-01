@@ -4,18 +4,18 @@ using Task_management_system.Areas.Identity;
 
 namespace Task_management_system.Models
 {
-    [Table("Task")]
+    [Table("Issue")]
     [Display(Name = "Задача")]
-    public class Task
+    public class Issue
     {
         [Key]
-        public int TaskId { get; set; }
+        public int IssueId { get; set; }
 
         [Required]
-        public string TaskName { get; set; }
+        public string IssueName { get; set; }
 
         [Required]
-        public string TaskDescription { get; set; }
+        public string IssueDescription { get; set; }
 
         public ApplicationUser Assignee { get; set; }
 
@@ -26,10 +26,10 @@ namespace Task_management_system.Models
 
 
         [Required]
-        public DateTime TaskLastEditedDate { get; set; }
+        public DateTime IssueLastEditedDate { get; set; }
 
         [Required]
-        public DateTime TaskCompletionDate { get; set; }
+        public DateTime IssueCompletionDate { get; set; }
 
         [Required]
         public string Subject { get; set; }

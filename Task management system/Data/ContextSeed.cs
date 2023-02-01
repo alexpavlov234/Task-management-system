@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Task_management_system.Areas.Identity;
+using Task_management_system.Models;
 
 namespace Task_management_system.Data
 {
@@ -33,6 +34,17 @@ namespace Task_management_system.Data
                 }
 
             }
+        }
+
+        public static void SeedKeyValuesAsync(Context context)
+        {
+            KeyType projectKeyType = new KeyType { KeyTypeName = "Тип на проект", KeyTypeIntCode = "ProjectType", Description = "Тип на проекта", IsSystem = true };
+
+            context.KeyType.Add(projectKeyType);
+            context.KeyValue.Add(new KeyValue { KeyType = projectKeyType, Name = "Работен", NameEN = "Working", IsActive = true, KeyValueIntCode = "Working", Description = "Проект свързан с работа" });
+            context.KeyValue.Add(new KeyValue { KeyType = projectKeyType, Name = "Учебен", NameEN = "Educational", IsActive = true, KeyValueIntCode = "Educational", Description = "Проект свързан с учебен процес/училище" });
+            context.KeyValue.Add(new KeyValue { KeyType = projectKeyType, Name = "Личен", NameEN = "Personal", IsActive = true, KeyValueIntCode = "Personal", Description = "Проект свързан с личния живот" });
+            context.SaveChanges();
         }
     }
 }

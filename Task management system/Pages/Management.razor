@@ -117,7 +117,7 @@
 
     public List<IdentityRole> roles { get; set; }
     public List<ApplicationUser> users { get; set; }
-    private ManagementModal modal;
+ 
     public int RowCounter = 0;
     SfGrid<ApplicationUser> sfGrid { get; set; }
     [Inject]
@@ -184,10 +184,10 @@
 
             ExportProperties.Theme = Theme;
             ExportProperties.FileName = $"Потребители.pdf";
-
-            await this.usersGrid.ExportToPdfAsync(ExportProperties);
             usersGrid.PageSettings.PageSize = temp;
             await usersGrid.Refresh();
+            await this.usersGrid.ExportToPdfAsync(ExportProperties);
+            
         }
         else if (args.Item.Id == "usersGrid_excelexport")
         {

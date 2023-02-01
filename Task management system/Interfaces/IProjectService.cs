@@ -2,7 +2,7 @@
 
 internal interface IProjectService
 {
-    void CreateProject(Project project);
+    string CreateProject(Project project);
     void DeleteProject(Project project);
     void DeleteProject(int ProjectId);
     List<Project> GetAllProjects();

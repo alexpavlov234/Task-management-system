@@ -191,11 +191,12 @@ namespace Task_management_system.Migrations
                 {
                     ProjectId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProjectName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProjectName = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProjectDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProjectOwnerId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    ProjectOwnerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ProjectTypeIdKeyValue = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -205,20 +206,26 @@ namespace Task_management_system.Migrations
                         column: x => x.ProjectOwnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Project_KeyValue_ProjectTypeIdKeyValue",
+                        column: x => x.ProjectTypeIdKeyValue,
+                        principalTable: "KeyValue",
+                        principalColumn: "IdKeyValue",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Task",
+                name: "Issue",
                 columns: table => new
                 {
-                    TaskId = table.Column<int>(type: "int", nullable: false)
+                    IssueId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TaskName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TaskDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IssueName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IssueDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AssigneeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     AssignedТoId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    TaskLastEditedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TaskCompletionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IssueLastEditedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IssueCompletionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -233,19 +240,19 @@ namespace Task_management_system.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Task", x => x.TaskId);
+                    table.PrimaryKey("PK_Issue", x => x.IssueId);
                     table.ForeignKey(
-                        name: "FK_Task_AspNetUsers_AssignedТoId",
+                        name: "FK_Issue_AspNetUsers_AssignedТoId",
                         column: x => x.AssignedТoId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Task_AspNetUsers_AssigneeId",
+                        name: "FK_Issue_AspNetUsers_AssigneeId",
                         column: x => x.AssigneeId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Task_Project_ProjectId",
+                        name: "FK_Issue_Project_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Project",
                         principalColumn: "ProjectId");
@@ -271,16 +278,16 @@ namespace Task_management_system.Migrations
                     RecurrenceRule = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RecurrenceException = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RecurrenceID = table.Column<int>(type: "int", nullable: true),
-                    TaskId = table.Column<int>(type: "int", nullable: true)
+                    IssueId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Subtask", x => x.SubtaskId);
                     table.ForeignKey(
-                        name: "FK_Subtask_Task_TaskId",
-                        column: x => x.TaskId,
-                        principalTable: "Task",
-                        principalColumn: "TaskId");
+                        name: "FK_Subtask_Issue_IssueId",
+                        column: x => x.IssueId,
+                        principalTable: "Issue",
+                        principalColumn: "IssueId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -328,9 +335,36 @@ namespace Task_management_system.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Issue_AssignedТoId",
+                table: "Issue",
+                column: "AssignedТoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Issue_AssigneeId",
+                table: "Issue",
+                column: "AssigneeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Issue_ProjectId",
+                table: "Issue",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_KeyValue_IdKeyType",
                 table: "KeyValue",
                 column: "IdKeyType");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_KeyValue_KeyValueIntCode",
+                table: "KeyValue",
+                column: "KeyValueIntCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Project_ProjectName",
+                table: "Project",
+                column: "ProjectName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Project_ProjectOwnerId",
@@ -338,24 +372,14 @@ namespace Task_management_system.Migrations
                 column: "ProjectOwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Subtask_TaskId",
+                name: "IX_Project_ProjectTypeIdKeyValue",
+                table: "Project",
+                column: "ProjectTypeIdKeyValue");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subtask_IssueId",
                 table: "Subtask",
-                column: "TaskId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Task_AssignedТoId",
-                table: "Task",
-                column: "AssignedТoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Task_AssigneeId",
-                table: "Task",
-                column: "AssigneeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Task_ProjectId",
-                table: "Task",
-                column: "ProjectId");
+                column: "IssueId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserClaims_AspNetUsers_UserId",
@@ -411,25 +435,25 @@ namespace Task_management_system.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "KeyValue");
-
-            migrationBuilder.DropTable(
                 name: "Subtask");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "KeyType");
-
-            migrationBuilder.DropTable(
-                name: "Task");
+                name: "Issue");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Project");
+
+            migrationBuilder.DropTable(
+                name: "KeyValue");
+
+            migrationBuilder.DropTable(
+                name: "KeyType");
         }
     }
 }

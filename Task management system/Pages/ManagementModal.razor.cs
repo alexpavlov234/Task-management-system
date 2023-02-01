@@ -44,12 +44,15 @@ namespace Task_management_system.Pages
             inputModel.PhoneNumber = applicationUser.PhoneNumber;
             IsUserNew = applicationUser != null ? (await UserService.GetApplicationUserByIdAsync(applicationUser.Id)) == null : false;
             editContext = new EditContext(inputModel);
-            if (IsUserNew) { GeneratePassword(); } else
+            if (IsUserNew) { GeneratePassword(); }
+            else
             {
-              var roles =  await UserService.GetRoleAsync(applicationUser);
-                if (roles.Contains("Admin")){
+                IList<string> roles = await UserService.GetRoleAsync(applicationUser);
+                if (roles.Contains("Admin"))
+                {
                     inputModel.Role = "Admin";
-                } else
+                }
+                else
                 {
                     inputModel.Role = "User";
                 }
@@ -67,12 +70,12 @@ namespace Task_management_system.Pages
         private async void SaveUser()
         {
             if (editContext.Validate())
-                
+
             {
 
                 if ((await UserService.GetApplicationUserByIdAsync(inputModel.Id)) != null)
                 {
-                ApplicationUser User = await UserService.ToExistingApplicationUser(inputModel);
+                    ApplicationUser User = await UserService.ToExistingApplicationUser(inputModel);
                     await UserService.UpdateApplicationUser(User);
                     await CallbackAfterSubmit.InvokeAsync();
                     toast.sfSuccessToast.Title = "Успешно приложени промени!";
@@ -94,7 +97,7 @@ namespace Task_management_system.Pages
                     }
 
                     await CallbackAfterSubmit.InvokeAsync();
-                    
+
                 }
             }
         }

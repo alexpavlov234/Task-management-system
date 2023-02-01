@@ -12,6 +12,7 @@ namespace Task_management_system.Interfaces
         void DeleteKeyValue(int IdKeyValue);
         List<KeyType> GetAllKeyTypes();
         List<KeyValue> GetAllKeyValues();
+        List<KeyValue> GetAllKeyValuesByKeyType(string keyTypeIntCode);
         KeyType GetKeyTypeById(int IdKeyType);
         KeyType GetKeyTypeByKeyTypeIntCode(string KeyTypeIntCode);
         KeyValue GetKeyValueById(int IdKeyValue);

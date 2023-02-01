@@ -26,10 +26,12 @@ namespace Task_management_system.Models
         public DateTime EndDate { get; set; }
 
 
-        public ICollection<Task> Tasks { get; set; }
+        public ICollection<Issue> Tasks { get; set; }
 
         public ApplicationUser ProjectOwner { get; set; }
 
         public ICollection<ApplicationUser> ProjectParticipants { get; set; }
+
+        public KeyValue ProjectType { get; set; }
     }
 }

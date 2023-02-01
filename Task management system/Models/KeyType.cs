@@ -22,8 +22,6 @@ namespace Task_management_system.Models
 
         public bool IsSystem { get; set; }
 
-        public int IdEntity => IdKeyType;
-
 
         public IEnumerable<KeyValue> KeyValues { get; set; }
     }
