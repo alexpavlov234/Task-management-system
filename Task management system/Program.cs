@@ -39,6 +39,7 @@ namespace Task_management_system
 
             builder.Services.AddScoped<IKeyValueService, KeyValueService>();
             builder.Services.AddScoped<BaseHelper>();
+            builder.Services.AddSingleton(typeof(ISyncfusionStringLocalizer), typeof(SyncfusionLocalizer));
 
             WebApplication app = builder.Build();
 
@@ -73,7 +74,7 @@ namespace Task_management_system
             }
 
             app.UseHttpsRedirection();
-
+            app.UseRequestLocalization("bg");
 
 
             app.UseStaticFiles();

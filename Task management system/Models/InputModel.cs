@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Task_management_system.Services.Common
+namespace Task_management_system.Models
 {
     public class InputModel
     {

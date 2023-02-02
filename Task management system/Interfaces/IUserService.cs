@@ -1,5 +1,5 @@
 ﻿using Task_management_system.Areas.Identity;
-using Task_management_system.Services.Common;
+using Task_management_system.Models;
 
 public interface IUserService
 {

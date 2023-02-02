@@ -1,5 +1,6 @@
 ﻿@using System.Text
 @using Microsoft.AspNetCore.Identity
+@using Syncfusion.Blazor.Calendars
 @using Task_management_system.Models
 @using Task_management_system.Services
 
@@ -22,48 +23,66 @@ else
 *@
 <AuthorizeView>
     <Authorized>
-         <div class="col-sm-12">
+
         <div class="frame container">
             <img class="banner" src="img/13186366_5125963-ai.svg" alt="Banner">
             <div class="bottom-left">Здравейте, @userFullName</div>
         </div>
-        </div>
-        @if (response != null)
-        {
+
+        <div class="row" style="margin-right: 0px">
+            @if (response != null)
+            {
 
 
+                <div class="col-xxl-6 col-xl-6 col-lg-12">
+                    <div class="custom-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Времето</h5>
+                            <div class="row">
+                                <div class="col-sm-6 middle-align">
+                                    <p class="weather-city">София</p>
+                                    <p class="weather-temp">@((int)response.Temperature.Metric.Value + "°" + response.Temperature.Metric.Unit)</p>
+                                    <p class="weather-info">@response.WeatherText</p>
+                                </div>
+                                <div class="col-sm-6 middle-align">
+                                    <img class="weather-icon" src="@image" alt="Banner">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card-footer">
+                            <div class="form-group">
+                                <div class="text-right">
+                                    <a href="@response.Link" class="btn btn-primary">По подробно</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+            }
             <div class="col-xxl-6 col-xl-6 col-lg-12">
                 <div class="custom-card">
                     <div class="card-body">
-                        <h5 class="card-title">Времето</h5>
-                        <div class="row">
-                            <div class="col-sm-6 middle-align">
-                                <p class="weather-city">София</p>
-                                <p class="weather-temp">@((int)response.Temperature.Metric.Value + "°" + response.Temperature.Metric.Unit)</p>
-                                <p class="weather-info">@response.WeatherText</p>
-                            </div>
-                            <div class="col-sm-6 middle-align">
-                                <img class="weather-icon" src="@image" alt="Banner">
-                            </div>
-                        </div>
+                        <h5 class="card-title">Календар</h5>
+                        <SfCalendar TValue="DateTime" WeekNumber=true></SfCalendar>
 
                     </div>
                     <div class="card-footer">
                         <div class="form-group">
                             <div class="text-right">
-                                <a href="@response.Link" class="btn btn-primary">По подробно</a>
+                                <a href="/Calendar" class="btn btn-primary">По подробно</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-        }
+        </div>
     </Authorized>
 
     <NotAuthorized>
@@ -83,9 +102,10 @@ else
     String result = "";
     protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
-        if(await userService.GetLoggedUser() != null){
-        var user = await userService.GetLoggedUser();
-        userFullName = user.FirstName + " " + user.LastName;
+        if (await userService.GetLoggedUser() != null)
+        {
+            var user = await userService.GetLoggedUser();
+            userFullName = user.FirstName + " " + user.LastName;
         }
         //CurrentConditions currentConditions = new CurrentConditions("bXyjKZghQjnIwBB2WKEHdNsVyZdaJECK", "bg-bg");
         //result = await currentConditions.Get(51097, false);

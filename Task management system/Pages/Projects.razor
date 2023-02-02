@@ -132,25 +132,23 @@
     }
     private async Task UpdateAfterManagementModalSubmitAsync()
     {
-
+        projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
+        projects = projectService.GetAllProjects();
         this.StateHasChanged();
     }
     private async Task DeleteProject(Project project)
     {
 
-        //await UserService.DeleteApplicationUser(applicationUser);
-        //var users = UserService.GetAllUsers();
-        //var itemToRemove = users.Remove(users.Single(r => r.UserName == httpContextAccessor.HttpContext.User.Identity.Name));
-        //var roles = roleManager.Roles.ToList();
-        //this.users = users;
-        //this.roles = roles;
+        projectService.DeleteProject(project);
+        projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
+        projects = projectService.GetAllProjects();
         this.StateHasChanged();
 
     }
 
     private async Task EditProject(Project project)
     {
-
+        projectModal.OpenDialog(project);
       //  managementModal.OpenDialog(applicationUser);
     }
 

@@ -439,6 +439,7 @@ namespace Task_management_system.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProjectOwnerId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ProjectTypeIdKeyValue")
@@ -619,7 +620,9 @@ namespace Task_management_system.Migrations
                 {
                     b.HasOne("Task_management_system.Areas.Identity.ApplicationUser", "ProjectOwner")
                         .WithMany()
-                        .HasForeignKey("ProjectOwnerId");
+                        .HasForeignKey("ProjectOwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Task_management_system.Models.KeyValue", "ProjectType")
                         .WithMany()

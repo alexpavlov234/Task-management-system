@@ -20,6 +20,7 @@ namespace Task_management_system.Pages
         private ToastMsg toast = new ToastMsg();
         private List<KeyValue> projectTypes { get; set; }
         private List<ApplicationUser> users { get; set; }
+        private ApplicationUser[] projectParticipants { get; set; }
 
         [Parameter]
         public EventCallback CallbackAfterSubmit { get; set; }
@@ -29,7 +30,7 @@ namespace Task_management_system.Pages
 
         [Inject]
         private IKeyValueService keyValueService { get; set; }
-        
+
         [Inject]
         private IUserService UserService { get; set; }
 
@@ -40,8 +41,11 @@ namespace Task_management_system.Pages
             users = UserService.GetAllUsers();
         }
         public async void OpenDialog(Project project)
+
         {
-            
+
+            this.project = project;
+            projectParticipants = this.project.ProjectParticipants.ToArray();
             editContext = new EditContext(project);
 
             IsVisible = true;
@@ -54,20 +58,21 @@ namespace Task_management_system.Pages
             StateHasChanged();
         }
 
-        private async void SaveUser()
+        private async void SaveProject()
         {
+          
+            project.ProjectParticipants = new List<ApplicationUser>(projectParticipants);
             if (editContext.Validate())
 
             {
 
                 if (ProjectService.GetProjectById(project.ProjectId) != null)
                 {
-
                     ProjectService.UpdateProject(project);
                     await CallbackAfterSubmit.InvokeAsync();
                     toast.sfSuccessToast.Title = "Успешно приложени промени!";
                     toast.sfSuccessToast.ShowAsync();
-                    IsVisible = false;
+                    
                 }
                 else
                 {
@@ -86,6 +91,12 @@ namespace Task_management_system.Pages
                     await CallbackAfterSubmit.InvokeAsync();
 
                 }
+            }
+            else
+            {
+                toast.sfErrorToast.Title = editContext.GetValidationMessages().FirstOrDefault();
+                toast.sfErrorToast.ShowAsync();
+
             }
         }
 

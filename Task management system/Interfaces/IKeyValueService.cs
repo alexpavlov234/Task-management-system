@@ -2,7 +2,7 @@
 
 namespace Task_management_system.Interfaces
 {
-    internal interface IKeyValueService
+    public interface IKeyValueService
     {
         void CreateKeyType(KeyType keyType);
         void CreateKeyValue(KeyValue keyValue, string KeyTypeIntCode);

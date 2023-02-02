@@ -196,7 +196,7 @@ namespace Task_management_system.Migrations
                     ProjectDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProjectOwnerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ProjectOwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IdProjectType = table.Column<int>(type: "int", nullable: false),
                     ProjectTypeIdKeyValue = table.Column<int>(type: "int", nullable: false)
                 },
@@ -207,7 +207,8 @@ namespace Task_management_system.Migrations
                         name: "FK_Project_AspNetUsers_ProjectOwnerId",
                         column: x => x.ProjectOwnerId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Project_KeyValue_ProjectTypeIdKeyValue",
                         column: x => x.ProjectTypeIdKeyValue,

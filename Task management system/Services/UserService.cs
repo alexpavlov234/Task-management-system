@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Data;
-using Task_management_system.Services.Common;
+using Task_management_system.Models;
 
 public class UserService : Controller, IUserService
 {

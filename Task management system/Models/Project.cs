@@ -13,28 +13,27 @@ namespace Task_management_system.Models
         [Key]
         public int ProjectId { get; set; }
 
-        [Required]
-
-        public string ProjectName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Полето 'Име на проект' е задължително!")]
+         public string ProjectName { get; set; }
+        [Required(ErrorMessage = "Полето 'Описание на проект' е задължително!")]
         public string ProjectDescription { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Моля изберете начална дата!")]
         public DateTime StartDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Моля изберете крайна дата!")]
         public DateTime EndDate { get; set; }
 
 
         public ICollection<Issue> Tasks { get; set; }
-
+        [Required(ErrorMessage = "Полето 'Собственик на проект' е задължително!")]
         public ApplicationUser ProjectOwner { get; set; }
-
+        [Required(ErrorMessage = "Моля изберете поне един участник в проекта!")]
         public ICollection<ApplicationUser> ProjectParticipants { get; set; }
 
+        
        
-       
-        [Required]
+        [Required(ErrorMessage = "Полето 'Тип на проект' е задължително!")]
         [ForeignKey(nameof(KeyValue))]
         public int IdProjectType { get; set; }
         public KeyValue ProjectType { get; set; }
