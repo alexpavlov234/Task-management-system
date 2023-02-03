@@ -1,0 +1,73 @@
+﻿@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using System.ComponentModel.DataAnnotations
+@using Syncfusion.Blazor.Inputs
+@using Task_management_system.Areas.Identity
+@using Task_management_system.Models
+@using Task_management_system.Pages.Common
+@using Task_management_system.Services.Common
+@using Syncfusion.Blazor.Popups
+@inject IProjectService ProjectService
+
+
+<SfDialog Width="800px" Height="400px" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@IsVisible">
+    <DialogTemplates>
+        <Header>
+           <span style="color: #009cfc;">@this.issue.Subject</span></Header>
+        <Content>
+
+            <EditForm EditContext="editContext">
+
+                <DataAnnotationsValidator />
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="issueName">Име на задача</label>
+                        <InputText id="issueName" @bind-Value="issue.Subject" class="form-control"></InputText>
+                        <ValidationMessage For="@(() => issue.Subject)" />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="datepicker">Проект</label>
+                        <SfDropDownList ID="project" TValue="string" TItem="Project" @bind-Value="issueProjectName" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете проект" DataSource="@projects">
+                            <DropDownListFieldSettings Value="ProjectName" Text="ProjectName"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="datepicker">Срок на задача</label>
+                        <SfDateRangePicker ID="datepicker" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@issue.EndDate" @bind-EndDate="@issue.StartDate" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
+                        <ValidationMessage For="@(() => issue.EndDate)" />
+                        <ValidationMessage For="@(() => issue.StartDate)" />
+                    </div>
+                 
+                </div>
+                <label for="description">Описание на задача</label>
+                <div class="multiline">
+                    <SfTextBox id="description" Multiline=true Placeholder="Въведете описание на задача" @bind-Value="@issue.Description"></SfTextBox>
+                    <ValidationMessage For="@(() => issue.Description)" />
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="owner">Възложена на</label>
+                        <SfDropDownList ID="owner" TValue="string" TItem="ApplicationUser" @bind-Value="issueAssignedToUserName" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете, на кого е възложена " DataSource="@users">
+                            <DropDownListFieldSettings Value="UserName" Text="FullName"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                        <ValidationMessage For="@(() => issue.AssignedТo)" />
+                    </div>
+                    
+                </div>
+
+
+            </EditForm>
+        </Content>
+        <FooterTemplate>
+            <div class="form-group">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary" @onclick="SaveIssue">Запиши</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CloseDialog">Отказ</button>
+                </div>
+            </div>
+        </FooterTemplate>
+    </DialogTemplates>
+</SfDialog>
+<ToastMsg @ref="toast" />
+

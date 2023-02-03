@@ -34,7 +34,7 @@ namespace Task_management_system
             builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
             builder.Services.AddScoped<TokenProvider>();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IUssueService, IssueService>();
+            builder.Services.AddScoped<IIssueService, IssueService>();
             builder.Services.AddScoped<IProjectService, ProjectService>();
 
             builder.Services.AddScoped<IKeyValueService, KeyValueService>();

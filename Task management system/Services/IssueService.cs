@@ -8,7 +8,7 @@ using Task_management_system.Data;
 using Task_management_system.Models;
 using Issue = Task_management_system.Models.Issue;
 
-public class IssueService : Controller, IUssueService
+public class IssueService : Controller, IIssueService
 {
     private readonly Context _context;
     private readonly IEmailSender _emailSender;
@@ -28,41 +28,52 @@ public class IssueService : Controller, IUssueService
         _emailSender = emailSender;
     }
 
-    public void CreateTask(Issue issue)
+    public string CreateTask(Issue issue)
     {
-        Issue task1 = _context.Tasks.FirstOrDefault((c) => (c.IssueName == issue.IssueName));
-        if (task1 == null)
-        {
-            _context.Tasks.Add(issue);
-            _context.SaveChanges();
-        }
+        
+        Issue issue1 = _context.Issues.AsNoTracking().FirstOrDefault((c) => (c.Subject == issue.Subject));
+        //try
+        //{
+            if (issue1 == null)
+            {
+                _context.Clone().Issues.Add(issue);
+                _context.SaveChanges();
+                return "Успешно създаване на задача!";
+
+            }
+            else
+            {
+                return "Вече съществува такава задача!";
+            }
+
+        //}
+        //catch
+        //{
+        //    return "Неуспешен запис!";
+        //}
     }
 
     public void DeleteTask(Issue issue)
     {
-        _context.Tasks.Remove(issue);
+        _context.Issues.Remove(issue);
         _context.SaveChanges();
     }
 
-    public void DeleteTask(int IssueId)
-    {
-        _context.Tasks.Remove(new Issue { IssueId = IssueId });
-        _context.SaveChanges();
-    }
+    
 
     public List<Issue> GetAllTasks()
     {
-        return _context.Tasks.ToList();
+        return _context.Issues.ToList();
     }
 
     public Issue GetTaskById(int TaskId)
     {
-        return _context.Tasks.Where(x => x.IssueId == TaskId).FirstOrDefault();
+        return _context.Issues.Where(x => x.IssueId == TaskId).FirstOrDefault();
     }
 
-    public Issue GetTaskByTaskName(string TaskName)
+    public Issue GetTaskByTaskName(string Subject)
     {
-        return _context.Tasks.Where(x => x.IssueName == TaskName).FirstOrDefault();
+        return _context.Issues.Where(x => x.Subject == Subject).FirstOrDefault();
     }
 
     public void UpdateTask(Issue issue)
@@ -80,7 +91,7 @@ public class IssueService : Controller, IUssueService
     public void CreateSubtask(Issue issue, Subtask subtask)
     {
         issue.Subtasks.Add(subtask);
-        _context.Tasks.Update(issue);
+        _context.Issues.Update(issue);
         _context.SaveChanges();
     }
 
@@ -88,7 +99,7 @@ public class IssueService : Controller, IUssueService
     {
         Issue issue = GetTaskById(TaskId);
         issue.Subtasks.Add(subtask);
-        _context.Tasks.Update(issue);
+        _context.Issues.Update(issue);
         _context.SaveChanges();
     }
 

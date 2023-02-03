@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Task_management_system.Areas.Identity;
@@ -26,13 +28,14 @@ namespace Task_management_system.Models
 
 
         public ICollection<Issue> Tasks { get; set; }
+
         [Required(ErrorMessage = "Полето 'Собственик на проект' е задължително!")]
         public ApplicationUser ProjectOwner { get; set; }
         [Required(ErrorMessage = "Моля изберете поне един участник в проекта!")]
         public ICollection<ApplicationUser> ProjectParticipants { get; set; }
 
         
-       
+
         [Required(ErrorMessage = "Полето 'Тип на проект' е задължително!")]
         [ForeignKey(nameof(KeyValue))]
         public int IdProjectType { get; set; }
