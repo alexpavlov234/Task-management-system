@@ -45,9 +45,12 @@ namespace Task_management_system.Pages
         {
 
             this.project = project;
-            projectParticipants = this.project.ProjectParticipants.ToArray();
+            if (this.project.ProjectParticipants != null)
+            {
+                projectParticipants = this.project.ProjectParticipants.ToArray();
+            }
+            
             editContext = new EditContext(project);
-
             IsVisible = true;
             StateHasChanged();
         }

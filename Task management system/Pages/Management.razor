@@ -11,71 +11,65 @@
 @inject SignInManager<ApplicationUser> signInManager
 @attribute [Authorize(Roles = "Admin")]
 
-<div class="content-wrapper">
 
-    <div class="card">
+<div class="frame container">
+    <img class="banner" src="img/iStock-1203930843.jpg" alt="Banner">
+    <div class="bottom-left">
 
-        <div class="card-header">
-            <div class="frame container">
-                <img class="banner" src="img/iStock-1203930843.jpg" alt="Banner">
-                <div class="bottom-left">
+        <h3>Потребители</h3>
+        <nav class="navbar navbar-expand">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav float">
+                <li class="nav-item d-none d-sm-inline-block">
 
-                    <h3>Потребители</h3>
-                    <nav class="navbar navbar-expand">
-                        <!-- Left navbar links -->
-                        <ul class="navbar-nav float">
-                            <li class="nav-item d-none d-sm-inline-block">
+                    <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddNewDocumentClickHandler" disabled="@(this.DisableAllFields)">Нов потребител</button>
 
-                                <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddNewDocumentClickHandler" disabled="@(this.DisableAllFields)">Нов потребител</button>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    &nbsp;
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
 
-                            </li>
-                            <li class="nav-item d-none d-sm-inline-block">
-                                &nbsp;
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-sm-12">
-                    <SfGrid ID="usersGrid" DataSource="users" AllowSorting="true" AllowFiltering=true EnableAltRow="true" EnableHover="false"
-                            AllowTextWrap="true" @ref="usersGrid" AllowSelection="true" Toolbar="@(new List<string>() { "ExcelExport", "PdfExport" })"
-                            AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true">
-                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
-                        <GridPageSettings PageCount="5" PageSize=20 PageSizes="true"></GridPageSettings>
-                        <GridEvents OnToolbarClick="ToolbarClick" TValue="ApplicationUser"></GridEvents>
-                        <GridColumns>
-                            <GridColumn Width="40px">
-                                <Template>
-                                    <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
-                                        <button type="button" class="btn btn-outline-warning waves-effect md-trigger" @onclick="(() => EditUser(context as ApplicationUser))">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                    </SfTooltip>
-                                </Template>
-                            </GridColumn>
-                            <GridColumn Width="40px">
-                                <Template>
-                                    <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger" @onclick="(() => DeleteUser(context as ApplicationUser))">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </SfTooltip>
-                                </Template>
-                            </GridColumn>
-                            
+<div class="card-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <SfGrid ID="usersGrid" DataSource="users" AllowSorting="true" AllowFiltering=true EnableAltRow="true" EnableHover="false"
+                    AllowTextWrap="true" @ref="usersGrid" AllowSelection="true" Toolbar="@(new List<string>() { "ExcelExport", "PdfExport" })"
+                    AllowExcelExport="true" AllowPdfExport="true" AllowPaging="true">
+                <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+                <GridPageSettings PageCount="5" PageSize=20 PageSizes="true"></GridPageSettings>
+                <GridEvents OnToolbarClick="ToolbarClick" TValue="ApplicationUser"></GridEvents>
+                <GridColumns>
+                    <GridColumn Width="40px">
+                        <Template>
+                            <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
+                                <button type="button" class="btn btn-outline-warning waves-effect md-trigger" @onclick="(() => EditUser(context as ApplicationUser))">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                            </SfTooltip>
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Width="40px">
+                        <Template>
+                            <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                <button type="button" class="btn btn-outline-danger waves-effect md-trigger" @onclick="(() => DeleteUser(context as ApplicationUser))">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </SfTooltip>
+                        </Template>
+                    </GridColumn>
 
-                            <GridColumn Field=@nameof(ApplicationUser.UserName) HeaderText="Потребителско име" IsPrimaryKey="true" TextAlign="TextAlign.Right" Width="120"></GridColumn>
-                            <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" Width="120"></GridColumn>
-                            <GridColumn Field=@nameof(ApplicationUser.LastName) HeaderText="Фамилия" Width="120"></GridColumn>
-                            <GridColumn Field=@nameof(ApplicationUser.Email) HeaderText="Имейл" Width="120"></GridColumn>
-                            <GridColumn Field=@nameof(ApplicationUser.PhoneNumber) HeaderText="Телефон" Width="120"></GridColumn>
-                        </GridColumns>
-                    </SfGrid>
-                </div>
-            </div>
+
+                    <GridColumn Field=@nameof(ApplicationUser.UserName) HeaderText="Потребителско име" IsPrimaryKey="true" TextAlign="TextAlign.Right" Width="120"></GridColumn>
+                    <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" Width="120"></GridColumn>
+                    <GridColumn Field=@nameof(ApplicationUser.LastName) HeaderText="Фамилия" Width="120"></GridColumn>
+                    <GridColumn Field=@nameof(ApplicationUser.Email) HeaderText="Имейл" Width="120"></GridColumn>
+                    <GridColumn Field=@nameof(ApplicationUser.PhoneNumber) HeaderText="Телефон" Width="120"></GridColumn>
+                </GridColumns>
+            </SfGrid>
         </div>
     </div>
 </div>
@@ -98,7 +92,7 @@
         var roles = roleManager.Roles.ToList();
         this.users = users;
         this.roles = roles;
-        
+
         await this.usersGrid.Refresh();
         this.StateHasChanged();
     }
@@ -117,7 +111,7 @@
 
     public List<IdentityRole> roles { get; set; }
     public List<ApplicationUser> users { get; set; }
- 
+
     public int RowCounter = 0;
     SfGrid<ApplicationUser> sfGrid { get; set; }
     [Inject]
@@ -187,7 +181,7 @@
             usersGrid.PageSettings.PageSize = temp;
             await usersGrid.Refresh();
             await this.usersGrid.ExportToPdfAsync(ExportProperties);
-            
+
         }
         else if (args.Item.Id == "usersGrid_excelexport")
         {

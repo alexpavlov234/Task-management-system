@@ -62,9 +62,10 @@ button.nav-link.btn.btn-link {
     word-wrap: break-word;
     background-color: #fff;
     background-clip: border-box;
-    border: 3px solid rgba(0,0,0,.125);
+    border: 1px solid rgba(0,0,0,.125);
     border-radius: 0.75rem;
     margin: 20px;
+    box-shadow: 0px 0px 4px 0px rgba(112,112,112,1);
 }
 .weather-city {
     font-size: 20px;
@@ -77,7 +78,7 @@ button.nav-link.btn.btn-link {
   
 }
 .form-floating, .btn, input {
-    margin: 5px 0 5px 0 !important;
+    margin: 5px 0 5px 0;
 }
 .input-group-prepend button {
     border-top-right-radius: 0;
