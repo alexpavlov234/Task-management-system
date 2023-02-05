@@ -57,6 +57,9 @@ namespace Task_management_system.Pages
             if(issue.Project != null)
             {
                 issueProjectName = issue.Project.ProjectName;
+            } else
+            {
+                issueProjectName = "";
             }
             this.projects = ProjectService.GetAllProjects();
             
