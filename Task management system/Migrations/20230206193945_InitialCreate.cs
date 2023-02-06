@@ -223,20 +223,23 @@ namespace Task_management_system.Migrations
                 {
                     IssueId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProjectId = table.Column<int>(type: "int", nullable: false),
+                    IssueName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IssueDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AssigneeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     AssignedТoId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    LastEditedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IssueLastEditedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IssueCompletionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsAllDay = table.Column<bool>(type: "bit", nullable: false),
                     RecurrenceRule = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RecurrenceException = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RecurrenceID = table.Column<int>(type: "int", nullable: true)
+                    RecurrenceID = table.Column<int>(type: "int", nullable: true),
+                    ProjectId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -255,8 +258,7 @@ namespace Task_management_system.Migrations
                         name: "FK_Issue_Project_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Project",
-                        principalColumn: "ProjectId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ProjectId");
                 });
 
             migrationBuilder.CreateTable(

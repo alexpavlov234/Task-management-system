@@ -30,7 +30,7 @@ namespace Task_management_system.Data
         public DbSet<Project> Projects { get; set; }
         public DbSet<KeyType> KeyType { get; set; }
         public DbSet<KeyValue> KeyValue { get; set; }
-        public DbSet<Issue> Issues { get; set; }
+        public DbSet<Issue> Tasks { get; set; }
         public DbSet<Subtask> Subtasks { get; set; }
 
         public Context Clone()

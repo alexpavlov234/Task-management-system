@@ -11,39 +11,49 @@ namespace Task_management_system.Models
         [Key]
         public int IssueId { get; set; }
 
-        [ForeignKey("Project")]
-        public int ProjectId { get; set; }
-        public Project Project { get; set; }
+        [Required]
+        public string IssueName { get; set; }
+
+        [Required]
+        public string IssueDescription { get; set; }
 
         public ApplicationUser Assignee { get; set; }
 
+
         public ApplicationUser AssignedТo { get; set; }
 
+
+
+
         [Required]
-        public DateTime LastEditedDate { get; set; }
-        
+        public DateTime IssueLastEditedDate { get; set; }
+
+        [Required]
+        public DateTime IssueCompletionDate { get; set; }
+
         [Required]
         public string Subject { get; set; }
 
+        [Required]
         public string Location { get; set; }
 
         [Required]
         public string Status { get; set; }
 
         [Required]
-        public DateTime StartDate { get; set; }
+        public DateTime StartTime { get; set; }
 
         [Required]
-        public DateTime EndDate { get; set; }
-        [Required]
+        public DateTime EndTime { get; set; }
+
+
+
         public string Description { get; set; }
         public bool IsAllDay { get; set; }
         public string RecurrenceRule { get; set; }
         public string RecurrenceException { get; set; }
         public Nullable<int> RecurrenceID { get; set; }
-      
+        [Required]
         public ICollection<Subtask> Subtasks { get; set; }
-
-        
     }
 }

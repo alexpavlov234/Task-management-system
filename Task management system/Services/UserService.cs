@@ -80,7 +80,7 @@ public class UserService : Controller, IUserService
     // Връща списък с всички потребители
     public List<ApplicationUser> GetAllUsers()
     {
-        return _context.Clone().Users.ToList();
+        return _context.Users.ToList();
     }
 
     // Връща един потребител по зададен Id

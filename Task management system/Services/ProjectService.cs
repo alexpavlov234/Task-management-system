@@ -35,18 +35,10 @@ public class ProjectService : Controller, IProjectService
     {
         project.ProjectType = _keyValueService.GetKeyValueById(project.IdProjectType);
         Project project1 = _context.Projects.FirstOrDefault((c) => (c.ProjectName == project.ProjectName));
-        try
-        {
+        //try
+        //{
             if (project1 == null)
             {
-                var projectParticipants = project.ProjectParticipants.ToList();
-
-                if (!projectParticipants.Contains(project.ProjectOwner))
-                {
-                    projectParticipants.Add(project.ProjectOwner);
-                }
-
-                project.ProjectParticipants = projectParticipants;
                 _context.Projects.Add(project);
                 _context.SaveChanges();
                 return "Успешно създаване на проект!";
@@ -57,12 +49,11 @@ public class ProjectService : Controller, IProjectService
                 return "Вече съществува такъв проект!";
             }
 
-        }
-        catch (Exception e)
-        {
-          // return "Неуспешен запис!";
-          return e.Message;
-        }
+        //}
+        //catch
+        //{
+        //    return "Неуспешен запис!";
+        //}cccccccccccccccccccccccc
     }
 
     public void DeleteProject(Project project)
@@ -79,7 +70,7 @@ public class ProjectService : Controller, IProjectService
 
     public List<Project> GetAllProjects()
     {
-        return _context.Projects.Include("Tasks").ToList();
+        return _context.Projects.ToList();
     }
 
     public Project GetProjectById(int ProjectId)

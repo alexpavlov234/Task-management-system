@@ -255,20 +255,31 @@ namespace Task_management_system.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsAllDay")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastEditedDate")
+                    b.Property<DateTime>("IssueCompletionDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("IssueDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("IssueLastEditedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IssueName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProjectId")
+                    b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
                     b.Property<string>("RecurrenceException")
@@ -282,7 +293,7 @@ namespace Task_management_system.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
@@ -585,17 +596,13 @@ namespace Task_management_system.Migrations
                         .WithMany()
                         .HasForeignKey("AssigneeId");
 
-                    b.HasOne("Task_management_system.Models.Project", "Project")
+                    b.HasOne("Task_management_system.Models.Project", null)
                         .WithMany("Tasks")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjectId");
 
                     b.Navigation("AssignedТo");
 
                     b.Navigation("Assignee");
-
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("Task_management_system.Models.KeyValue", b =>
