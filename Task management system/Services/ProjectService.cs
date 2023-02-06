@@ -39,6 +39,14 @@ public class ProjectService : Controller, IProjectService
         {
             if (project1 == null)
             {
+                var projectParticipants = project.ProjectParticipants.ToList();
+
+                if (!projectParticipants.Contains(project.ProjectOwner))
+                {
+                    projectParticipants.Add(project.ProjectOwner);
+                }
+
+                project.ProjectParticipants = projectParticipants;
                 _context.Projects.Add(project);
                 _context.SaveChanges();
                 return "Успешно създаване на проект!";
@@ -50,9 +58,10 @@ public class ProjectService : Controller, IProjectService
             }
 
         }
-        catch
+        catch (Exception e)
         {
-           return "Неуспешен запис!";
+          // return "Неуспешен запис!";
+          return e.Message;
         }
     }
 

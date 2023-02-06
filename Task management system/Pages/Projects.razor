@@ -177,7 +177,7 @@
     private async Task AddNewProjectClickHandler()
     {
 
-        projectModal.OpenDialog(new Project { StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(1), ProjectParticipants = new List<ApplicationUser>() });
+        projectModal.OpenDialog(new Project { StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(1) });
     }
     private async Task UpdateAfterProjectModalSubmitAsync()
     {
@@ -187,7 +187,6 @@
     }
     private async Task DeleteProject(Project project)
     {
-
         projectService.DeleteProject(project);
         projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
         projects = projectService.GetAllProjects();

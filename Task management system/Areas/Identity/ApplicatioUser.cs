@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Task_management_system.Models;
 
 namespace Task_management_system.Areas.Identity
 {
@@ -11,6 +12,8 @@ namespace Task_management_system.Areas.Identity
         public string FirstName { get; set; }
         [Required(ErrorMessage = "Полето 'Фамилия' е задължително")]
         public string LastName { get; set; }
+        [InverseProperty("ProjectOwner")]
+        public ICollection<Project> ProjectsOwned { get; set; }
         [NotMapped]
         public string Role { get; set; }
 

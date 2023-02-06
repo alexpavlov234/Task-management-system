@@ -29,10 +29,14 @@ namespace Task_management_system.Models
 
         public ICollection<Issue> Tasks { get; set; }
 
-        [Required(ErrorMessage = "Полето 'Собственик на проект' е задължително!")]
-        public ApplicationUser ProjectOwner { get; set; }
-        [Required(ErrorMessage = "Моля изберете поне един участник в проекта!")]
         public ICollection<ApplicationUser> ProjectParticipants { get; set; }
+
+        [InverseProperty("ProjectsOwned")]
+        public ApplicationUser ProjectOwner { get; set; }
+
+        
+
+
 
         
 
