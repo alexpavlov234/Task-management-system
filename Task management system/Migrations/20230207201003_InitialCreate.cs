@@ -223,7 +223,6 @@ namespace Task_management_system.Migrations
                 {
                     IssueId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IssueDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AssigneeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     AssignedТoId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Subject = table.Column<string>(type: "nvarchar(450)", nullable: false),

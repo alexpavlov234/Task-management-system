@@ -13,26 +13,17 @@ namespace Task_management_system.Models
         [Key]
         public int IssueId { get; set; }
 
-
-        [Required]
-        public string IssueDescription { get; set; }
-
         public ApplicationUser Assignee { get; set; }
 
 
         public ApplicationUser AssignedТo { get; set; }
 
-
-
-
-
-        [Required]
+        [Required(ErrorMessage = "Полето 'Име' е задължително!")]
         public string Subject { get; set; }
 
-        [Required]
         public string Location { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Полето 'Статус' е задължително!")]
         public string Status { get; set; }
 
         [Required]
@@ -40,7 +31,7 @@ namespace Task_management_system.Models
 
         [Required]
         public DateTime EndTime { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Полето 'Проект' е задължително!")]
         public Project Project { get; set; }
 
         public string Description { get; set; }

@@ -261,10 +261,6 @@ namespace Task_management_system.Migrations
                     b.Property<bool>("IsAllDay")
                         .HasColumnType("bit");
 
-                    b.Property<string>("IssueDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

@@ -1,6 +1,7 @@
 ﻿using KeyValue_management_system.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Syncfusion.Blazor.DropDowns;
 using System.Runtime.CompilerServices;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
@@ -16,6 +17,7 @@ namespace Task_management_system.Pages
         private Issue issue = new Issue();
         public string? issueAssignedToUserName { get; set; }
         public string? issueProjectName { get; set; }
+        private List<KeyValue> statuses = new List<KeyValue>();
         private List<Project> projects { get; set; }
         private bool IsUserNew = false;
         private bool IsVisible = false;
@@ -49,6 +51,7 @@ namespace Task_management_system.Pages
         public async void OpenDialog(Issue issue)
 
         {
+            statuses = new List<KeyValue>();
             this.issue = issue;
             if (issue.AssignedТo != null)
             {
@@ -57,18 +60,63 @@ namespace Task_management_system.Pages
             if (issue.Project != null)
             {
                 issueProjectName = issue.Project.ProjectName;
+                this.issue.EndTime = this.issue.Project.EndDate;
+                if (DateTime.Now < issue.EndTime)
+                {
+                    this.issue.StartTime = this.issue.Project.EndDate.AddMonths(-1);
+                }
+                else
+                {
+                    this.issue.StartTime = DateTime.Now;
+                    this.issue.EndTime = DateTime.Now.AddMonths(1);
+                }
             }
             else
             {
                 issueProjectName = "";
             }
+            GetStatus(this.issue.Status);
             this.projects = ProjectService.GetAllProjects();
 
             editContext = new EditContext(issue);
             IsVisible = true;
             StateHasChanged();
         }
+        private void GetStatus(string status)
+        {
+            List<KeyValue> keyValues = keyValueService.GetAllKeyValuesByKeyType("IssueStatus");
+            if (status == keyValues.Where(x => x.KeyValueIntCode == "New").First().Name)
+            {
+                statuses.AddRange(keyValues.Where(x => x.KeyValueIntCode == "New" || x.KeyValueIntCode == "InExecution" || x.KeyValueIntCode == "Closed").ToList());
+            }
+            else if (status == keyValues.Where(x => x.KeyValueIntCode == "InExecution").First().Name)
+            {
+                statuses.AddRange(keyValues.Where(x => x.KeyValueIntCode == "InExecution" || x.KeyValueIntCode == "Closed").ToList());
+            }
+            else if (status == keyValues.Where(x => x.KeyValueIntCode == "ForReview").First().Name)
+            {
+                statuses.AddRange(keyValues.Where(x => x.KeyValueIntCode == "ForReview" || x.KeyValueIntCode == "Closed" || x.KeyValueIntCode == "ReturnedForCorrection").ToList());
+            }
+            else if (status == keyValues.Where(x => x.KeyValueIntCode == "ReturnedForCorrection").First().Name)
+            {
+                statuses.AddRange(keyValues.Where(x => x.KeyValueIntCode == "ReturnedForCorrection" || x.KeyValueIntCode == "InExecution" || x.KeyValueIntCode == "ForReview").ToList());
+            }
+        }
 
+        private void OnValueSelecthandler(ChangeEventArgs<string, Project> args)
+        {
+            this.issue.Project = this.projects.Where(x => x.ProjectName == issueProjectName).First();
+            this.issue.EndTime = this.issue.Project.EndDate;
+            if (DateTime.Now < issue.EndTime)
+            {
+                this.issue.StartTime = this.issue.Project.EndDate.AddMonths(-1);
+            }
+            else
+            {
+                this.issue.StartTime = DateTime.Now;
+                this.issue.EndTime = DateTime.Now.AddMonths(1);
+            }
+        }
         private void CloseDialog()
         {
             IsVisible = false;

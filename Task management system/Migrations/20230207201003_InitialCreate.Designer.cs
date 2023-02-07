@@ -12,7 +12,7 @@ using Task_management_system.Data;
 namespace Task_management_system.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230207193018_InitialCreate")]
+    [Migration("20230207201003_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -262,10 +262,6 @@ namespace Task_management_system.Migrations
 
                     b.Property<bool>("IsAllDay")
                         .HasColumnType("bit");
-
-                    b.Property<string>("IssueDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
                         .IsRequired()
