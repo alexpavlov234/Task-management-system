@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Task_management_system.Areas.Identity;
 
@@ -6,13 +7,12 @@ namespace Task_management_system.Models
 {
     [Table("Issue")]
     [Display(Name = "Задача")]
+    [Index(nameof(Subject), IsUnique = true)]
     public class Issue
     {
         [Key]
         public int IssueId { get; set; }
 
-        [Required]
-        public string IssueName { get; set; }
 
         [Required]
         public string IssueDescription { get; set; }
@@ -25,11 +25,6 @@ namespace Task_management_system.Models
 
 
 
-        [Required]
-        public DateTime IssueLastEditedDate { get; set; }
-
-        [Required]
-        public DateTime IssueCompletionDate { get; set; }
 
         [Required]
         public string Subject { get; set; }
@@ -45,8 +40,8 @@ namespace Task_management_system.Models
 
         [Required]
         public DateTime EndTime { get; set; }
-
-
+        [Required]
+        public Project Project { get; set; }
 
         public string Description { get; set; }
         public bool IsAllDay { get; set; }

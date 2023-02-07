@@ -1,10 +1,10 @@
 ﻿using Task_management_system.Models;
 
-internal interface IUssueService
+internal interface IIssueService
 {
     void CreateSubtask(Issue issue, Subtask subtask);
     void CreateSubtask(int TaskId, Subtask subtask);
-    void CreateTask(Issue issue);
+    string CreateTask(Issue issue);
     void DeleteSubtask(Subtask subtask);
     void DeleteTask(int TaskId);
     List<Issue> GetAllTasks();

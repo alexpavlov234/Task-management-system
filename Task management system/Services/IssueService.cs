@@ -8,7 +8,7 @@ using Task_management_system.Data;
 using Task_management_system.Models;
 using Issue = Task_management_system.Models.Issue;
 
-public class IssueService : Controller, IUssueService
+public class IssueService : Controller, IIssueService
 {
     private readonly Context _context;
     private readonly IEmailSender _emailSender;
@@ -28,13 +28,23 @@ public class IssueService : Controller, IUssueService
         _emailSender = emailSender;
     }
 
-    public void CreateTask(Issue issue)
+    public string CreateTask(Issue issue)
     {
-        Issue task1 = _context.Tasks.FirstOrDefault((c) => (c.IssueName == issue.IssueName));
+        Issue task1 = _context.Tasks.FirstOrDefault((c) => (c.Subject == issue.Subject));
         if (task1 == null)
         {
-            _context.Tasks.Add(issue);
-            _context.SaveChanges();
+            try
+            {
+                _context.Tasks.Add(issue);
+                _context.SaveChanges();
+                return "Успешно добавяне на проект!";
+            } catch { 
+                return "Неуспешно добавяне на проект!";
+
+            }
+        } else
+        {
+            return "Вече съществува такъв проект!";
         }
     }
 
@@ -62,7 +72,7 @@ public class IssueService : Controller, IUssueService
 
     public Issue GetTaskByTaskName(string TaskName)
     {
-        return _context.Tasks.Where(x => x.IssueName == TaskName).FirstOrDefault();
+        return _context.Tasks.Where(x => x.Subject == TaskName).FirstOrDefault();
     }
 
     public void UpdateTask(Issue issue)

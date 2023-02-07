@@ -17,7 +17,7 @@ namespace Task_management_system.Data
         {
             modelBuilder.Entity<Project>().HasIndex(b => b.ProjectName)
             .IsUnique();
-            modelBuilder.Entity<Issue>();
+            modelBuilder.Entity<Issue>().HasIndex(b => b.Subject).IsUnique();
             modelBuilder.Entity<Subtask>();
             modelBuilder.Entity<KeyType>();
             modelBuilder.Entity<KeyValue>().HasIndex(b => b.KeyValueIntCode)
