@@ -6,6 +6,7 @@ using Syncfusion.Blazor.Data;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Data;
 using Task_management_system.Models;
+using Task_management_system.Pages;
 using Issue = Task_management_system.Models.Issue;
 
 public class IssueService : Controller, IIssueService
@@ -37,14 +38,14 @@ public class IssueService : Controller, IIssueService
             {
                 _context.Tasks.Add(issue);
                 _context.SaveChanges();
-                return "Успешно добавяне на проект!";
+                return "Успешно добавяне на задача!";
             } catch { 
-                return "Неуспешно добавяне на проект!";
+                return "Неуспешно добавяне на задача!";
 
             }
         } else
         {
-            return "Вече съществува такъв проект!";
+            return "Вече съществува такъв задача!";
         }
     }
 
@@ -62,17 +63,23 @@ public class IssueService : Controller, IIssueService
 
     public List<Issue> GetAllTasks()
     {
-        return _context.Tasks.ToList();
+        List<Issue> issues = _context.Tasks.ToList();
+        _context.SaveChanges();
+        return issues;
     }
 
     public Issue GetTaskById(int TaskId)
     {
-        return _context.Tasks.Where(x => x.IssueId == TaskId).FirstOrDefault();
+        Issue issue1 = _context.Tasks.Where(x => x.IssueId == TaskId).FirstOrDefault();
+        _context.SaveChanges();
+        return issue1;
     }
 
     public Issue GetTaskByTaskName(string TaskName)
     {
-        return _context.Tasks.Where(x => x.Subject == TaskName).FirstOrDefault();
+        Issue issue1 = _context.Tasks.Where(x => x.Subject == TaskName).FirstOrDefault();
+        _context.SaveChanges();
+        return issue1;
     }
 
     public void UpdateTask(Issue issue)

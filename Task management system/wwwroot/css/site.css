@@ -4,20 +4,78 @@
     font-family: SegoeUI;
     src: url(fonts/SEGUIVARDISPLAY.TTF);
 }
+
 @font-face {
     font-family: SegoeUIBold;
     src: url(fonts/SEGUIVARBOLD.TTF);
 }
+
 .page-background-class {
     background-color: #04173d;
 }
-h2{
-font-family:SegoeUIBold;
+
+h2 {
+    font-family: SegoeUIBold;
+}
+
+.task-line-green {
+    border: none;
+    width: 100%;
+    height: 24px !important;
+    margin-top: 0;
+    box-shadow: 0 20px 25px 10px #33a602;
+    background-color: white;
+    margin: -50px auto 50px;
+}
+.task-line-red {
+    border: none;
+    width: 100%;
+    height: 24px !important;
+    margin-top: 0;
+    box-shadow: 0 20px 25px 10px #a60202;
+    background-color: white;
+    margin: -50px auto 50px;
+}
+.task-line-yellow {
+    border: none;
+    width: 100%;
+    height: 24px !important;
+    margin-top: 0;
+    box-shadow: 0 20px 25px 10px #a68d02;
+    background-color: white;
+    margin: -50px auto 50px;
+}
+.task-line-blue {
+    border: none;
+    width: 100%;
+    height: 24px !important;
+    margin-top: 0;
+    box-shadow: 0 20px 25px 10px #0278a6;
+    background-color: white;
+    margin: -50px auto 50px;
+}
+.task-line-gray {
+    border: none;
+    width: 100%;
+    height: 24px !important;
+    margin-top: 0;
+    box-shadow: 0 20px 25px 10px gray;
+    background-color: white;
+    margin: -50px auto 50px;
+}
+.task-line-purple {
+    border: none;
+    width: 90%;
+    height: 50px;
+    margin-top: 0;
+    box-shadow: 0 20px 30px -20px #a602a3;
+
 }
 
 label {
     font-family: SegoeUI;
 }
+
 html, body {
     font-family: SegoeUI;
 }
@@ -44,16 +102,20 @@ img {
 .top-row.px-4 {
     padding: 10px !important;
 }
+
 button.nav-link.btn.btn-link {
     margin: 5px !important;
 }
+
 .weather-temp {
     font-size: 72px;
 }
+
 .weather-info {
     font-size: 22px;
     color: dodgerblue;
 }
+
 .custom-card {
     position: relative;
     display: flex;
@@ -67,23 +129,25 @@ button.nav-link.btn.btn-link {
     margin: 20px;
     box-shadow: 0px 0px 4px 0px rgba(112,112,112,1);
 }
+
 .weather-city {
     font-size: 20px;
     color: gray;
 }
+
 .weather-icon {
-   
     height: 80%;
-    
-  
 }
+
 .form-floating, .btn, input {
     margin: 5px 0 5px 0;
 }
+
 .input-group-prepend button {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
+
 .e-rowcell button {
     width: 100%;
 }
@@ -152,6 +216,7 @@ button.nav-link.btn.btn-link {
     font-family: SegoeUIBold;
     text-align: left;
 }
+
 .container {
     position: relative;
     overflow: hidden;
@@ -165,6 +230,7 @@ button.nav-link.btn.btn-link {
     margin-top: auto;
     margin-bottom: auto;
 }
+
 .container#outer {
     overflow: hidden;
 }

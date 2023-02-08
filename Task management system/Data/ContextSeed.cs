@@ -44,7 +44,7 @@ namespace Task_management_system.Data
             context.KeyType.Add(projectKeyType);
             context.KeyType.Add(issueStatusKeyType);
             context.KeyValue.Add(new KeyValue { KeyType = issueStatusKeyType, Name = "Нова", NameEN = "New", IsActive = true, KeyValueIntCode = "New", Description = "Нова" });
-            context.KeyValue.Add(new KeyValue { KeyType = issueStatusKeyType, Name = "В изпълнеие", NameEN = "In execution", IsActive = true, KeyValueIntCode = "InExecution", Description = "В изпълнение" });
+            context.KeyValue.Add(new KeyValue { KeyType = issueStatusKeyType, Name = "В изпълнение", NameEN = "In execution", IsActive = true, KeyValueIntCode = "InExecution", Description = "В изпълнение" });
             context.KeyValue.Add(new KeyValue { KeyType = issueStatusKeyType, Name = "За преглед", NameEN = "For review", IsActive = true, KeyValueIntCode = "ForReview", Description = "За преглед" });
             context.KeyValue.Add(new KeyValue { KeyType = issueStatusKeyType, Name = "Затворена", NameEN = "Closed", IsActive = true, KeyValueIntCode = "Closed", Description = "Затворена" });
             context.KeyValue.Add(new KeyValue { KeyType = issueStatusKeyType, Name = "Върната за корекция", NameEN = "Returned for correction", IsActive = true, KeyValueIntCode = "ReturnedForCorrection", Description = "Върната за корекция" });

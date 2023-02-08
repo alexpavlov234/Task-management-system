@@ -94,7 +94,8 @@ public class UserService : Controller, IUserService
 
     public async Task<ApplicationUser> GetApplicationUserByUsernameAsync(string Username)
     {
-        ApplicationUser user = await _userManager.FindByNameAsync(Username);
+        ApplicationUser user = _context.Users.Where(x => x.UserName == Username).FirstOrDefault();// await _userManager.FindByNameAsync(Username);
+        _context.SaveChanges();
         return user;
     }
 
