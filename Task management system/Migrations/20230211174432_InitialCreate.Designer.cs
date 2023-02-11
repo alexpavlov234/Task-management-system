@@ -12,7 +12,7 @@ using Task_management_system.Data;
 namespace Task_management_system.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230211170028_InitialCreate")]
+    [Migration("20230211174432_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,21 +23,6 @@ namespace Task_management_system.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("ApplicationUserProject", b =>
-                {
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ProjectId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ApplicationUserProject");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -247,6 +232,21 @@ namespace Task_management_system.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Task_management_system.Models.ApplicationUserProject", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "ProjectId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ApplicationUserProjects");
                 });
 
             modelBuilder.Entity("Task_management_system.Models.Issue", b =>
@@ -531,25 +531,6 @@ namespace Task_management_system.Migrations
                     b.ToTable("Subtask");
                 });
 
-            modelBuilder.Entity("ApplicationUserProject", b =>
-                {
-                    b.HasOne("Task_management_system.Models.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Task_management_system.Areas.Identity.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -601,6 +582,25 @@ namespace Task_management_system.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Task_management_system.Models.ApplicationUserProject", b =>
+                {
+                    b.HasOne("Task_management_system.Models.Project", "Project")
+                        .WithMany("ProjectParticipants")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Task_management_system.Areas.Identity.ApplicationUser", "User")
+                        .WithMany("ProjectsParticipants")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Task_management_system.Models.Issue", b =>
                 {
                     b.HasOne("Task_management_system.Areas.Identity.ApplicationUser", "AssignedТo")
@@ -612,13 +612,13 @@ namespace Task_management_system.Migrations
                     b.HasOne("Task_management_system.Areas.Identity.ApplicationUser", "Assignee")
                         .WithMany("AssigneeUsers")
                         .HasForeignKey("AssigneeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Task_management_system.Models.Project", "Project")
                         .WithMany("Tasks")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("AssignedТo");
@@ -642,7 +642,7 @@ namespace Task_management_system.Migrations
             modelBuilder.Entity("Task_management_system.Models.Project", b =>
                 {
                     b.HasOne("Task_management_system.Areas.Identity.ApplicationUser", "ProjectOwner")
-                        .WithMany("ProjectOwners")
+                        .WithMany("ProjectsOwners")
                         .HasForeignKey("ProjectOwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -671,7 +671,9 @@ namespace Task_management_system.Migrations
 
                     b.Navigation("AssigneeUsers");
 
-                    b.Navigation("ProjectOwners");
+                    b.Navigation("ProjectsOwners");
+
+                    b.Navigation("ProjectsParticipants");
                 });
 
             modelBuilder.Entity("Task_management_system.Models.Issue", b =>
@@ -686,6 +688,8 @@ namespace Task_management_system.Migrations
 
             modelBuilder.Entity("Task_management_system.Models.Project", b =>
                 {
+                    b.Navigation("ProjectParticipants");
+
                     b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618

@@ -19,7 +19,17 @@ namespace Task_management_system.Data
             modelBuilder.Entity<Project>().HasIndex(b => b.ProjectName)
             .IsUnique();
             modelBuilder.Entity<Issue>().HasIndex(b => b.Subject).IsUnique();
-            modelBuilder.Entity<Issue>().HasOne(x => x.Assignee).WithMany(y => y.AssigneeUsers).OnDelete(DeleteBehavior.Cascade); 
+            modelBuilder.Entity<Issue>()
+                .HasOne(i => i.Project)
+                .WithMany(p => p.Tasks)
+                .HasForeignKey(i => i.ProjectId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Issue>()
+                .HasOne(i => i.Assignee)
+                .WithMany(u => u.AssigneeUsers)
+                .HasForeignKey(i => i.AssigneeId)
+                .OnDelete(DeleteBehavior.NoAction);
+           // modelBuilder.Entity<Issue>().HasOne(x => x.Assignee).WithMany(y => y.AssigneeUsers).OnDelete(DeleteBehavior.Cascade); 
             modelBuilder.Entity<Issue>().HasOne(x => x.AssignedТo).WithMany(y => y.AssignToUsers).OnDelete(DeleteBehavior.Cascade); 
             modelBuilder.Entity<Project>().HasOne(x => x.ProjectOwner).WithMany(y => y.ProjectsOwners).OnDelete(DeleteBehavior.Cascade);
             //modelBuilder.Entity<Project>().HasMany(x => x.ProjectsParticipants).WithMany(y => y.ProjectsParticipants).UsingEntity<ApplicationUserProject>("ApplicationUserProject"); 
@@ -29,11 +39,12 @@ namespace Task_management_system.Data
             modelBuilder.Entity<ApplicationUserProject>()
                 .HasOne(aup => aup.User)
                 .WithMany(u => u.ProjectsParticipants)
-                .HasForeignKey(aup => aup.UserId);
+                .HasForeignKey(aup => aup.UserId).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<ApplicationUserProject>()
                 .HasOne(aup => aup.Project)
                 .WithMany(p => p.ProjectParticipants)
-                .HasForeignKey(aup => aup.ProjectId);
+                .HasForeignKey(aup => aup.ProjectId).OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<Subtask>();
             modelBuilder.Entity<KeyType>();
             modelBuilder.Entity<KeyValue>().HasIndex(b => b.KeyValueIntCode)

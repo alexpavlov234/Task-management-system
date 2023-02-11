@@ -47,7 +47,7 @@ namespace Task_management_system.Pages
             this.project = project;
             if (this.project.ProjectParticipants != null)
             {
-                projectParticipants = this.project.ProjectParticipants.ToArray();
+              //  projectParticipants = this.project.ProjectParticipants.ToArray();
             }
             
             editContext = new EditContext(project);
@@ -64,7 +64,7 @@ namespace Task_management_system.Pages
         private async void SaveProject()
         {
           
-            project.ProjectParticipants = new List<ApplicationUser>(projectParticipants);
+           // project.ProjectParticipants = new List<ApplicationUser>(projectParticipants);
             if (editContext.Validate())
 
             {

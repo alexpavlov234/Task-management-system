@@ -12,7 +12,7 @@ namespace Task_management_system.Models
     {
         public Project()
         {
-            this.ProjectParticipants = new List<ApplicationUser>();
+            this.ProjectParticipants = new List<ApplicationUserProject>();
         }
         [Key]
         public int ProjectId { get; set; }
@@ -33,7 +33,7 @@ namespace Task_management_system.Models
         [Required(ErrorMessage = "Полето 'Собственик на проект' е задължително!")]
         public ApplicationUser ProjectOwner { get; set; }
         [Required(ErrorMessage = "Моля изберете поне един участник в проекта!")]
-        public ICollection<ApplicationUser> ProjectParticipants { get; set; }
+        public IEnumerable<ApplicationUserProject>? ProjectParticipants { get; set; }
 
         
        

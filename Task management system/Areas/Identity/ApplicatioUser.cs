@@ -10,7 +10,7 @@ namespace Task_management_system.Areas.Identity
     {
         public ApplicationUser()
         {
-            this.ProjectsParticipants = new List<Project>();
+            this.ProjectsParticipants = new List<ApplicationUserProject>();
             this.ProjectsOwners = new List<Project>();
             this.AssignToUsers = new List<Issue>();
             this.AssigneeUsers = new List<Issue>();
@@ -24,7 +24,7 @@ namespace Task_management_system.Areas.Identity
         public virtual ICollection<Issue> AssigneeUsers { get; set; } 
         public virtual ICollection<Issue> AssignToUsers { get; set; } 
         public virtual ICollection<Project> ProjectsOwners { get; set; } 
-        public virtual ICollection<Project> ProjectsParticipants { get; set; } 
+        public virtual IEnumerable<ApplicationUserProject>? ProjectsParticipants { get; set; } 
 
         [NotMapped]
         public string Role { get; set; }

@@ -12,7 +12,8 @@ namespace Task_management_system.Models
     {
         [Key]
         public int IssueId { get; set; }
-
+        
+        public string AssigneeId { get; set; }
         public ApplicationUser Assignee { get; set; }
 
 
@@ -32,6 +33,7 @@ namespace Task_management_system.Models
         [Required]
         public DateTime EndTime { get; set; }
         [Required(ErrorMessage = "Полето 'Проект' е задължително!")]
+        public int ProjectId { get; set; }
         public Project Project { get; set; }
 
         public string Description { get; set; }

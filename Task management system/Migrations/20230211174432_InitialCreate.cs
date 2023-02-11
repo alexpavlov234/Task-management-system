@@ -235,27 +235,25 @@ namespace Task_management_system.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApplicationUserProject",
+                name: "ApplicationUserProjects",
                 columns: table => new
                 {
-                    ProjectId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProjectId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationUserProject", x => new { x.ProjectId, x.UserId });
+                    table.PrimaryKey("PK_ApplicationUserProjects", x => new { x.UserId, x.ProjectId });
                     table.ForeignKey(
-                        name: "FK_ApplicationUserProject_AspNetUsers_UserId",
+                        name: "FK_ApplicationUserProjects_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ApplicationUserProject_Project_ProjectId",
+                        name: "FK_ApplicationUserProjects_Project_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Project",
-                        principalColumn: "ProjectId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ProjectId");
                 });
 
             migrationBuilder.CreateTable(
@@ -291,14 +289,12 @@ namespace Task_management_system.Migrations
                         name: "FK_Issue_AspNetUsers_AssigneeId",
                         column: x => x.AssigneeId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Issue_Project_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Project",
-                        principalColumn: "ProjectId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ProjectId");
                 });
 
             migrationBuilder.CreateTable(
@@ -334,9 +330,9 @@ namespace Task_management_system.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUserProject_UserId",
-                table: "ApplicationUserProject",
-                column: "UserId");
+                name: "IX_ApplicationUserProjects_ProjectId",
+                table: "ApplicationUserProjects",
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -434,7 +430,7 @@ namespace Task_management_system.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ApplicationUserProject");
+                name: "ApplicationUserProjects");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
