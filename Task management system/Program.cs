@@ -63,6 +63,7 @@ namespace Task_management_system
                     ILogger<Program> logger = loggerFactory.CreateLogger<Program>();
                     logger.LogError(ex, "Възникна грешка при запълването на базата данни с информация.");
                 }
+
             }
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

@@ -10,6 +10,10 @@ namespace Task_management_system.Models
     [Index(nameof(ProjectName), IsUnique = true)]
     public class Project
     {
+        public Project()
+        {
+            this.ProjectParticipants = new List<ApplicationUser>();
+        }
         [Key]
         public int ProjectId { get; set; }
 
