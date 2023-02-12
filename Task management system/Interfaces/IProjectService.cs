@@ -9,4 +9,5 @@ internal interface IProjectService
     Project GetProjectById(int ProjectId);
     Project GetProjectByProjectName(string ProjectName);
     void UpdateProject(Project project);
-}
+
+} 

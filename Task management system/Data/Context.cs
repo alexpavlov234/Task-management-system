@@ -53,7 +53,10 @@ namespace Task_management_system.Data
             // modelBuilder.Seed();
             base.OnModelCreating(modelBuilder);
         }
-
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
         public DbSet<Project> Projects { get; set; }
         public DbSet<ApplicationUserProject> ApplicationUserProjects { get; set; }
         public DbSet<KeyType> KeyType { get; set; }

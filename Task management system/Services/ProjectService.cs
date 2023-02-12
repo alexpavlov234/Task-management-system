@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Data;
 using Task_management_system.Interfaces;
@@ -106,6 +107,19 @@ public class ProjectService : Controller, IProjectService
     public void UpdateProject(Project project)
     {
         project.ProjectType = _keyValueService.GetKeyValueById(project.ProjectTypeId);
+
+        List<ApplicationUserProject> projectParticipants = new List<ApplicationUserProject>();
+        projectParticipants.AddRange(project.ProjectParticipants.Select(i => new ApplicationUserProject()
+        {
+            ProjectId = i.ProjectId,
+            Project = i.Project,
+            User = i.User,
+            UserId = i.UserId
+        }));
+        project.ProjectParticipants = new List<ApplicationUserProject>();
+        var projectOwner = _context.Users.FirstOrDefault(u => u.Id == project.ProjectOwner.Id);
+        _context.Entry(project.ProjectOwner).State = EntityState.Detached;
+        project.ProjectOwner = projectOwner;
         Project? local = _context.Set<Project>().Local.FirstOrDefault(entry => entry.ProjectId.Equals(project.ProjectId));
         if (local != null)
         {
@@ -114,5 +128,26 @@ public class ProjectService : Controller, IProjectService
         }
         _context.Entry(project).State = EntityState.Modified;
         _context.SaveChanges();
+
+        var participantsToRemove = _context.ApplicationUserProjects.Where(pp => pp.ProjectId == project.ProjectId).ToList();
+        foreach (var participant in participantsToRemove)
+        {
+            _context.ApplicationUserProjects.Remove(participant);
+        }
+        _context.SaveChanges();
+
+        foreach (var participant in projectParticipants)
+        {
+            var participantUser = _context.Users.Where(x => x.Id == participant.UserId).First();
+            _context.Add(new ApplicationUserProject { User = participantUser, Project = project });
+        }
+
+        _context.SaveChanges();
     }
+
+
+
+
+
+
 }

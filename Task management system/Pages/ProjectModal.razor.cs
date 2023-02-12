@@ -52,17 +52,17 @@ namespace Task_management_system.Pages
         {
             this.projectParticipants = null;
 
-            this.project = new Project(){ProjectId = project.ProjectId, ProjectParticipants = project.ProjectParticipants, Tasks = project.Tasks, ProjectOwner = project.ProjectOwner, ProjectTypeId = project.ProjectTypeId, EndDate = project.EndDate, ProjectDescription = project.ProjectDescription, ProjectName = project.ProjectName, ProjectType = project.ProjectType, StartDate = project.StartDate};
-           // this.project = ProjectService.GetProjectById(project.ProjectId);
+            this.project = new Project() { ProjectId = project.ProjectId, ProjectParticipants = project.ProjectParticipants, Tasks = project.Tasks, ProjectOwner = project.ProjectOwner, ProjectTypeId = project.ProjectTypeId, EndDate = project.EndDate, ProjectDescription = project.ProjectDescription, ProjectName = project.ProjectName, ProjectType = project.ProjectType, StartDate = project.StartDate };
+            // this.project = ProjectService.GetProjectById(project.ProjectId);
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
             users = UserService.GetAllUsers();
             projectParticipantsSfMultiSelect.DataSource = this.users;
             if (this.project.ProjectParticipants != null)
             {
                 //TODO:Да го фикснеш;
-               // this.project.ProjectParticipants.Remove(x => x.);
+                // this.project.ProjectParticipants.Remove(x => x.);
                 this.projectParticipants = this.project.ProjectParticipants.Select(x => x.User).Where(x => x != null).ToArray();
-                
+
             }
             else
             {
@@ -80,20 +80,46 @@ namespace Task_management_system.Pages
             StateHasChanged();
         }
 
+        private void UpdateDialog()
+        {
+            projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
+            users = UserService.GetAllUsers();
+            projectParticipantsSfMultiSelect.DataSource = this.users;
+            if (this.project.ProjectParticipants != null)
+            {
+                //TODO:Да го фикснеш;
+                // this.project.ProjectParticipants.Remove(x => x.);
+                this.projectParticipants = this.project.ProjectParticipants.Select(x => x.User).Where(x => x != null).ToArray();
+
+            }
+            else
+            {
+                this.projectParticipants = new ApplicationUser[] { };
+            }
+
+            editContext = new EditContext(this.project);
+
+            StateHasChanged();
+        }
         private async void SaveProject()
         {
-            
-           //this.projectParticipants.DistinctBy(i => i.User);
-           //TODO: Да се обмисли
-           
-            var participants = this.projectParticipants.Select(x => new ApplicationUserProject
-                {
-                    UserId = x.Id,
-                    ProjectId = this.project.ProjectId
-                });
 
-                this.project.ProjectParticipants = participants.ToList();
-            
+            //this.projectParticipants.DistinctBy(i => i.User);
+            //TODO: Да се обмисли
+            if (this.projectParticipants == null)
+            {
+                this.projectParticipants = new ApplicationUser[] { };
+            }
+
+            var participants = this.projectParticipants.Select(x => new ApplicationUserProject
+            {
+                UserId = x.Id,
+                ProjectId = this.project.ProjectId
+            });
+
+
+            this.project.ProjectParticipants = participants.ToList();
+
 
             // project.ProjectParticipants = new List<ApplicationUser>(projectParticipants);
             if (editContext.Validate())
@@ -102,11 +128,12 @@ namespace Task_management_system.Pages
 
                 if (ProjectService.GetProjectById(project.ProjectId) != null)
                 {
-                    ProjectService.UpdateProject(project);
+                   ProjectService.UpdateProject(project);
                     await CallbackAfterSubmit.InvokeAsync();
                     toast.sfSuccessToast.Title = "Успешно приложени промени!";
                     toast.sfSuccessToast.ShowAsync();
-                    
+                   UpdateDialog();
+
                 }
                 else
                 {
@@ -115,6 +142,8 @@ namespace Task_management_system.Pages
                     {
                         toast.sfSuccessToast.Title = result;
                         toast.sfSuccessToast.ShowAsync();
+
+                        UpdateDialog();
                     }
                     else
                     {
