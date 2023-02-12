@@ -22,7 +22,7 @@
             <ul class="navbar-nav float">
                 <li class="nav-item d-none d-sm-inline-block">
 
-                    <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddNewDocumentClickHandler" disabled="@(this.DisableAllFields)">Нов потребител</button>
+                    <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddApplicationUser" disabled="@(this.DisableAllFields)">Нов потребител</button>
 
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
@@ -118,7 +118,7 @@
     private Context context { get; set; }
     [Inject]
     private IHttpContextAccessor httpContextAccessor { get; set; }
-    private async Task AddNewDocumentClickHandler()
+    private async Task AddApplicationUser()
     {
         managementModal.OpenDialog(new ApplicationUser());
     }

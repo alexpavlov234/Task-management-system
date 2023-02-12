@@ -21,7 +21,7 @@ namespace Task_management_system.Data
             modelBuilder.Entity<Issue>().HasIndex(b => b.Subject).IsUnique();
             modelBuilder.Entity<Issue>()
                 .HasOne(i => i.Project)
-                .WithMany(p => p.Tasks)
+                .WithMany(p => p.Issues)
                 .HasForeignKey(i => i.ProjectId)
                 .OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Issue>()
@@ -45,7 +45,7 @@ namespace Task_management_system.Data
                 .WithMany(p => p.ProjectParticipants)
                 .HasForeignKey(aup => aup.ProjectId).OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Subtask>();
+            modelBuilder.Entity<Subtask>().HasOne(x =>x.Issue).WithMany(i => i.Subtasks).HasForeignKey(x => x.IssueId).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<KeyType>();
             modelBuilder.Entity<KeyValue>().HasIndex(b => b.KeyValueIntCode)
             .IsUnique();
@@ -61,7 +61,7 @@ namespace Task_management_system.Data
         public DbSet<ApplicationUserProject> ApplicationUserProjects { get; set; }
         public DbSet<KeyType> KeyType { get; set; }
         public DbSet<KeyValue> KeyValue { get; set; }
-        public DbSet<Issue> Tasks { get; set; }
+        public DbSet<Issue> Issues { get; set; }
         public DbSet<Subtask> Subtasks { get; set; }
 
         public Context Clone()

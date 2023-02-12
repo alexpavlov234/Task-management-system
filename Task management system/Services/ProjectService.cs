@@ -117,7 +117,7 @@ public class ProjectService : Controller, IProjectService
         // return _context.Projects.Include(x => x.ProjectParticipants).ThenInclude(pp => pp.User).ToList();
         var projects = _context.Projects.Include(x => x.ProjectParticipants)
             .ThenInclude(pp => pp.User).Include(p => p.ProjectType).AsNoTracking()
-            .Include(p => p.ProjectOwner).ToList();
+            .Include(p => p.ProjectOwner).Include(p => p.Issues).ThenInclude(i => i.AssignedТo).Include(p => p.Issues).ThenInclude(i => i.Assignee).ToList();
 
 
         return projects;

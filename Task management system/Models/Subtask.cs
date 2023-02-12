@@ -10,22 +10,12 @@ namespace Task_management_system.Models
         [Key]
         public int SubtaskId { get; set; }
 
-        [Required]
-        public string SubtaskName { get; set; }
-
-        [Required]
-        public string SubtaskDescription { get; set; }
-
-        [Required]
-        public DateTime SubtaskLastEditedDate { get; set; }
-
-        [Required]
-        public DateTime SubtaskCompletionDate { get; set; }
+   
 
         [Required]
         public string Subject { get; set; }
 
-        [Required]
+ 
         public string Location { get; set; }
 
         [Required]
@@ -41,7 +31,9 @@ namespace Task_management_system.Models
         public string RecurrenceRule { get; set; }
         public string RecurrenceException { get; set; }
         public Nullable<int> RecurrenceID { get; set; }
-
+        [ForeignKey("Issue")]
+        public int IssueId { get; set; }
+        public Issue Issue { get; set; }
 
     }
 }

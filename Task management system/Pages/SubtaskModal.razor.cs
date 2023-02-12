@@ -1,10 +1,7 @@
 ﻿using KeyValue_management_system.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Syncfusion.Blazor.DropDowns;
-using Syncfusion.Blazor.Grids;
 using System.Runtime.CompilerServices;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
@@ -14,22 +11,20 @@ using Task_management_system.Services.Common;
 
 namespace Task_management_system.Pages
 {
-    public partial class IssueModal
+    public partial class SubtaskModal
     {
         protected EditContext editContext;
-        private Issue issue = new Issue();
+        private Subtask subtask = new Subtask();
         private string statusLineColor = "";
         private SfDropDownList<string, KeyValue> statusDropDownList = new SfDropDownList<string, KeyValue>();
         public string? issueAssignedToUserName { get; set; }
         //public string? issueProjectName { get; set; }
         private List<KeyValue> statuses = new List<KeyValue>();
-        private SfGrid<Subtask> subtasksGrid = new SfGrid<Subtask>();
         private List<Project> projects { get; set; }
-        private bool IsIssueNew = true;
+        private bool IsUserNew = false;
         private bool IsVisible = false;
         private DateTime MinDate = new DateTime(1900, 1, 1);
         private ToastMsg toast = new ToastMsg();
-        private SubtaskModal subtaskModal = new SubtaskModal();
         private List<KeyValue> projectTypes { get; set; }
         private List<ApplicationUser> users { get; set; }
         private ApplicationUser[] projectParticipants { get; set; }
@@ -55,73 +50,37 @@ namespace Task_management_system.Pages
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("IssueType");
             users = UserService.GetAllUsers();
         }
-        private async Task AddSubtask()
-        {
-            subtaskModal.OpenDialog(new Subtask { Status = "Нова", Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Issue = this.issue, IssueId = this.issue.IssueId});
 
-            //managementModal.OpenDialog(new ApplicationUser());
-        }
-        private async Task DeleteSubtask(Subtask subtask)
-        {
-
-            //await UserService.DeleteApplicationUser(applicationUser);
-            //var users = UserService.GetAllUsers();
-            //var itemToRemove = users.Remove(users.Single(r => r.UserName == httpContextAccessor.HttpContext.User.Identity.Name));
-            //var roles = roleManager.Roles.ToList();
-            //this.users = users;
-            //this.roles = roles;
-            //this.StateHasChanged();
-
-        }
-
-        private async Task EditSubtask(Subtask subtask)
-        {
-
-            // managementModal.OpenDialog(applicationUser);
-        }
-        private async Task UpdateAfterSubtaskModalSubmitAsync()
-        {
-
-            this.issue = IssueService.GetTaskById(issue.IssueId);
-            this.StateHasChanged();
-        }
-        public async void OpenDialog(Issue issue)
+        public async void OpenDialog(Subtask subtask)
 
         {
-            this.IsIssueNew = IssueService.GetTaskById(issue.IssueId) == null;
             statuses = new List<KeyValue>();
-            this.issue = issue;
-            if (issue.AssignedТo != null)
+            this.subtask = subtask;
+            
+            if (subtask.Issue != null)
             {
-                issueAssignedToUserName = issue.AssignedТo.UserName;
-            }
-            if (issue.Project != null)
-            {
-                //issueProjectName = issue.Project.ProjectName;
-                this.issue.EndTime = this.issue.Project.EndDate;
-
-                if (DateTime.Now < issue.EndTime)
+                //issueProjectName = subtask.Project.ProjectName;
+                this.subtask.EndTime = this.subtask.Issue.EndTime;
+                if (DateTime.Now < subtask.EndTime)
                 {
-                    this.issue.StartTime = this.issue.Project.EndDate.AddMonths(-1);
+                    this.subtask.StartTime = this.subtask.Issue.EndTime.AddMonths(-1);
                 }
                 else
                 {
-
-                    this.issue.StartTime = DateTime.Now;
-                    this.issue.EndTime = DateTime.Now.AddMonths(1);
+                    this.subtask.StartTime = DateTime.Now;
+                    this.subtask.EndTime = DateTime.Now.AddMonths(1);
                 }
             }
             else
             {
-
                 //issueProjectName = "";
-                this.issue.StartTime = DateTime.Now;
-                this.issue.EndTime = DateTime.Now.AddMonths(1);
+                this.subtask.StartTime = DateTime.Now;
+                this.subtask.EndTime = DateTime.Now.AddMonths(1);
             }
-            GetStatus(this.issue.Status);
+            GetStatus(this.subtask.Status);
             this.projects = ProjectService.GetAllProjects();
 
-            editContext = new EditContext(issue);
+            editContext = new EditContext(subtask);
             IsVisible = true;
             StateHasChanged();
         }
@@ -161,20 +120,7 @@ namespace Task_management_system.Pages
             StateHasChanged();
         }
 
-        private void OnValueSelectHandlerProject(ChangeEventArgs<int, Project> args)
-        {
-            this.issue.Project = this.projects.Where(x => x.ProjectId == args.Value).First();
-            this.issue.EndTime = this.issue.Project.EndDate;
-            if (DateTime.Now < issue.EndTime)
-            {
-                this.issue.StartTime = this.issue.Project.EndDate.AddMonths(-1);
-            }
-            else
-            {
-                this.issue.StartTime = DateTime.Now;
-                this.issue.EndTime = DateTime.Now.AddMonths(1);
-            }
-        }
+       
         private void OnValueSelectHandlerStatus(ChangeEventArgs<string, KeyValue> args)
         {
             GetStatus(args.Value);
@@ -187,49 +133,37 @@ namespace Task_management_system.Pages
 
         private async void SaveIssue()
         {
-
+            
 
             if (editContext.Validate())
 
             {
-                
 
-                if (IssueService.GetTaskById(issue.IssueId) != null)
+
+                if (IssueService.GetSubtaskById(subtask.SubtaskId) != null)
                 {
-                    if (issueAssignedToUserName != null)
-                    {
-                        issue.AssignedТo = await UserService.GetApplicationUserByUsernameAsync(issueAssignedToUserName);
-                    }
+                    
 
-                    //issue.Project = projects.Where(x => x.ProjectName == issueProjectName).First();
-                    //issue.ProjectId = issue.Project.ProjectId;
-                    IssueService.UpdateTask(issue);
+                    //subtask.Project = projects.Where(x => x.ProjectName == issueProjectName).First();
+                    //subtask.ProjectId = subtask.Project.ProjectId;
+                    IssueService.UpdateSubtask(subtask);
 
                     await CallbackAfterSubmit.InvokeAsync();
                     toast.sfSuccessToast.Title = "Успешно приложени промени!";
                     toast.sfSuccessToast.ShowAsync();
-                    await this.subtasksGrid.Refresh();
 
                 }
                 else
                 {
-                    if (issueAssignedToUserName != null)
-                    {
-                        issue.AssignedТo = await UserService.GetApplicationUserByUsernameAsync(issueAssignedToUserName);
-                    }
-
-                    //issue.Project = projects.Where(x => x.ProjectName == issueProjectName).First();
-                    //issue.ProjectId = issue.Project.ProjectId;
-
-                    string result = IssueService.CreateTask(issue);
-
+                    
+                    //subtask.Project = projects.Where(x => x.ProjectName == issueProjectName).First();
+                    //subtask.ProjectId = subtask.Project.ProjectId;
+                    string result = IssueService.CreateSubtask(subtask);
 
                     if (result.StartsWith("Успешно"))
                     {
                         toast.sfSuccessToast.Title = result;
                         toast.sfSuccessToast.ShowAsync();
-                        this.IsIssueNew = false;
-                        
                     }
                     else
                     {

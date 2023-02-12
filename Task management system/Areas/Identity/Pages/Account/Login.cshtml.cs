@@ -68,6 +68,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [DataType(DataType.Password)]
+            [Display(Name = "Парола")]
             public string Password { get; set; }
 
             /// <summary>

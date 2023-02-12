@@ -29,7 +29,7 @@ namespace Task_management_system.Models
         public DateTime EndDate { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
-        public ICollection<Issue> Tasks { get; set; }
+        public ICollection<Issue> Issues { get; set; }
         [Required(ErrorMessage = "Полето 'Собственик на проект' е задължително!")]
         [System.Text.Json.Serialization.JsonIgnore]
         public ApplicationUser ProjectOwner { get; set; }

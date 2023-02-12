@@ -476,7 +476,7 @@ namespace Task_management_system.Migrations
                     b.Property<bool>("IsAllDay")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("IssueId")
+                    b.Property<int>("IssueId")
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
@@ -502,20 +502,6 @@ namespace Task_management_system.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("SubtaskCompletionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SubtaskDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("SubtaskLastEditedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SubtaskName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -611,7 +597,7 @@ namespace Task_management_system.Migrations
                         .IsRequired();
 
                     b.HasOne("Task_management_system.Models.Project", "Project")
-                        .WithMany("Tasks")
+                        .WithMany("Issues")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -655,9 +641,13 @@ namespace Task_management_system.Migrations
 
             modelBuilder.Entity("Task_management_system.Models.Subtask", b =>
                 {
-                    b.HasOne("Task_management_system.Models.Issue", null)
+                    b.HasOne("Task_management_system.Models.Issue", "Issue")
                         .WithMany("Subtasks")
-                        .HasForeignKey("IssueId");
+                        .HasForeignKey("IssueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Issue");
                 });
 
             modelBuilder.Entity("Task_management_system.Areas.Identity.ApplicationUser", b =>
@@ -683,9 +673,9 @@ namespace Task_management_system.Migrations
 
             modelBuilder.Entity("Task_management_system.Models.Project", b =>
                 {
-                    b.Navigation("ProjectParticipants");
+                    b.Navigation("Issues");
 
-                    b.Navigation("Tasks");
+                    b.Navigation("ProjectParticipants");
                 });
 #pragma warning restore 612, 618
         }

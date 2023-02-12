@@ -302,10 +302,6 @@ namespace Task_management_system.Migrations
                 {
                     SubtaskId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SubtaskName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SubtaskDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SubtaskLastEditedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SubtaskCompletionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -316,7 +312,7 @@ namespace Task_management_system.Migrations
                     RecurrenceRule = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RecurrenceException = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RecurrenceID = table.Column<int>(type: "int", nullable: true),
-                    IssueId = table.Column<int>(type: "int", nullable: true)
+                    IssueId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -325,7 +321,8 @@ namespace Task_management_system.Migrations
                         name: "FK_Subtask_Issue_IssueId",
                         column: x => x.IssueId,
                         principalTable: "Issue",
-                        principalColumn: "IssueId");
+                        principalColumn: "IssueId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

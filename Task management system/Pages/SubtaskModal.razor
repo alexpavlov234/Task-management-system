@@ -1,0 +1,111 @@
+﻿@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using System.ComponentModel.DataAnnotations
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Navigations
+@using Task_management_system.Areas.Identity
+@using Task_management_system.Models
+@using Task_management_system.Pages.Common
+@using Task_management_system.Services.Common
+@using Syncfusion.Blazor.Popups
+@inject IProjectService ProjectService
+
+
+<SfDialog Width="85%" Height="auto" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@IsVisible">
+    <DialogTemplates>
+        <Header>
+            @if (this.subtask != null)
+            {
+                @if (this.subtask.Issue != null)
+                {
+                    <span style="color: darkgray;">@this.subtask.Issue.Subject / </span> 
+                    <span style="color: #009cfc;">@this.subtask.Subject</span>
+                }
+                else
+                {
+                    <span style="color: #009cfc;">@this.subtask.Subject</span>
+                }
+            }
+            
+        </Header>
+        <Content>
+
+
+
+            <hr class="@statusLineColor" />
+            <EditForm EditContext="editContext">
+
+                <DataAnnotationsValidator />
+
+
+                <InputText id="issueName" @bind-Value="subtask.Subject" class="form-control my-4" placeholder="Име" style="font-size: 36px"></InputText>
+                <ValidationMessage For="@(() => subtask.Subject)" />
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="p-3 col-md-12" style="border: 1px solid lightgray; border-radius: 5px">
+                            <div class="row py-1">
+                                <div class="col-md-3 d-flex align-items-center">
+                                    <i class="fa-solid fa-arrows-spin" style="color: dimgray"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Статус</b></span> &nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <div class="col-md-9 d-flex align-items-center">
+
+                                    <SfDropDownList @ref="statusDropDownList" ID="status" TValue="string" Enabled="true" TItem="KeyValue" @bind-Value="subtask.Status" PopupHeight="350px" PopupWidth="350px" DataSource="@statuses">
+                                        <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
+                                        <DropDownListEvents TItem="KeyValue" TValue="string" ValueChange="@OnValueSelectHandlerStatus"></DropDownListEvents>
+                                    </SfDropDownList>
+
+                                </div>
+
+                                <div />
+
+
+
+                            </div>
+
+                        </div>
+                        <ValidationMessage For="@(() => subtask.Status)" />
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 col-md-12" style="border: 1px solid lightgray; border-radius: 5px">
+                            
+                            <div class="row py-1">
+                                <div class="col-md-3 d-flex align-items-center">
+                                    <i class="fa-solid fa-clock fa-lg" style="color: dimgray"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Срок</b></span> &nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <div class="col-md-9 d-flex align-items-center">
+                                    <SfDateRangePicker ID="datepicker" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@subtask.StartTime" @bind-EndDate="@subtask.EndTime" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
+                                    <ValidationMessage For="@(() => subtask.EndTime)" />
+                                    <ValidationMessage For="@(() => subtask.StartTime)" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <label for="description">Описание на задача</label>
+                <div class="multiline">
+                    <SfTextBox id="description" Multiline=true Placeholder="Въведете описание на задача" @bind-Value="@subtask.Description"></SfTextBox>
+                    <ValidationMessage For="@(() => subtask.Description)" />
+                </div>
+               
+
+
+            </EditForm>
+        </Content>
+        <FooterTemplate>
+            <div class="form-group">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary" @onclick="SaveIssue">Запиши</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CloseDialog">Отказ</button>
+                </div>
+            </div>
+        </FooterTemplate>
+    </DialogTemplates>
+</SfDialog>
+<ToastMsg @ref="toast" />
+
+<style>
+    .e-dialog .e-dlg-content {
+        font-family: SegoeUI;
+    }
+</style>

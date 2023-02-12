@@ -2,7 +2,7 @@
 
 internal interface IIssueService
 {
-    void CreateSubtask(Issue issue, Subtask subtask);
+    string CreateSubtask(Subtask subtask);
     void CreateSubtask(int TaskId, Subtask subtask);
     string CreateTask(Issue issue);
     void DeleteSubtask(Subtask subtask);
