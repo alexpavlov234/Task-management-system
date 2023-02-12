@@ -8,6 +8,6 @@ internal interface IProjectService
     List<Project> GetAllProjects();
     Project GetProjectById(int ProjectId);
     Project GetProjectByProjectName(string ProjectName);
-    void UpdateProject(Project project);
+    string UpdateProject(Project project);
 
-} 
+}

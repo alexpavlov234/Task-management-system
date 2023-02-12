@@ -180,7 +180,7 @@
     private async Task DeleteProject(Project project)
     {
 
-        projectService.DeleteProject(project);
+        projectService.DeleteProject(project.ProjectId);
         projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
         projects = projectService.GetAllProjects();
         this.StateHasChanged();

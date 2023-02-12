@@ -80,7 +80,8 @@ public class UserService : Controller, IUserService
     // Връща списък с всички потребители
     public List<ApplicationUser> GetAllUsers()
     {
-        return _context.Users.AsNoTracking().ToList();
+        var users =  _context.Users.AsNoTracking().ToList();
+        return users;
     }
 
     // Връща един потребител по зададен Id
