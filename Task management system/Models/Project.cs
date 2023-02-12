@@ -28,18 +28,21 @@ namespace Task_management_system.Models
         [Required(ErrorMessage = "Моля изберете крайна дата!")]
         public DateTime EndDate { get; set; }
 
-
+        [System.Text.Json.Serialization.JsonIgnore]
         public ICollection<Issue> Tasks { get; set; }
         [Required(ErrorMessage = "Полето 'Собственик на проект' е задължително!")]
+        [System.Text.Json.Serialization.JsonIgnore]
         public ApplicationUser ProjectOwner { get; set; }
         [Required(ErrorMessage = "Моля изберете поне един участник в проекта!")]
-        public IEnumerable<ApplicationUserProject>? ProjectParticipants { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public ICollection<ApplicationUserProject>? ProjectParticipants { get; set; }
 
         
        
         [Required(ErrorMessage = "Полето 'Тип на проект' е задължително!")]
         [ForeignKey(nameof(KeyValue))]
-        public int IdProjectType { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public int ProjectTypeId { get; set; }
         public KeyValue ProjectType { get; set; }
     }
 }

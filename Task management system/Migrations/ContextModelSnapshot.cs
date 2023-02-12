@@ -428,9 +428,6 @@ namespace Task_management_system.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdProjectType")
-                        .HasColumnType("int");
-
                     b.Property<string>("ProjectDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -443,7 +440,7 @@ namespace Task_management_system.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ProjectTypeIdKeyValue")
+                    b.Property<int>("ProjectTypeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -456,7 +453,7 @@ namespace Task_management_system.Migrations
 
                     b.HasIndex("ProjectOwnerId");
 
-                    b.HasIndex("ProjectTypeIdKeyValue");
+                    b.HasIndex("ProjectTypeId");
 
                     b.ToTable("Project");
                 });
@@ -647,7 +644,7 @@ namespace Task_management_system.Migrations
 
                     b.HasOne("Task_management_system.Models.KeyValue", "ProjectType")
                         .WithMany()
-                        .HasForeignKey("ProjectTypeIdKeyValue")
+                        .HasForeignKey("ProjectTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

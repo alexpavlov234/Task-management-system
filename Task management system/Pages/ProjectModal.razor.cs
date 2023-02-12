@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Runtime.CompilerServices;
+using NuGet.Packaging;
+using NuGet.Protocol;
+using Syncfusion.Blazor.DropDowns;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
@@ -18,8 +21,12 @@ namespace Task_management_system.Pages
         private bool IsVisible = false;
         private DateTime MinDate = new DateTime(1900, 1, 1);
         private ToastMsg toast = new ToastMsg();
+
+        private SfMultiSelect<ApplicationUser[], ApplicationUser> projectParticipantsSfMultiSelect { get; set; } =
+            new SfMultiSelect<ApplicationUser[], ApplicationUser>();
         private List<KeyValue> projectTypes { get; set; }
         private List<ApplicationUser> users { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
         private ApplicationUser[] projectParticipants { get; set; }
 
         [Parameter]
@@ -35,22 +42,34 @@ namespace Task_management_system.Pages
         private IUserService UserService { get; set; }
 
 
-        protected async override Task OnInitializedAsync()
-        {
-            projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
-            users = UserService.GetAllUsers();
-        }
+        //protected async override Task OnInitializedAsync()
+        //{
+        //    projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
+        //    users = UserService.GetAllUsers();
+        //}
         public async void OpenDialog(Project project)
 
         {
+            this.projectParticipants = null;
 
-            this.project = project;
+            this.project = new Project(){ProjectId = project.ProjectId, ProjectParticipants = project.ProjectParticipants, Tasks = project.Tasks, ProjectOwner = project.ProjectOwner, ProjectTypeId = project.ProjectTypeId, EndDate = project.EndDate, ProjectDescription = project.ProjectDescription, ProjectName = project.ProjectName, ProjectType = project.ProjectType, StartDate = project.StartDate};
+           // this.project = ProjectService.GetProjectById(project.ProjectId);
+            projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
+            users = UserService.GetAllUsers();
+            projectParticipantsSfMultiSelect.DataSource = this.users;
             if (this.project.ProjectParticipants != null)
             {
-              //  projectParticipants = this.project.ProjectParticipants.ToArray();
+                //TODO:Да го фикснеш;
+               // this.project.ProjectParticipants.Remove(x => x.);
+                this.projectParticipants = this.project.ProjectParticipants.Select(x => x.User).Where(x => x != null).ToArray();
+                
             }
-            
-            editContext = new EditContext(project);
+            else
+            {
+                this.projectParticipants = new ApplicationUser[] { };
+            }
+
+            editContext = new EditContext(this.project);
             IsVisible = true;
             StateHasChanged();
         }
@@ -63,8 +82,20 @@ namespace Task_management_system.Pages
 
         private async void SaveProject()
         {
-          
-           // project.ProjectParticipants = new List<ApplicationUser>(projectParticipants);
+            
+           //this.projectParticipants.DistinctBy(i => i.User);
+           //TODO: Да се обмисли
+           
+            var participants = this.projectParticipants.Select(x => new ApplicationUserProject
+                {
+                    UserId = x.Id,
+                    ProjectId = this.project.ProjectId
+                });
+
+                this.project.ProjectParticipants = participants.ToList();
+            
+
+            // project.ProjectParticipants = new List<ApplicationUser>(projectParticipants);
             if (editContext.Validate())
 
             {

@@ -20,10 +20,13 @@ namespace Task_management_system.Areas.Identity
         public string FirstName { get; set; }
         [Required(ErrorMessage = "Полето 'Фамилия' е задължително")]
         public string LastName { get; set; }
-
-        public virtual ICollection<Issue> AssigneeUsers { get; set; } 
-        public virtual ICollection<Issue> AssignToUsers { get; set; } 
-        public virtual ICollection<Project> ProjectsOwners { get; set; } 
+        [System.Text.Json.Serialization.JsonIgnore]
+        public virtual ICollection<Issue> AssigneeUsers { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public virtual ICollection<Issue> AssignToUsers { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public virtual ICollection<Project> ProjectsOwners { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
         public virtual IEnumerable<ApplicationUserProject>? ProjectsParticipants { get; set; } 
 
         [NotMapped]

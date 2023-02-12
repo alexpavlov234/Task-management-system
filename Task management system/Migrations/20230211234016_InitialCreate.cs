@@ -214,8 +214,7 @@ namespace Task_management_system.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProjectOwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IdProjectType = table.Column<int>(type: "int", nullable: false),
-                    ProjectTypeIdKeyValue = table.Column<int>(type: "int", nullable: false)
+                    ProjectTypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -227,8 +226,8 @@ namespace Task_management_system.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Project_KeyValue_ProjectTypeIdKeyValue",
-                        column: x => x.ProjectTypeIdKeyValue,
+                        name: "FK_Project_KeyValue_ProjectTypeId",
+                        column: x => x.ProjectTypeId,
                         principalTable: "KeyValue",
                         principalColumn: "IdKeyValue",
                         onDelete: ReferentialAction.Cascade);
@@ -417,9 +416,9 @@ namespace Task_management_system.Migrations
                 column: "ProjectOwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Project_ProjectTypeIdKeyValue",
+                name: "IX_Project_ProjectTypeId",
                 table: "Project",
-                column: "ProjectTypeIdKeyValue");
+                column: "ProjectTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Subtask_IssueId",

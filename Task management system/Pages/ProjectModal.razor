@@ -34,10 +34,10 @@
                     </div>
                     <div class="col-md-4">
                         <label for="type">Тип проект</label>
-                        <SfDropDownList ID="type" TValue="int" TItem="KeyValue" @bind-Value="project.IdProjectType" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете тип" DataSource="@projectTypes">
+                        <SfDropDownList ID="type" TValue="int" TItem="KeyValue" @bind-Value="project.ProjectTypeId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете тип" DataSource="@projectTypes">
                             <DropDownListFieldSettings Value="IdKeyValue" Text="Name"></DropDownListFieldSettings>
                         </SfDropDownList>
-                        <ValidationMessage For="@(() => project.IdProjectType)" />
+                        <ValidationMessage For="@(() => project.ProjectTypeId)" />
                     </div>
                 </div>
                 <label for="description">Описание на проект</label>
@@ -55,10 +55,10 @@
                     </div>
                     <div class="col-md-12">
                         <label for="participants">Участници в проекта</label>
-                        <SfMultiSelect TValue="ApplicationUser[]" TItem="ApplicationUser" Placeholder="Изберете участници" DataSource="@users" @bind-Value="projectParticipants">
+                        <SfMultiSelect @ref="projectParticipantsSfMultiSelect"TValue="ApplicationUser[]" TItem="ApplicationUser" Placeholder="Изберете участници" DataSource="@users" @bind-Value="projectParticipants">
                             <MultiSelectFieldSettings Text="FullName" Value="UserName"></MultiSelectFieldSettings>
                         </SfMultiSelect>
-
+                        
                     </div>
                 </div>
 
