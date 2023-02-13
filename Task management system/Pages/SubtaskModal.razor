@@ -11,14 +11,14 @@
 @inject IProjectService ProjectService
 
 
-<SfDialog Width="85%" Height="auto" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@IsVisible">
+<SfDialog Width="65%" Height="auto" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@IsVisible">
     <DialogTemplates>
         <Header>
             @if (this.subtask != null)
             {
                 @if (this.subtask.Issue != null)
                 {
-                    <span style="color: darkgray;">@this.subtask.Issue.Subject / </span> 
+                    <span style="color: darkgray;">@this.subtask.Issue.Subject / </span>
                     <span style="color: #009cfc;">@this.subtask.Subject</span>
                 }
                 else
@@ -26,7 +26,7 @@
                     <span style="color: #009cfc;">@this.subtask.Subject</span>
                 }
             }
-            
+
         </Header>
         <Content>
 
@@ -49,7 +49,7 @@
                                 </div>
                                 <div class="col-md-9 d-flex align-items-center">
 
-                                    <SfDropDownList @ref="statusDropDownList" ID="status" TValue="string" Enabled="true" TItem="KeyValue" @bind-Value="subtask.Status" PopupHeight="350px" PopupWidth="350px" DataSource="@statuses">
+                                    <SfDropDownList @ref="statusDropDownList" ID="statusSubtask" TValue="string" Enabled="true" TItem="KeyValue" @bind-Value="subtask.Status" PopupHeight="350px" PopupWidth="350px" DataSource="@statuses">
                                         <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
                                         <DropDownListEvents TItem="KeyValue" TValue="string" ValueChange="@OnValueSelectHandlerStatus"></DropDownListEvents>
                                     </SfDropDownList>
@@ -67,27 +67,27 @@
                     </div>
                     <div class="col-md-6">
                         <div class="p-3 col-md-12" style="border: 1px solid lightgray; border-radius: 5px">
-                            
+
                             <div class="row py-1">
                                 <div class="col-md-3 d-flex align-items-center">
                                     <i class="fa-solid fa-clock fa-lg" style="color: dimgray"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Срок</b></span> &nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
                                 <div class="col-md-9 d-flex align-items-center">
-                                    <SfDateRangePicker ID="datepicker" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@subtask.StartTime" @bind-EndDate="@subtask.EndTime" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
+                                    <SfDateRangePicker ID="datepickerSubtask" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@subtask.StartTime" @bind-EndDate="@subtask.EndTime" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
                                     <ValidationMessage For="@(() => subtask.EndTime)" />
                                     <ValidationMessage For="@(() => subtask.StartTime)" />
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 <label for="description">Описание на задача</label>
                 <div class="multiline">
-                    <SfTextBox id="description" Multiline=true Placeholder="Въведете описание на задача" @bind-Value="@subtask.Description"></SfTextBox>
+                    <SfTextBox id="descriptionSubtask" Multiline=true Placeholder="Въведете описание на задача" @bind-Value="@subtask.Description"></SfTextBox>
                     <ValidationMessage For="@(() => subtask.Description)" />
                 </div>
-               
+
 
 
             </EditForm>

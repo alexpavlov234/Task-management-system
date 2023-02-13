@@ -57,38 +57,38 @@ namespace Task_management_system.Pages
         }
         private async Task AddSubtask()
         {
-            subtaskModal.OpenDialog(new Subtask { Status = "Нова", Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Issue = this.issue, IssueId = this.issue.IssueId});
+            subtaskModal.OpenDialog(new Subtask { Status = "Нова", Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Issue = this.issue, IssueId = this.issue.IssueId });
 
             //managementModal.OpenDialog(new ApplicationUser());
         }
         private async Task DeleteSubtask(Subtask subtask)
         {
 
-            //await UserService.DeleteApplicationUser(applicationUser);
-            //var users = UserService.GetAllUsers();
-            //var itemToRemove = users.Remove(users.Single(r => r.UserName == httpContextAccessor.HttpContext.User.Identity.Name));
-            //var roles = roleManager.Roles.ToList();
-            //this.users = users;
-            //this.roles = roles;
-            //this.StateHasChanged();
+            IssueService.DeleteSubtask(subtask);
+            this.issue = IssueService.GetIssueById(issue.IssueId);
+            await this.CallbackAfterSubmit.InvokeAsync();
+            await this.subtasksGrid.Refresh();
+            this.StateHasChanged();
+
 
         }
 
         private async Task EditSubtask(Subtask subtask)
         {
 
-            // managementModal.OpenDialog(applicationUser);
+            subtaskModal.OpenDialog(subtask);
         }
         private async Task UpdateAfterSubtaskModalSubmitAsync()
         {
 
-            this.issue = IssueService.GetTaskById(issue.IssueId);
+            this.issue = IssueService.GetIssueById(issue.IssueId);
+            await this.subtasksGrid.Refresh();
             this.StateHasChanged();
         }
         public async void OpenDialog(Issue issue)
 
         {
-            this.IsIssueNew = IssueService.GetTaskById(issue.IssueId) == null;
+            this.IsIssueNew = IssueService.GetIssueById(issue.IssueId) == null;
             statuses = new List<KeyValue>();
             this.issue = issue;
             if (issue.AssignedТo != null)
@@ -192,9 +192,9 @@ namespace Task_management_system.Pages
             if (editContext.Validate())
 
             {
-                
 
-                if (IssueService.GetTaskById(issue.IssueId) != null)
+
+                if (IssueService.GetIssueById(issue.IssueId) != null)
                 {
                     if (issueAssignedToUserName != null)
                     {
@@ -203,7 +203,7 @@ namespace Task_management_system.Pages
 
                     //issue.Project = projects.Where(x => x.ProjectName == issueProjectName).First();
                     //issue.ProjectId = issue.Project.ProjectId;
-                    IssueService.UpdateTask(issue);
+                    IssueService.UpdateIssue(issue);
 
                     await CallbackAfterSubmit.InvokeAsync();
                     toast.sfSuccessToast.Title = "Успешно приложени промени!";
@@ -221,7 +221,7 @@ namespace Task_management_system.Pages
                     //issue.Project = projects.Where(x => x.ProjectName == issueProjectName).First();
                     //issue.ProjectId = issue.Project.ProjectId;
 
-                    string result = IssueService.CreateTask(issue);
+                    string result = IssueService.CreateIssue(issue);
 
 
                     if (result.StartsWith("Успешно"))
@@ -229,7 +229,7 @@ namespace Task_management_system.Pages
                         toast.sfSuccessToast.Title = result;
                         toast.sfSuccessToast.ShowAsync();
                         this.IsIssueNew = false;
-                        
+
                     }
                     else
                     {

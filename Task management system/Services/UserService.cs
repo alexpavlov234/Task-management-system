@@ -95,7 +95,14 @@ public class UserService : Controller, IUserService
 
     public async Task<ApplicationUser> GetApplicationUserByUsernameAsync(string Username)
     {
-        ApplicationUser user = _context.Users.Where(x => x.UserName == Username).FirstOrDefault();// await _userManager.FindByNameAsync(Username);
+        ApplicationUser? local = _context.Set<ApplicationUser>().Local.FirstOrDefault(entry => entry.UserName.Equals(Username));
+        // check if local is not null
+        if (local != null)
+        {
+            // detach
+            _context.Entry(local).State = EntityState.Detached;
+        }
+        ApplicationUser user = _context.Users.Where(x => x.UserName == Username).AsNoTracking().FirstOrDefault();// await _userManager.FindByNameAsync(Username);
         _context.SaveChanges();
         return user;
     }

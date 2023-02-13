@@ -29,30 +29,12 @@ public class IssueService : Controller, IIssueService
         _emailSender = emailSender;
     }
 
-    //public string CreateTask(Issue issue)
-    //{
-    //    Issue task1 = _context.Issues.FirstOrDefault((c) => (c.Subject == issue.Subject));
-    //    if (task1 == null)
-    //    {
-    //        try
-    //        {
-    //            _context.Issues.Add(issue);
-    //            _context.SaveChanges();
-    //            return "Успешно добавяне на задача!";
-    //        } catch { 
-    //            return "Неуспешно добавяне на задача!";
 
-    //        }
-    //    } else
-    //    {
-    //        return "Вече съществува такъв задача!";
-    //    }
-    //}
-
-    public string CreateTask(Issue issue)
+    public string CreateIssue(Issue issue)
     {
         try
         {
+            _context.DetachAllEntities();
             var assignedTo = _context.Users.FirstOrDefault(u => u.Id == issue.AssignedТo.Id);
             issue.AssignedТo = assignedTo;
             var assignee = _context.Users.FirstOrDefault(u => u.Id == issue.Assignee.Id);
@@ -75,39 +57,36 @@ public class IssueService : Controller, IIssueService
         }
     }
 
-
-
-    public void DeleteTask(Issue issue)
+    public void DeleteIssue(Issue issue)
     {
-        _context.Issues.Remove(issue);
+        Issue? local = _context.Set<Issue>().Local.FirstOrDefault(entry => entry.IssueId.Equals(issue.IssueId));
+        if (local != null)
+        {
+            // detach
+            _context.Entry(local).State = EntityState.Detached;
+        }
+        _context.Entry(issue).State = EntityState.Deleted;
         _context.SaveChanges();
     }
 
-    public void DeleteTask(int IssueId)
+    public List<Issue> GetAllIssues()
     {
-        _context.Issues.Remove(new Issue { IssueId = IssueId });
-        _context.SaveChanges();
-    }
+        List<Issue> issues = _context.Issues.Include(x => x.Subtasks).Include(t => t.Project).Include(t => t.Assignee).Include(t => t.AssignedТo).ToList();
 
-    public List<Issue> GetAllTasks()
-    {
-        List<Issue> issues = _context.Issues.ToList();
         return issues;
     }
 
-    public Issue GetTaskById(int TaskId)
-    {  Issue issue1 = _context.Issues.Where(x => x.IssueId == TaskId).FirstOrDefault();
-       return issue1;
-    }
-
-    public Issue GetTaskByTaskName(string TaskName)
+    public Issue GetIssueById(int TaskId)
     {
-        Issue issue1 = _context.Issues.Where(x => x.Subject == TaskName).FirstOrDefault();
+        Issue issue1 = _context.Issues.Where(x => x.IssueId == TaskId).Include(x => x.Subtasks).Include(t => t.Project).Include(t => t.Assignee).Include(t => t.AssignedТo).FirstOrDefault();
         return issue1;
     }
 
-    public void UpdateTask(Issue issue)
+
+
+    public void UpdateIssue(Issue issue)
     {
+    
         Issue? local = _context.Set<Issue>().Local.FirstOrDefault(entry => entry.IssueId.Equals(issue.IssueId));
         if (local != null)
         {
@@ -120,29 +99,25 @@ public class IssueService : Controller, IIssueService
 
     public string CreateSubtask(Subtask subtask)
     {
+        _context.DetachAllEntities();
         Issue? local = _context.Set<Issue>().Local.FirstOrDefault(entry => entry.IssueId.Equals(subtask.Issue.IssueId));
         if (local != null)
         {
             // detach
             _context.Entry(local).State = EntityState.Detached;
         }
-        _context.Entry(subtask).State = EntityState.Modified;
-     
+        _context.Entry(subtask).State = EntityState.Added;
+
         _context.Subtasks.Add(subtask);
         _context.SaveChanges();
         return "Yeah!";
     }
 
-    public void CreateSubtask(int TaskId, Subtask subtask)
-    {
-        Issue issue = GetTaskById(TaskId);
-        issue.Subtasks.Add(subtask);
-        _context.Issues.Update(issue);
-        _context.SaveChanges();
-    }
+
 
     public void UpdateSubtask(Subtask subtask)
     {
+        
         Subtask? local = _context.Set<Subtask>().Local.FirstOrDefault(entry => entry.SubtaskId.Equals(subtask.SubtaskId));
         if (local != null)
         {
@@ -155,17 +130,21 @@ public class IssueService : Controller, IIssueService
 
     public void DeleteSubtask(Subtask subtask)
     {
-        _context.Subtasks.Remove(subtask);
+        _context.DetachAllEntities();
+        Subtask? local = _context.Set<Subtask>().Local.FirstOrDefault(entry => entry.SubtaskId.Equals(subtask.SubtaskId));
+        if (local != null)
+        {
+            // detach
+            _context.Entry(local).State = EntityState.Detached;
+        }
+        _context.Entry(subtask).State = EntityState.Deleted;
         _context.SaveChanges();
     }
 
     public Subtask GetSubtaskById(int SubtaskId)
     {
-        return _context.Subtasks.Where(x => x.SubtaskId == SubtaskId).FirstOrDefault();
+        return _context.Subtasks.Where(x => x.SubtaskId == SubtaskId).Include(s => s.Issue).FirstOrDefault();
     }
 
-    public Subtask GetSubtaskByTaskName(string subtaskSubject)
-    {
-        return _context.Subtasks.Where(x => x.Subject == subtaskSubject).FirstOrDefault();
-    }
+
 }
