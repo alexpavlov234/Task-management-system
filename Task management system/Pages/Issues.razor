@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Identity.EntityFrameworkCore
 @using Syncfusion.Blazor.Cards
+@using Syncfusion.Blazor.Kanban
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.TreeGrid
@@ -12,6 +13,8 @@
 @using Task_management_system.Models
 @using Task_management_system.Pages.Common
 @using Task_management_system.Pages
+@using Task_management_system.Pages.Shared
+@using System.Globalization
 @inject RoleManager<IdentityRole> roleManager
 @inject UserManager<ApplicationUser> userManager
 @inject SignInManager<ApplicationUser> signInManager
@@ -24,81 +27,80 @@
 <div class="content-wrapper">
 
 
-    <div>
-
-        <div class="frame container">
-            <img class="banner" src="img/iStock-1203930843.jpg" alt="Banner">
-            <div class="bottom-left">
-
-                <h3>Задачи</h3>
-                <nav class="navbar navbar-expand">
-                    <!-- Left navbar links -->
-                    <ul class="navbar-nav float">
-                        <li class="nav-item d-none d-sm-inline-block">
-                            <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddNewTaskClickHandler">Новa задача</button>
 
 
-                        </li>
-                        <li class="nav-item d-none d-sm-inline-block">
-                            &nbsp;
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+    <div class="frame container">
+        <img class="banner" src="img/iStock-1203930843.jpg" alt="Banner">
+        <div class="bottom-left">
+
+            <h3>Задачи</h3>
+            <nav class="navbar navbar-expand">
+                <!-- Left navbar links -->
+                <ul class="navbar-nav float">
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddNewTaskClickHandler">Новa задача</button>
+
+
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        &nbsp;
+                    </li>
+                </ul>
+            </nav>
         </div>
+    </div>
 
-        <div class="m-3">
-            <div class="row m-0">
-                <div class="col-sm-12">
+    <div class="m-3">
 
-                    <div class="project-issue-list">
+        <div class="row m-0">
+            <div class="col-sm-12">
 
-                        @foreach (var project in projects)
-                        {
-                            <CollapsibleCard>
-                                <CardHeader>
+                <div class="project-issue-list">
 
-                                    <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px; background-color: #f8f8ff">
-                                        <div style="width: 200px">
-                                            @project.ProjectName
+                    @foreach (var project in projects)
+                    {
+
+                        <CollapsibleCard>
+                            <CardHeader>
+                                <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; background-color: #f8f8ff">
+                                    <div style="width: 200px">
+                                        @project.ProjectName
+                                    </div>
+                                    <div class="vr"></div>
+                                    @if (project.Issues.Count() != 0)
+                                    {
+                                        <div class="progress" style="width: 220px; border-radius: 20.25rem;">
+                                            <div class="progress-bar" role="progressbar" aria-label="Завършени задачи" style="width: @((project.Issues == null ? 0 : Convert.ToDouble(project.Issues.Where(x => x.Status == "Затворена").Count()) / (project.Issues.Count()) * 100).ToString().Replace(',', '.'))%; background-color: #4f9b00" aria-valuenow="@(project.Issues == null ? 0 : (project.Issues.Where(x => x.Status == "Затворена").Count() / project.Issues.Count()) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
-                                        <div class="vr"></div>
-                                        @if (project.Issues.Count() != 0)
-                                        {
-                                            <div class="progress" style="width: 220px; border-radius: 20.25rem;">
-                                                <div class="progress-bar" role="progressbar" aria-label="Завършени задачи" style="width: @(project.Issues == null ? 0 : Convert.ToDouble(project.Issues.Where(x => x.Status == "Затворена").Count())/(project.Issues.Count())*100)%; background-color: #4f9b00" aria-valuenow="@(project.Issues == null ? 0 :( project.Issues.Where(x => x.Status == "Затворена").Count()/project.Issues.Count())*100)" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <label style="color: gray">@(project.Issues == null ? 0 : project.Issues.Where(x => x.Status == "Затворена").Count())/@(project.Issues == null ? 0 : project.Issues.Count()) завършени задачи </label>
-                                        }
-                                        else
-                                        {
-                                            <label style="color: gray">Няма добавени задачи </label>
-                                        }
-                                        <div class="vr"></div>
+                                        <label style="color: gray">@(project.Issues == null ? 0 : project.Issues.Where(x => x.Status == "Затворена").Count())/@(project.Issues == null ? 0 : project.Issues.Count()) завършени задачи </label>
+                                    }
+                                    else
+                                    {
+                                        <label style="color: gray">Няма добавени задачи </label>
+                                    }
+                                    <div class="vr"></div>
 
-                                        <div style="display: flex">
-                                            <SfTooltip Position="Position.BottomCenter" Content="Нова задача" OpensOn="Hover">
-                                                <button type="button" class="btn btn-outline-primary waves-effect md-trigger m-1" @onclick="(() => AddIssueToProject(project))">
-                                                    <i class="fa-solid fa-plus"></i>
-                                                </button>
-                                            </SfTooltip>
-                                        </div>
+                                    <div style="display: flex">
+                                        <SfTooltip Position="Position.BottomCenter" Content="Нова задача" OpensOn="Hover">
+                                            <button type="button" class="btn btn-outline-primary waves-effect md-trigger m-1" @onclick="(() => AddIssueToProject(project))">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+                                        </SfTooltip>
+                                    </div>
 
-                                    </li>
+                                </li>
+                            </CardHeader>
 
-
-
-
-
-
-                                </CardHeader>
-                                <CardBody>
-                                    <ul class="list-group">
-                                        @foreach (var issue in (project.Issues == null ? new List<Issue>() : project.Issues))
+                            <CardBody>
+                                @if (project.Issues != null)
+                                {
+                                    @if (project.Issues.Count() != 0)
+                                    {
+                                        @foreach (var issue in project.Issues)
                                         {
 
                                             <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
-                                                <div style="width: 200px">
+                                                <div style="width: 205px">
                                                     @issue.Subject
                                                 </div>
                                                 <div class="vr"></div>
@@ -107,10 +109,9 @@
                                                     @if (issue.Subtasks.Count() != 0)
                                                     {
                                                         <div class="progress" style="width: 220px; border-radius: 20.25rem;">
-                                                            <div class="progress-bar" role="progressbar" aria-label="Завършени задачи" style="width: @(issue.Subtasks == null ? 0 : Convert.ToDouble(issue.Subtasks.Where(x => x.Status == "Затворена").Count()) / (issue.Subtasks.Count()) * 100)%; background-color: #4f9b00" aria-valuenow="@(issue.Subtasks == null ? 0 : (issue.Subtasks.Where(x => x.Status == "Затворена").Count() / issue.Subtasks.Count()) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
+                                                            <div class="progress-bar" role="progressbarsubtasks" aria-label="Завършени подзадачи" style="width: @((issue.Subtasks == null ? 0 : Convert.ToDouble(issue.Subtasks.Where(x => x.Status == "Затворена").Count()) / (issue.Subtasks.Count()) * 100).ToString().Replace(',', '.'))%; background-color: #4f9b00" aria-valuenow="@(issue.Subtasks == null ? 0 : (issue.Subtasks.Where(x => x.Status == "Затворена").Count() / issue.Subtasks.Count()) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
-
-                                                        <label style="color: gray">@(issue.Subtasks == null ? 0 : (issue.Subtasks.Count() == 0 ? 0 : issue.Subtasks.Where(x => x.Status == "Затворена").Count() / issue.Subtasks.Count()))/@(issue.Subtasks == null ? 0 : issue.Subtasks.ToArray().Length) завършени подзадачи </label>
+                                                        <label style="color: gray">@(issue.Subtasks == null ? 0 : (issue.Subtasks.Count() == 0 ? 0 : issue.Subtasks.Where(x => x.Status == "Затворена").Count()))/@(issue.Subtasks == null ? 0 : issue.Subtasks.ToArray().Length) завършени подзадачи </label>
                                                     }
                                                     else
                                                     {
@@ -138,20 +139,50 @@
 
                                             </li>
                                         }
-                                    </ul>
-                                </CardBody>
-                            </CollapsibleCard>
-                        }
+                                    }
+                                    else
+                                    {
+                                        <li class="list-group-item rounded d-flex align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px; text-align: center;">
+                                            <label style="color: gray">Няма задачи в този проект!</label>
+                                        </li>
 
+                                    }
+                                }
+                                else
+                                {
+                                    <li class="list-group-item rounded d-flex align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px; text-align: center;">
+                                        <label style="color: gray">Няма задачи в този проект!</label>
+                                    </li>
+                                }
+                            </CardBody>
+                        </CollapsibleCard>
 
-                    </div>
+                    }
+
                 </div>
             </div>
         </div>
+
+
+        <SfKanban @ref="sfKanban" TValue="Issue" KeyField="Status" DataSource="@issues" AllowDragAndDrop="true">
+            <KanbanColumns>
+                <KanbanColumn HeaderText="Нова" KeyField="@(new List<string>() {"Нова"})"></KanbanColumn>
+                <KanbanColumn HeaderText="В изпълнение" KeyField="@(new List<string>() {"В изпълнение"})"></KanbanColumn>
+                <KanbanColumn HeaderText="За тестване" KeyField="@(new List<string>() {"За тестване"})"></KanbanColumn>
+                <KanbanColumn HeaderText="Върната за корекция" KeyField="@(new List<string>() {"Върната за корекция"})"></KanbanColumn>
+                <KanbanColumn HeaderText="Затворена" KeyField="@(new List<string>() {"Затворена"})"></KanbanColumn>
+            </KanbanColumns>
+            <KanbanEvents TValue="Issue" ActionComplete="@ActionCompleteHandler"></KanbanEvents>
+            <KanbanCardSettings HeaderField="Subject" ContentField="Description"></KanbanCardSettings>
+        </SfKanban>
+
+
     </div>
 </div>
 
 
+
+<ToastMsg @ref="toast" />
 
 <IssueModal @ref="taskModal" CallbackAfterSubmit="UpdateAfterIssueModalSubmitAsync" />
 
@@ -160,36 +191,77 @@
     //https://learn.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-7.0
 
     private List<Project> projects { get; set; }
-
+    private List<Issue> issues { get; set; }
+    private SfKanban<Issue> sfKanban { get; set; }
     private IssueModal taskModal = new IssueModal();
 
-
+    private ToastMsg toast = new ToastMsg();
 
     protected async override Task OnInitializedAsync()
     {
         projects = projectService.GetAllProjects();
+        issues = IssueService.GetAllIssues();
 
-
+    }
+    public async void ActionCompleteHandler(Syncfusion.Blazor.Kanban.ActionEventArgs<Issue> args)
+    {
+        var result = IssueService.UpdateIssue(args.ChangedRecords.FirstOrDefault());
+        if (result.StartsWith("Успешно"))
+        {
+            toast.sfSuccessToast.Title = result;
+            toast.sfSuccessToast.ShowAsync();
+            issues = IssueService.GetAllIssues();
+            projects = projectService.GetAllProjects();
+            await sfKanban.RefreshAsync();
+            this.StateHasChanged();
+        }
+        else
+        {
+            toast.sfErrorToast.Title = result;
+            toast.sfErrorToast.ShowAsync();
+        }
+        // Here you can customize your code
     }
     private async Task AddNewTaskClickHandler()
     {
-
-        taskModal.OpenDialog(new Issue { Status = "Нова", Assignee = await userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0 });
+        if (projects.Count() == 0)
+        {
+            toast.sfErrorToast.Title = "Моля създайте първо проект!";
+            toast.sfErrorToast.ShowAsync();
+        }
+        else
+        {
+            taskModal.OpenDialog(new Issue { Status = "Нова", Assignee = await userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0 });
+        }
     }
     private async Task AddIssueToProject(Project project)
     {
-        taskModal.OpenDialog(new Issue { Status = "Нова", Project = project, Assignee = await userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0 });
+        taskModal.OpenDialog(new Issue { Status = "Нова", Project = project, ProjectId = project.ProjectId, Assignee = await userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0 });
     }
     private async Task UpdateAfterIssueModalSubmitAsync()
     {
 
         projects = projectService.GetAllProjects();
+        issues = IssueService.GetAllIssues();
+        await sfKanban.RefreshAsync();
         this.StateHasChanged();
     }
     private async Task DeleteIssue(Issue issue)
     {
 
-        IssueService.DeleteIssue(issue);
+        var result = IssueService.DeleteIssue(issue);
+        if (result.StartsWith("Успешно"))
+        {
+            toast.sfSuccessToast.Title = result;
+            toast.sfSuccessToast.ShowAsync();
+
+
+        }
+        else
+        {
+            toast.sfErrorToast.Title = result;
+            toast.sfErrorToast.ShowAsync();
+        }
 
         projects = projectService.GetAllProjects();
         this.StateHasChanged();

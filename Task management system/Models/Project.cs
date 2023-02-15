@@ -12,13 +12,13 @@ namespace Task_management_system.Models
     {
         public Project()
         {
-            this.ProjectParticipants = new List<ApplicationUserProject>();
+            ProjectParticipants = new List<ApplicationUserProject>();
         }
         [Key]
         public int ProjectId { get; set; }
 
         [Required(ErrorMessage = "Полето 'Име на проект' е задължително!")]
-         public string ProjectName { get; set; }
+        public string ProjectName { get; set; }
         [Required(ErrorMessage = "Полето 'Описание на проект' е задължително!")]
         public string ProjectDescription { get; set; }
 
@@ -37,8 +37,8 @@ namespace Task_management_system.Models
         [System.Text.Json.Serialization.JsonIgnore]
         public ICollection<ApplicationUserProject>? ProjectParticipants { get; set; }
 
-        
-       
+
+
         [Required(ErrorMessage = "Полето 'Тип на проект' е задължително!")]
         [ForeignKey(nameof(KeyValue))]
         [System.Text.Json.Serialization.JsonIgnore]

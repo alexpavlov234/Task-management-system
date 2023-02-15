@@ -1,11 +1,7 @@
-﻿using KeyValue_management_system.Services;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Grids;
-using System.Runtime.CompilerServices;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
@@ -57,18 +53,28 @@ namespace Task_management_system.Pages
         }
         private async Task AddSubtask()
         {
-            subtaskModal.OpenDialog(new Subtask { Status = "Нова", Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Issue = this.issue, IssueId = this.issue.IssueId });
+            subtaskModal.OpenDialog(new Subtask { Status = "Нова", Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Issue = issue, IssueId = issue.IssueId });
 
             //managementModal.OpenDialog(new ApplicationUser());
         }
         private async Task DeleteSubtask(Subtask subtask)
         {
 
-            IssueService.DeleteSubtask(subtask);
-            this.issue = IssueService.GetIssueById(issue.IssueId);
-            await this.CallbackAfterSubmit.InvokeAsync();
-            await this.subtasksGrid.Refresh();
-            this.StateHasChanged();
+            string result = IssueService.DeleteSubtask(subtask);
+            if (result.StartsWith("Успешно"))
+            {
+                toast.sfSuccessToast.Title = result;
+                toast.sfSuccessToast.ShowAsync();
+            }
+            else
+            {
+                toast.sfErrorToast.Title = result;
+                toast.sfErrorToast.ShowAsync();
+            }
+            issue = IssueService.GetIssueById(issue.IssueId);
+            await CallbackAfterSubmit.InvokeAsync();
+            await subtasksGrid.Refresh();
+            StateHasChanged();
 
 
         }
@@ -81,14 +87,14 @@ namespace Task_management_system.Pages
         private async Task UpdateAfterSubtaskModalSubmitAsync()
         {
 
-            this.issue = IssueService.GetIssueById(issue.IssueId);
-            await this.subtasksGrid.Refresh();
-            this.StateHasChanged();
+            issue = IssueService.GetIssueById(issue.IssueId);
+            await subtasksGrid.Refresh();
+            StateHasChanged();
         }
         public async void OpenDialog(Issue issue)
 
         {
-            this.IsIssueNew = IssueService.GetIssueById(issue.IssueId) == null;
+            IsIssueNew = IssueService.GetIssueById(issue.IssueId) == null;
             statuses = new List<KeyValue>();
             this.issue = issue;
             if (issue.AssignedТo != null)
@@ -119,7 +125,7 @@ namespace Task_management_system.Pages
                 this.issue.EndTime = DateTime.Now.AddMonths(1);
             }
             GetStatus(this.issue.Status);
-            this.projects = ProjectService.GetAllProjects();
+            projects = ProjectService.GetAllProjects();
 
             editContext = new EditContext(issue);
             IsVisible = true;
@@ -163,16 +169,16 @@ namespace Task_management_system.Pages
 
         private void OnValueSelectHandlerProject(ChangeEventArgs<int, Project> args)
         {
-            this.issue.Project = this.projects.Where(x => x.ProjectId == args.Value).First();
-            this.issue.EndTime = this.issue.Project.EndDate;
+            issue.Project = projects.Where(x => x.ProjectId == args.Value).First();
+            issue.EndTime = issue.Project.EndDate;
             if (DateTime.Now < issue.EndTime)
             {
-                this.issue.StartTime = this.issue.Project.EndDate.AddMonths(-1);
+                issue.StartTime = issue.Project.EndDate.AddMonths(-1);
             }
             else
             {
-                this.issue.StartTime = DateTime.Now;
-                this.issue.EndTime = DateTime.Now.AddMonths(1);
+                issue.StartTime = DateTime.Now;
+                issue.EndTime = DateTime.Now.AddMonths(1);
             }
         }
         private void OnValueSelectHandlerStatus(ChangeEventArgs<string, KeyValue> args)
@@ -208,7 +214,7 @@ namespace Task_management_system.Pages
                     await CallbackAfterSubmit.InvokeAsync();
                     toast.sfSuccessToast.Title = "Успешно приложени промени!";
                     toast.sfSuccessToast.ShowAsync();
-                    await this.subtasksGrid.Refresh();
+                    await subtasksGrid.Refresh();
 
                 }
                 else
@@ -218,8 +224,6 @@ namespace Task_management_system.Pages
                         issue.AssignedТo = await UserService.GetApplicationUserByUsernameAsync(issueAssignedToUserName);
                     }
 
-                    //issue.Project = projects.Where(x => x.ProjectName == issueProjectName).First();
-                    //issue.ProjectId = issue.Project.ProjectId;
 
                     string result = IssueService.CreateIssue(issue);
 
@@ -228,7 +232,7 @@ namespace Task_management_system.Pages
                     {
                         toast.sfSuccessToast.Title = result;
                         toast.sfSuccessToast.ShowAsync();
-                        this.IsIssueNew = false;
+                        IsIssueNew = false;
 
                     }
                     else

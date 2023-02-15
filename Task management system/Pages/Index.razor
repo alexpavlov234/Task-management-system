@@ -1,8 +1,10 @@
 ﻿@using System.Text
 @using Microsoft.AspNetCore.Identity
 @using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.Schedule
 @using Task_management_system.Models
 @using Task_management_system.Services
+@inject IIssueService IssueService
 
 @page "/"
 
@@ -34,7 +36,7 @@ else
             {
 
 
-                <div class="col-xxl-6 col-xl-6 col-lg-12">
+                <div class="col-xxl-6 col-xl-6 col-lg-12 pr-0" style="padding-right: 0px;">
                     <div class="custom-card">
                         <div class="card-body">
                             <h5 class="card-title">Времето</h5>
@@ -66,12 +68,20 @@ else
 
 
             }
-            <div class="col-xxl-6 col-xl-6 col-lg-12">
+            <div class="col-xxl-6 col-xl-6 col-lg-12" style="padding-right: 0px;">
                 <div class="custom-card">
                     <div class="card-body">
-                        <h5 class="card-title">Календар</h5>
-                        <SfCalendar TValue="DateTime" WeekNumber=true></SfCalendar>
-
+                        <h5 class="card-title">Задачи за деня</h5>
+                        <SfSchedule TValue="Issue" Height="300px" Width="auto" SelectedDate="@DateTime.Now" CurrentView="View.Agenda" ShowHeaderBar="false">
+                            <ScheduleEventSettings DataSource="@issues" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
+                            <ScheduleViews>
+                                <ScheduleView Option="View.Day"></ScheduleView>
+                                <ScheduleView Option="View.Week"></ScheduleView>
+                                <ScheduleView Option="View.WorkWeek"></ScheduleView>
+                                <ScheduleView Option="View.Month"></ScheduleView>
+                                <ScheduleView Option="View.Agenda"></ScheduleView>
+                            </ScheduleViews>
+                        </SfSchedule>
                     </div>
                     <div class="card-footer">
                         <div class="form-group">
@@ -91,17 +101,23 @@ else
 </AuthorizeView>
 
 
-
+<style>
+    .e-quick-popup-wrapper .e-popup-footer .e-event-edit, .e-quick-popup-wrapper .e-popup-footer .e-event-delete {
+        display: none;
+    }
+</style>
 @code {
+
     String userFullName = null;
     [Inject]
     private IUserService userService { get; set; }
-
+    private List<Issue> issues { get; set; }
     CurrentCondition response;
     String image = "";
     String result = "";
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
+        issues = IssueService.GetAllIssues();
         if (await userService.GetLoggedUser() != null)
         {
             var user = await userService.GetLoggedUser();

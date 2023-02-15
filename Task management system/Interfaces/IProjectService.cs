@@ -3,11 +3,9 @@
 internal interface IProjectService
 {
     string CreateProject(Project project);
-    void DeleteProject(Project project);
-    void DeleteProject(int ProjectId);
+    string DeleteProject(int ProjectId);
     List<Project> GetAllProjects();
     Project GetProjectById(int ProjectId);
-    Project GetProjectByProjectName(string ProjectName);
     string UpdateProject(Project project);
 
 }

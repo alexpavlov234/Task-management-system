@@ -29,8 +29,8 @@ namespace Task_management_system.Data
                 .WithMany(u => u.AssigneeUsers)
                 .HasForeignKey(i => i.AssigneeId)
                 .OnDelete(DeleteBehavior.NoAction);
-           // modelBuilder.Entity<Issue>().HasOne(x => x.Assignee).WithMany(y => y.AssigneeUsers).OnDelete(DeleteBehavior.Cascade); 
-            modelBuilder.Entity<Issue>().HasOne(x => x.AssignedТo).WithMany(y => y.AssignToUsers).OnDelete(DeleteBehavior.Cascade); 
+            // modelBuilder.Entity<Issue>().HasOne(x => x.Assignee).WithMany(y => y.AssigneeUsers).OnDelete(DeleteBehavior.Cascade); 
+            modelBuilder.Entity<Issue>().HasOne(x => x.AssignedТo).WithMany(y => y.AssignToUsers).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Project>().HasOne(x => x.ProjectOwner).WithMany(y => y.ProjectsOwners).OnDelete(DeleteBehavior.Cascade);
             //modelBuilder.Entity<Project>().HasMany(x => x.ProjectsParticipants).WithMany(y => y.ProjectsParticipants).UsingEntity<ApplicationUserProject>("ApplicationUserProject"); 
             //modelBuilder.Entity<ApplicationUserProject>().HasKey(sc => new { sc.ProjectId, sc.UserId});
@@ -45,11 +45,11 @@ namespace Task_management_system.Data
                 .WithMany(p => p.ProjectParticipants)
                 .HasForeignKey(aup => aup.ProjectId).OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Subtask>().HasOne(x =>x.Issue).WithMany(i => i.Subtasks).HasForeignKey(x => x.IssueId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Subtask>().HasOne(x => x.Issue).WithMany(i => i.Subtasks).HasForeignKey(x => x.IssueId).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<KeyType>();
             modelBuilder.Entity<KeyValue>().HasIndex(b => b.KeyValueIntCode)
             .IsUnique();
-            
+
             // modelBuilder.Seed();
             base.OnModelCreating(modelBuilder);
         }
@@ -70,14 +70,24 @@ namespace Task_management_system.Data
         }
         public void DetachAllEntities()
         {
-            var changedEntriesCopy = this.ChangeTracker.Entries()
-                .Where(e => e.State == EntityState.Added ||
-                            e.State == EntityState.Modified ||
-                            e.State == EntityState.Deleted)
-                .ToList();
+            try
+            {
+                List<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry> changedEntriesCopy = ChangeTracker
+                    .Entries()
+                    .Where(e => e.State == EntityState.Added ||
+                                e.State == EntityState.Modified ||
+                                e.State == EntityState.Deleted)
+                    .ToList();
 
-            foreach (var entry in changedEntriesCopy)
-                entry.State = EntityState.Detached;
+                foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry? entry in changedEntriesCopy)
+                {
+                    entry.State = EntityState.Detached;
+                }
+            }
+            catch
+            {
+
+            }
         }
 
     }

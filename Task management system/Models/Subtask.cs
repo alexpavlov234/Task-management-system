@@ -10,12 +10,12 @@ namespace Task_management_system.Models
         [Key]
         public int SubtaskId { get; set; }
 
-   
+
 
         [Required]
         public string Subject { get; set; }
 
- 
+
         public string Location { get; set; }
 
         [Required]

@@ -1,9 +1,5 @@
-﻿using KeyValue_management_system.Services;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using System.Runtime.CompilerServices;
-using NuGet.Packaging;
-using NuGet.Protocol;
 using Syncfusion.Blazor.DropDowns;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
@@ -50,23 +46,23 @@ namespace Task_management_system.Pages
         public async void OpenDialog(Project project)
 
         {
-            this.projectParticipants = null;
+            projectParticipants = null;
 
             this.project = new Project() { ProjectId = project.ProjectId, ProjectParticipants = project.ProjectParticipants, Issues = project.Issues, ProjectOwner = project.ProjectOwner, ProjectTypeId = project.ProjectTypeId, EndDate = project.EndDate, ProjectDescription = project.ProjectDescription, ProjectName = project.ProjectName, ProjectType = project.ProjectType, StartDate = project.StartDate };
             // this.project = ProjectService.GetProjectById(project.ProjectId);
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
             users = UserService.GetAllUsers();
-            projectParticipantsSfMultiSelect.DataSource = this.users;
+            projectParticipantsSfMultiSelect.DataSource = users;
             if (this.project.ProjectParticipants != null)
             {
                 //TODO:Да го фикснеш;
                 // this.project.ProjectParticipants.Remove(x => x.);
-                this.projectParticipants = this.project.ProjectParticipants.Select(x => x.User).Where(x => x != null).ToArray();
+                projectParticipants = this.project.ProjectParticipants.Select(x => x.User).Where(x => x != null).ToArray();
 
             }
             else
             {
-                this.projectParticipants = new ApplicationUser[] { };
+                projectParticipants = new ApplicationUser[] { };
             }
 
             editContext = new EditContext(this.project);
@@ -84,20 +80,20 @@ namespace Task_management_system.Pages
         {
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
             users = UserService.GetAllUsers();
-            projectParticipantsSfMultiSelect.DataSource = this.users;
-            if (this.project.ProjectParticipants != null)
+            projectParticipantsSfMultiSelect.DataSource = users;
+            if (project.ProjectParticipants != null)
             {
                 //TODO:Да го фикснеш;
                 // this.project.ProjectParticipants.Remove(x => x.);
-                this.projectParticipants = this.project.ProjectParticipants.Select(x => x.User).Where(x => x != null).ToArray();
+                projectParticipants = project.ProjectParticipants.Select(x => x.User).Where(x => x != null).ToArray();
 
             }
             else
             {
-                this.projectParticipants = new ApplicationUser[] { };
+                projectParticipants = new ApplicationUser[] { };
             }
 
-            editContext = new EditContext(this.project);
+            editContext = new EditContext(project);
 
             StateHasChanged();
         }
@@ -106,19 +102,19 @@ namespace Task_management_system.Pages
 
             //this.projectParticipants.DistinctBy(i => i.User);
             //TODO: Да се обмисли
-            if (this.projectParticipants == null)
+            if (projectParticipants == null)
             {
-                this.projectParticipants = new ApplicationUser[] { };
+                projectParticipants = new ApplicationUser[] { };
             }
 
-            var participants = this.projectParticipants.Select(x => new ApplicationUserProject
+            IEnumerable<ApplicationUserProject> participants = projectParticipants.Select(x => new ApplicationUserProject
             {
                 UserId = x.Id,
-                ProjectId = this.project.ProjectId
+                ProjectId = project.ProjectId
             });
 
 
-            this.project.ProjectParticipants = participants.ToList();
+            project.ProjectParticipants = participants.ToList();
 
 
             // project.ProjectParticipants = new List<ApplicationUser>(projectParticipants);
@@ -128,11 +124,22 @@ namespace Task_management_system.Pages
 
                 if (ProjectService.GetProjectById(project.ProjectId) != null)
                 {
-                   ProjectService.UpdateProject(project);
+                    string result = ProjectService.UpdateProject(project);
                     await CallbackAfterSubmit.InvokeAsync();
-                    toast.sfSuccessToast.Title = "Успешно приложени промени!";
-                    toast.sfSuccessToast.ShowAsync();
-                   UpdateDialog();
+                    if (result.StartsWith("Успешно"))
+                    {
+                        toast.sfSuccessToast.Title = result;
+                        toast.sfSuccessToast.ShowAsync();
+
+                        UpdateDialog();
+                    }
+                    else
+                    {
+                        toast.sfErrorToast.Title = result;
+                        toast.sfErrorToast.ShowAsync();
+                    }
+
+                    UpdateDialog();
 
                 }
                 else

@@ -31,7 +31,7 @@ public class UserService : Controller, IUserService
     // Създаване на нов потребител
     public async Task<string> CreateApplicationUser(ApplicationUser applicationUser, String Password)
     {
-
+        _context.DetachAllEntities();
         // Използване на метода CreateAsync от UserManager за създаване на нов потребител
         IdentityResult result = await _userManager.CreateAsync(applicationUser, Password);
         // Отделяне на потребителя от локалния контекст
@@ -50,43 +50,51 @@ public class UserService : Controller, IUserService
     }
 
     // Изтриване на потребител
-    public async Task DeleteApplicationUser(ApplicationUser applicationUser)
+    public async Task<string> DeleteApplicationUser(ApplicationUser applicationUser)
     {
-        // Търсене на потребителя в локалния контекст
-        ApplicationUser? local = _context.Set<ApplicationUser>()
-    .Local
-    .FirstOrDefault(entry => entry.Id.Equals(applicationUser.Id));
-
-        // Проверка дали local не е null
-        if (local != null)
+        try
         {
-            // Отделяне
-            _context.Entry(local).State = EntityState.Detached;
+            _context.DetachAllEntities();
+            // Търсене на потребителя в локалния контекст
+            ApplicationUser? local = _context.Set<ApplicationUser>()
+                .Local
+                .FirstOrDefault(entry => entry.Id.Equals(applicationUser.Id));
+
+            // Проверка дали local не е null
+            if (local != null)
+            {
+                // Отделяне
+                _context.Entry(local).State = EntityState.Detached;
+            }
+
+            // Задаване на флаг за изтриване
+            _context.Entry(applicationUser).State = EntityState.Deleted;
+
+            // Запазване на промените
+            _context.SaveChanges();
+            return "Успешно изтриване!";
         }
-        // Задаване на флаг за изтриване
-        _context.Entry(applicationUser).State = EntityState.Deleted;
-
-        // Запазване на промените
-        _context.SaveChanges();
-
+        catch (DbUpdateException)
+        {
+            return "Неуспешно изтриване, понеже потребителят е свързан с проект/задача!";
+        }
+        catch
+        {
+            return "Неуспешно изтриване!";
+        }
     }
-
-
-
-
-
-
 
     // Връща списък с всички потребители
     public List<ApplicationUser> GetAllUsers()
     {
-        var users =  _context.Users.AsNoTracking().ToList();
+        List<ApplicationUser> users = _context.Users.AsNoTracking().ToList();
         return users;
     }
 
     // Връща един потребител по зададен Id
     public async Task<ApplicationUser> GetApplicationUserByIdAsync(string Id)
     {
+        _context.DetachAllEntities();
         // Търси в локалната база данни за потребител с зададеното Id
         ApplicationUser? local = _context.Users.AsNoTracking().FirstOrDefault(entry => entry.Id.Equals(Id));
 
@@ -95,6 +103,7 @@ public class UserService : Controller, IUserService
 
     public async Task<ApplicationUser> GetApplicationUserByUsernameAsync(string Username)
     {
+        _context.DetachAllEntities();
         ApplicationUser? local = _context.Set<ApplicationUser>().Local.FirstOrDefault(entry => entry.UserName.Equals(Username));
         // check if local is not null
         if (local != null)
@@ -109,6 +118,7 @@ public class UserService : Controller, IUserService
 
     public async Task UpdateApplicationUser(ApplicationUser applicationUser)
     {
+        _context.DetachAllEntities();
         ApplicationUser? local = _context.Set<ApplicationUser>().Local.FirstOrDefault(entry => entry.Id.Equals(applicationUser.Id));
         // check if local is not null
         if (local != null)
@@ -141,6 +151,7 @@ public class UserService : Controller, IUserService
 
     public async Task<ApplicationUser> GetLoggedUser()
     {
+        _context.DetachAllEntities();
         using (Context context = _context.Clone())
         {
             return await context.Users.SingleOrDefaultAsync(x => x.UserName == _httpContextAccessor.HttpContext.User.Identity.Name);

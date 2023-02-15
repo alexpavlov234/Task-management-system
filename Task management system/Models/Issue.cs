@@ -12,7 +12,7 @@ namespace Task_management_system.Models
     {
         [Key]
         public int IssueId { get; set; }
-        
+
         public string AssigneeId { get; set; }
         public ApplicationUser Assignee { get; set; }
 

@@ -4,7 +4,7 @@ public class SyncfusionLocalizer : ISyncfusionStringLocalizer
 {
     public string GetText(string key)
     {
-        return this.ResourceManager.GetString(key);
+        return ResourceManager.GetString(key);
     }
 
     public System.Resources.ResourceManager ResourceManager

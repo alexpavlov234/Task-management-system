@@ -8,7 +8,26 @@
         <NotFound>
             <PageTitle>Не е намерен</PageTitle>
             <LayoutView Layout="@typeof(MainLayout)">
-                <h1 role="alert">Съжаляваме, но на този адрес няма нищо.😕</h1>
+                <div class="container-full">
+                    <img class="banner-full" src="img/iStock-1203930843.jpg" alt="Banner">
+                    <div class="center-absolute" >
+                        <div class="row align-items-center" style="margin-right: 0px; position: absolute;
+                                                                   left: 0;
+                                                                   top: 50%;
+                                                                   transform: translateY(-50%);
+                                                                   width: 100%">
+                            <div class="text-center col-xxl-6 col-xl-12 col-lg-12 p-3">
+                                <h1 style="background: #7030A0; background: linear-gradient(to top left, #7030A0 0%, #00009E 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: calc(100% + 15vw + 1vh);">404</h1>
+                            </div>
+                            <div class="text-left col-xxl-6 col-xl-12 col-lg-12 p-5" style="text-align: left">
+                                <p style="color: black; font-size: calc(100% + 2vw + 1vh);"><b>Ами сега...</b></p>
+                                <p style="font-size: calc(100% + 0.2vw + 1vh);"><span style="color: gray; text-wrap: normal;">Страницата, която се опитвате да отворите, не е налична!</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </LayoutView>
         </NotFound>
     </Router>

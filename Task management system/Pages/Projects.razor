@@ -11,6 +11,8 @@
 @using Task_management_system.Models
 @using Task_management_system.Pages.Common
 @using Task_management_system.Pages
+@using Task_management_system.Pages.Shared
+@using System.Globalization
 @inject RoleManager<IdentityRole> roleManager
 @inject UserManager<ApplicationUser> userManager
 @inject SignInManager<ApplicationUser> signInManager
@@ -52,66 +54,77 @@
 
                         @foreach (var projectType in projectTypes)
                         {
-
-                            @if (projectType.Name == "Учебен")
-                            {
-                                <div class="e-message e-success p-2 my-2" style="font-size: 18px">@projectType.Name</div>
-
-                            }
-                            else if (projectType.Name == "Работен")
-                            {
-                                <div class="e-message e-warning p-2 my-2" style="font-size: 18px">@projectType.Name</div>
-
-                            }
-                            else
-                            {
-                                <div class="e-message e-error p-2 my-2" style="font-size: 18px">@projectType.Name</div>
-
-                            }
-
-
-                            <ul class="list-group">
-                                <!-- Project 1 -->
-                                @foreach (var project in projects)
-                                {
-                                    @if (project.ProjectType.KeyValueIntCode == projectType.KeyValueIntCode)
+                            <CollapsibleCard>
+                                <CardHeader>
+                                    @if (projectType.Name == "Учебен")
                                     {
-                                        <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
-                                            <div style="width: 200px">
-                                                @project.ProjectName
-                                            </div>
-                                            <div class="vr"></div>
-                                            @if (project.Issues.Count() != 0)
-                                            {
-                                                <div class="progress" style="width: 220px; border-radius: 20.25rem;">
-                                                    <div class="progress-bar" role="progressbar" aria-label="Завършени задачи" style="width: @(project.Issues == null ? 0 : (project.Issues.Where(x => x.Status == "Затворена").Count() / project.Issues.Count()) * 100)%; background-color: #4f9b00" aria-valuenow="@(project.Issues == null ? 0 : (project.Issues.Where(x => x.Status == "Затворена").Count() / project.Issues.Count()) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                                <label style="color: gray">@(project.Issues == null ? 0 : project.Issues.Where(x => x.Status == "Затворена").Count() / project.Issues.Count())/@(project.Issues == null ? 0 : project.Issues.ToArray().Length) завършени задачи </label>
-                                            }
-                                            else
-                                            {
-                                                <label style="color: gray">Няма добавени задачи </label>
-                                            }
-                                            <div class="vr"></div>
-                                            <div>
-                                                <div style="display: flex">
-                                                    <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
-                                                        <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditProject(project))">
-                                                            <i class="fa-solid fa-pen-to-square"></i>
-                                                        </button>
-                                                    </SfTooltip>
-                                                    <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
-                                                            <i class="fa-solid fa-trash"></i>
-                                                        </button>
-                                                    </SfTooltip>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    }
-                                }
-                            </ul>
+                                        <div class="e-message e-success p-2" style="font-size: 20px">@projectType.Name</div>
 
+                                    }
+                                    else if (projectType.Name == "Работен")
+                                    {
+                                        <div class="e-message e-warning p-2" style="font-size: 20px">@projectType.Name</div>
+
+                                    }
+                                    else
+                                    {
+                                        <div class="e-message e-error p-2" style="font-size: 20px">@projectType.Name</div>
+
+                                    }
+                                </CardHeader>
+                                <CardBody>
+                                    <ul class="list-group">
+                                        @{
+                                            var hasItems = false;
+                                        }
+                                        @foreach (var project in projects)
+                                        {
+                                            @if (project.ProjectType.KeyValueIntCode == projectType.KeyValueIntCode)
+                                            {
+                                                hasItems = true;
+                                                <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
+                                                    <div style="width: 200px">
+                                                        @project.ProjectName
+                                                    </div>
+                                                    <div class="vr"></div>
+                                                    @if (project.Issues.Count() != 0)
+                                                    {
+                                                        <div class="progress" style="width: 220px; border-radius: 20.25rem;">
+                                                            <div class="progress-bar" role="progressbar" aria-label="Завършени задачи" style="width: @((project.Issues == null ? 0 : Convert.ToDouble(project.Issues.Where(x => x.Status == "Затворена").Count())/(project.Issues.Count())*100).ToString().Replace(',','.'))%; background-color: #4f9b00" aria-valuenow="@(project.Issues == null ? 0 :( project.Issues.Where(x => x.Status == "Затворена").Count()/project.Issues.Count())*100)" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                        <label style="color: gray">@(project.Issues == null ? 0 : project.Issues.Where(x => x.Status == "Затворена").Count() / project.Issues.Count())/@(project.Issues == null ? 0 : project.Issues.ToArray().Length) завършени задачи </label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label style="color: gray">Няма добавени задачи </label>
+                                                    }
+                                                    <div class="vr"></div>
+                                                    <div>
+                                                        <div style="display: flex">
+                                                            <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
+                                                                <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditProject(project))">
+                                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                                </button>
+                                                            </SfTooltip>
+                                                            <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                                                <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
+                                                                    <i class="fa-solid fa-trash"></i>
+                                                                </button>
+                                                            </SfTooltip>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+                                        @if (!hasItems)
+                                        {
+                                            <div class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
+                                                <label style="color: gray">Няма проекти в избраната категория!</label>
+                                            </div>
+                                        }
+                                    </ul>
+                                </CardBody>
+                            </CollapsibleCard>
 
                         }
 
@@ -123,7 +136,7 @@
 </div>
 
 
-
+<ToastMsg @ref="toast" />
 <ProjectModal @ref="projectModal" CallbackAfterSubmit="UpdateAfterManagementModalSubmitAsync" />
 
 
@@ -133,7 +146,7 @@
     private List<KeyValue> projectTypes { get; set; }
     private List<Project> projects { get; set; }
     private ProjectModal projectModal = new ProjectModal();
-
+    private ToastMsg toast = new ToastMsg();
 
 
     protected async override Task OnInitializedAsync()
@@ -156,7 +169,19 @@
     private async Task DeleteProject(Project project)
     {
 
-        projectService.DeleteProject(project.ProjectId);
+        var result = projectService.DeleteProject(project.ProjectId);
+        if (result.StartsWith("Успешно"))
+        {
+            toast.sfSuccessToast.Title = result;
+            toast.sfSuccessToast.ShowAsync();
+
+
+        }
+        else
+        {
+            toast.sfErrorToast.Title = result;
+            toast.sfErrorToast.ShowAsync();
+        }
         projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
         projects = projectService.GetAllProjects();
         this.StateHasChanged();
@@ -166,7 +191,6 @@
     private async Task EditProject(Project project)
     {
         projectModal.OpenDialog(project);
-        //  managementModal.OpenDialog(applicationUser);
     }
 
 }

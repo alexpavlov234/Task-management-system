@@ -73,7 +73,7 @@
         </div>
     </div>
 </div>
-
+<ToastMsg @ref="toast" />
 <ManagementModal @ref="managementModal" CallbackAfterSubmit="UpdateAfterManagementModalSubmitAsync" />
 
 @code {
@@ -85,6 +85,7 @@
     private bool showDocumentConfirmDialog = false;
     private ManagementModal managementModal = new ManagementModal();
     private SfGrid<ApplicationUser> usersGrid = new SfGrid<ApplicationUser>();
+    private ToastMsg toast = new ToastMsg();
     private async Task UpdateAfterManagementModalSubmitAsync()
     {
         var users = UserService.GetAllUsers();
@@ -125,8 +126,21 @@
     private async Task DeleteUser(ApplicationUser applicationUser)
     {
 
-        await UserService.DeleteApplicationUser(applicationUser);
+        var result = await UserService.DeleteApplicationUser(applicationUser);
+
         var users = UserService.GetAllUsers();
+        if (result.StartsWith("Успешно"))
+        {
+            toast.sfSuccessToast.Title = result;
+            toast.sfSuccessToast.ShowAsync();
+
+
+        }
+        else
+        {
+            toast.sfErrorToast.Title = result;
+            toast.sfErrorToast.ShowAsync();
+        }
         var itemToRemove = users.Remove(users.Single(r => r.UserName == httpContextAccessor.HttpContext.User.Identity.Name));
         var roles = roleManager.Roles.ToList();
         this.users = users;

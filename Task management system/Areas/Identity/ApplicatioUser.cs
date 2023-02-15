@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Task_management_system.Models;
@@ -10,10 +9,10 @@ namespace Task_management_system.Areas.Identity
     {
         public ApplicationUser()
         {
-            this.ProjectsParticipants = new List<ApplicationUserProject>();
-            this.ProjectsOwners = new List<Project>();
-            this.AssignToUsers = new List<Issue>();
-            this.AssigneeUsers = new List<Issue>();
+            ProjectsParticipants = new List<ApplicationUserProject>();
+            ProjectsOwners = new List<Project>();
+            AssignToUsers = new List<Issue>();
+            AssigneeUsers = new List<Issue>();
         }
 
         [Required(ErrorMessage = "Полето 'Име' е задължително")]
@@ -27,7 +26,7 @@ namespace Task_management_system.Areas.Identity
         [System.Text.Json.Serialization.JsonIgnore]
         public virtual ICollection<Project> ProjectsOwners { get; set; }
         [System.Text.Json.Serialization.JsonIgnore]
-        public virtual IEnumerable<ApplicationUserProject>? ProjectsParticipants { get; set; } 
+        public virtual IEnumerable<ApplicationUserProject>? ProjectsParticipants { get; set; }
 
         [NotMapped]
         public string Role { get; set; }
@@ -41,5 +40,5 @@ namespace Task_management_system.Areas.Identity
                 return string.Format("{0} {1}", FirstName, LastName);
             }
         }
-    } 
+    }
 }

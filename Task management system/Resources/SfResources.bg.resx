@@ -4671,118 +4671,118 @@
     <value>ViewSide</value>
   </data>
   <data name="Schedule_AddTitle" xml:space="preserve">
-    <value>Add title</value>
+    <value>Добавяне на заглавие</value>
   </data>
   <data name="Schedule_Agenda" xml:space="preserve">
-    <value>Agenda</value>
+    <value>Програма</value>
   </data>
   <data name="Schedule_Alert" xml:space="preserve">
-    <value>Alert</value>
+    <value>Предупреждение</value>
   </data>
   <data name="Schedule_AllDay" xml:space="preserve">
-    <value>All day</value>
+    <value>Цял ден</value>
   </data>
   <data name="Schedule_BeginFrom" xml:space="preserve">
-    <value>Begin From</value>
+    <value>Започни от</value>
   </data>
   <data name="Schedule_BlockAlert" xml:space="preserve">
-    <value>Events cannot be scheduled within the blocked time range.</value>
+    <value>Събитията не могат да се планират в рамките на блокирания времеви диапазон.</value>
   </data>
   <data name="Schedule_Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Отказ</value>
   </data>
   <data name="Schedule_CancelButton" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Отказ</value>
   </data>
   <data name="Schedule_Close" xml:space="preserve">
-    <value>Close</value>
+    <value>Затвори</value>
   </data>
   <data name="Schedule_CreateError" xml:space="preserve">
-    <value>The duration of the event must be shorter than how frequently it occurs. Shorten the duration, or change the recurrence pattern in the recurrence event editor.</value>
+    <value>Продължителността на събитието трябва да е по-кратка от честотата на неговото възникване. Съкратете продължителността или променете модела на повторение в редактора на събитията с повторение.</value>
   </data>
   <data name="Schedule_CreateEvent" xml:space="preserve">
-    <value>Create</value>
+    <value>Създаване</value>
   </data>
   <data name="Schedule_Day" xml:space="preserve">
-    <value>Day</value>
+    <value>Ден</value>
   </data>
   <data name="Schedule_Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Изтрий</value>
   </data>
   <data name="Schedule_DeleteButton" xml:space="preserve">
-    <value>Delete</value>
+    <value>Изтриване на</value>
   </data>
   <data name="Schedule_DeleteContent" xml:space="preserve">
-    <value>Are you sure you want to delete this event?</value>
+    <value>Сигурни ли сте, че искате да изтриете това събитие?</value>
   </data>
   <data name="Schedule_DeleteEvent" xml:space="preserve">
-    <value>Delete Event</value>
+    <value>Изтриване на събитие</value>
   </data>
   <data name="Schedule_DeleteMultipleContent" xml:space="preserve">
-    <value>Are you sure you want to delete the selected events?</value>
+    <value>Сигурни ли сте, че искате да изтриете избраните събития?</value>
   </data>
   <data name="Schedule_DeleteMultipleEvent" xml:space="preserve">
-    <value>Delete Multiple Events</value>
+    <value>Изтриване на няколко събития</value>
   </data>
   <data name="Schedule_DeleteSeries" xml:space="preserve">
-    <value>Entire Series</value>
+    <value>Цялата серия</value>
   </data>
   <data name="Schedule_DeleteTitle" xml:space="preserve">
-    <value>Delete Event</value>
+    <value>Изтриване на събитие</value>
   </data>
   <data name="Schedule_Description" xml:space="preserve">
-    <value>Description</value>
+    <value>Описание</value>
   </data>
   <data name="Schedule_Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Редактиране</value>
   </data>
   <data name="Schedule_EditContent" xml:space="preserve">
-    <value>How would you like to change the appointment in the series?</value>
+    <value>Как бихте искали да промените срещата от поредицата?</value>
   </data>
   <data name="Schedule_EditEvent" xml:space="preserve">
-    <value>Edit Event</value>
+    <value>Редактиране на събитие</value>
   </data>
   <data name="Schedule_EditFollowingEvent" xml:space="preserve">
-    <value>Following Events</value>
+    <value>Следващи събития</value>
   </data>
   <data name="Schedule_EditRecurrence" xml:space="preserve">
-    <value>Edit Recurrence</value>
+    <value>Редактиране на повторението</value>
   </data>
   <data name="Schedule_EditSeries" xml:space="preserve">
-    <value>Entire Series</value>
+    <value>Цяла серия</value>
   </data>
   <data name="Schedule_EditTitle" xml:space="preserve">
-    <value>Edit Event</value>
+    <value>Редактиране на събитие</value>
   </data>
   <data name="Schedule_EmptyContainer" xml:space="preserve">
-    <value>There are no events scheduled on this day.</value>
+    <value>В този ден няма планирани събития.</value>
   </data>
   <data name="Schedule_End" xml:space="preserve">
-    <value>End</value>
+    <value>Приключва</value>
   </data>
   <data name="Schedule_EndAt" xml:space="preserve">
-    <value>Ends At</value>
+    <value>Приключва на</value>
   </data>
   <data name="Schedule_EndTime" xml:space="preserve">
-    <value>End Time</value>
+    <value>Крайно време</value>
   </data>
   <data name="Schedule_EndTimezone" xml:space="preserve">
     <value>End Time zone</value>
   </data>
   <data name="Schedule_InvalidDateError" xml:space="preserve">
-    <value>The entered date value is invalid.</value>
+    <value>Въведената стойност на датата е невалидна.</value>
   </data>
   <data name="Schedule_Location" xml:space="preserve">
-    <value>Location</value>
+    <value>Местоположение</value>
   </data>
   <data name="Schedule_LookForMore" xml:space="preserve">
-    <value>Look for more</value>
+    <value>Потърсете още</value>
   </data>
   <data name="Schedule_Month" xml:space="preserve">
-    <value>Month</value>
+    <value>Месец</value>
   </data>
   <data name="Schedule_MonthAgenda" xml:space="preserve">
-    <value>Month Agenda</value>
+    <value>Месечна програма</value>
   </data>
   <data name="Schedule_More" xml:space="preserve">
     <value>още</value>
@@ -4791,124 +4791,124 @@
     <value>Повече подробности</value>
   </data>
   <data name="Schedule_NewEvent" xml:space="preserve">
-    <value>New Event</value>
+    <value>Ново събитие</value>
   </data>
   <data name="Schedule_next" xml:space="preserve">
-    <value>Next</value>
+    <value>Следваща</value>
   </data>
   <data name="Schedule_No" xml:space="preserve">
-    <value>No</value>
+    <value>Не</value>
   </data>
   <data name="Schedule_NoEvents" xml:space="preserve">
-    <value>No events</value>
+    <value>Няма събития</value>
   </data>
   <data name="Schedule_NoRecords" xml:space="preserve">
-    <value>No Records</value>
+    <value>Няма записи</value>
   </data>
   <data name="Schedule_NoTitle" xml:space="preserve">
-    <value>(No Title)</value>
+    <value>(Без заглавие)</value>
   </data>
   <data name="Schedule_Occurrence" xml:space="preserve">
-    <value>Occurrence</value>
+    <value>Появяване</value>
   </data>
   <data name="Schedule_Ok" xml:space="preserve">
-    <value>Ok</value>
+    <value>Добре</value>
   </data>
   <data name="Schedule_Previous" xml:space="preserve">
-    <value>Previous</value>
+    <value>Предишена</value>
   </data>
   <data name="Schedule_Recurrence" xml:space="preserve">
-    <value>Recurrence</value>
+    <value>Повтаряне</value>
   </data>
   <data name="Schedule_Repeat" xml:space="preserve">
-    <value>Repeat</value>
+    <value>Повторение</value>
   </data>
   <data name="Schedule_Repeats" xml:space="preserve">
-    <value>Repeats</value>
+    <value>Повтаря се</value>
   </data>
   <data name="Schedule_SameDayAlert" xml:space="preserve">
-    <value>Two occurrences of the same event cannot occur on the same day.</value>
+    <value>Две прояви на едно и също събитие не могат да се случат в един и същи ден.</value>
   </data>
   <data name="Schedule_Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Запиши</value>
   </data>
   <data name="Schedule_SaveButton" xml:space="preserve">
-    <value>Save</value>
+    <value>Запиши</value>
   </data>
   <data name="Schedule_SearchTimezone" xml:space="preserve">
-    <value>Search Time zone</value>
+    <value>Търсене на часова зона</value>
   </data>
   <data name="Schedule_SelectedItems" xml:space="preserve">
-    <value>Items selected</value>
+    <value>Избрани елементи</value>
   </data>
   <data name="Schedule_Series" xml:space="preserve">
-    <value>Series</value>
+    <value>Серии</value>
   </data>
   <data name="Schedule_SeriesChangeAlert" xml:space="preserve">
-    <value>Do you want to cancel the changes made to specific instances of this series and match it to the whole series again?</value>
+    <value>Искате ли да отмените промените, направени в конкретни случаи на тази серия, и да ги приложите отново към цялата серия?</value>
   </data>
   <data name="Schedule_ShowingEventsUntil" xml:space="preserve">
-    <value>Showing events until</value>
+    <value>Показване на събития до</value>
   </data>
   <data name="Schedule_Start" xml:space="preserve">
-    <value>Start</value>
+    <value>Начало</value>
   </data>
   <data name="Schedule_StartEndError" xml:space="preserve">
-    <value>The selected end date occurs before the start date.</value>
+    <value>Избраната крайна дата е преди началната дата.</value>
   </data>
   <data name="Schedule_StartTime" xml:space="preserve">
-    <value>Start Time</value>
+    <value>Начално време</value>
   </data>
   <data name="Schedule_StartTimezone" xml:space="preserve">
-    <value>Start Time zone</value>
+    <value>Времева зона на началното време</value>
   </data>
   <data name="Schedule_Subject" xml:space="preserve">
-    <value>Subject</value>
+    <value>Име</value>
   </data>
   <data name="Schedule_TimelineDay" xml:space="preserve">
-    <value>Timeline Day</value>
+    <value>Времева линия - ден</value>
   </data>
   <data name="Schedule_TimelineMonth" xml:space="preserve">
-    <value>Timeline Month</value>
+    <value>Времева линия - месец</value>
   </data>
   <data name="Schedule_TimelineWeek" xml:space="preserve">
-    <value>Timeline Week</value>
+    <value>Времева линия - седмица</value>
   </data>
   <data name="Schedule_TimelineWorkWeek" xml:space="preserve">
-    <value>Timeline Work Week</value>
+    <value>Времева линия - делнични дни</value>
   </data>
   <data name="Schedule_TimelineYear" xml:space="preserve">
-    <value>Timeline Year</value>
+    <value>Времева линия - година</value>
   </data>
   <data name="Schedule_Timezone" xml:space="preserve">
-    <value>Time zone</value>
+    <value>Часова зона</value>
   </data>
   <data name="Schedule_Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Заглавие</value>
   </data>
   <data name="Schedule_Today" xml:space="preserve">
-    <value>Today</value>
+    <value>Днес</value>
   </data>
   <data name="Schedule_Week" xml:space="preserve">
-    <value>Week</value>
+    <value>Седмица</value>
   </data>
   <data name="Schedule_WeekAgenda" xml:space="preserve">
-    <value>Week Agenda</value>
+    <value>Седмична програма</value>
   </data>
   <data name="Schedule_WorkWeek" xml:space="preserve">
-    <value>Work Week</value>
+    <value>Делнични дни</value>
   </data>
   <data name="Schedule_WorkWeekAgenda" xml:space="preserve">
-    <value>Work Week Agenda</value>
+    <value>Програма за работната седмица</value>
   </data>
   <data name="Schedule_WrongPattern" xml:space="preserve">
-    <value>The recurrence pattern is not valid.</value>
+    <value>Моделът на повторение не е валиден.</value>
   </data>
   <data name="Schedule_Year" xml:space="preserve">
-    <value>Year</value>
+    <value>година</value>
   </data>
   <data name="Schedule_Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Да</value>
   </data>
   <data name="Slider_DecrementTitle" xml:space="preserve">
     <value>Decrease</value>

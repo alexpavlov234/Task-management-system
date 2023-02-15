@@ -4,7 +4,7 @@ using Task_management_system.Models;
 public interface IUserService
 {
     Task<string> CreateApplicationUser(ApplicationUser applicationUser, String Password);
-    Task DeleteApplicationUser(ApplicationUser applicationUser);
+    Task<string> DeleteApplicationUser(ApplicationUser applicationUser);
     List<ApplicationUser> GetAllUsers();
     Task<ApplicationUser> GetApplicationUserByIdAsync(string Id);
     Task<ApplicationUser> GetApplicationUserByUsernameAsync(string Username);

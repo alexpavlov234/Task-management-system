@@ -31,6 +31,7 @@ namespace KeyValue_management_system.Services
 
         public void CreateKeyValue(KeyValue keyValue, string KeyTypeIntCode)
         {
+            _context.DetachAllEntities();
             KeyType keyType = _context.KeyType.FirstOrDefault((c) => (c.KeyTypeIntCode == KeyTypeIntCode));
             KeyValue keyValue1 = _context.KeyValue.FirstOrDefault((c) => (c.KeyValueIntCode == keyValue.KeyValueIntCode));
             if (keyValue1 == null && keyType != null)

@@ -1,8 +1,6 @@
-﻿using KeyValue_management_system.Services;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Syncfusion.Blazor.DropDowns;
-using System.Runtime.CompilerServices;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
@@ -56,7 +54,7 @@ namespace Task_management_system.Pages
         {
             statuses = new List<KeyValue>();
             this.subtask = subtask;
-            
+
             if (subtask.Issue != null)
             {
                 //issueProjectName = subtask.Project.ProjectName;
@@ -78,7 +76,7 @@ namespace Task_management_system.Pages
                 this.subtask.EndTime = DateTime.Now.AddMonths(1);
             }
             GetStatus(this.subtask.Status);
-            this.projects = ProjectService.GetAllProjects();
+            projects = ProjectService.GetAllProjects();
 
             editContext = new EditContext(subtask);
             IsVisible = true;
@@ -120,7 +118,7 @@ namespace Task_management_system.Pages
             StateHasChanged();
         }
 
-       
+
         private void OnValueSelectHandlerStatus(ChangeEventArgs<string, KeyValue> args)
         {
             GetStatus(args.Value);
@@ -133,7 +131,7 @@ namespace Task_management_system.Pages
 
         private async void SaveIssue()
         {
-            
+
 
             if (editContext.Validate())
 
@@ -142,22 +140,29 @@ namespace Task_management_system.Pages
 
                 if (IssueService.GetSubtaskById(subtask.SubtaskId) != null)
                 {
-                    
+
 
                     //subtask.Project = projects.Where(x => x.ProjectName == issueProjectName).First();
                     //subtask.ProjectId = subtask.Project.ProjectId;
-                    IssueService.UpdateSubtask(subtask);
+                    string result = IssueService.UpdateSubtask(subtask);
 
                     await CallbackAfterSubmit.InvokeAsync();
-                    toast.sfSuccessToast.Title = "Успешно приложени промени!";
-                    toast.sfSuccessToast.ShowAsync();
+                    if (result.StartsWith("Успешно"))
+                    {
+                        toast.sfSuccessToast.Title = result;
+                        toast.sfSuccessToast.ShowAsync();
+                    }
+                    else
+                    {
+                        toast.sfErrorToast.Title = result;
+                        toast.sfErrorToast.ShowAsync();
+                    }
 
                 }
                 else
                 {
-                    
-                    //subtask.Project = projects.Where(x => x.ProjectName == issueProjectName).First();
-                    //subtask.ProjectId = subtask.Project.ProjectId;
+
+
                     string result = IssueService.CreateSubtask(subtask);
 
                     if (result.StartsWith("Успешно"))
