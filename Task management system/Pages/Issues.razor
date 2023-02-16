@@ -297,7 +297,10 @@
 
             projects = projectService.GetAllProjects();
             issues = IssueService.GetAllIssues();
-            await sfKanban.RefreshAsync();
+            if (tabId == 2)
+            {
+                await sfKanban.RefreshAsync();
+            }
             this.StateHasChanged();
         }
         else

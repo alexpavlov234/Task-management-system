@@ -4,10 +4,11 @@
 <PageTitle>Система за управление на задачи</PageTitle>
 
 <div class="page">
-    <div class="sidebar">
+    <AuthorizeView>
+        <Authorized>
+            <div class="sidebar">
 
-        <AuthorizeView>
-            <Authorized>
+
                 @if (isAdmin)
                 {
 
@@ -20,23 +21,35 @@
                 }
 
 
+
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            @* For unauthorized users *@
+            @*<NavMenuLogin />*@
+        </NotAuthorized>
+    </AuthorizeView>
+    <main>
+        <AuthorizeView>
+            <Authorized>
+                <div class="top-row px-4" style="padding: 10px !important">
+                    <LoginDisplay />
+
+                </div>
+
+                <article class="content px-4">
+                    @Body
+                </article>
             </Authorized>
             <NotAuthorized>
-                @* For unauthorized users *@
-                <NavMenuLogin />
+                <div class="content px-4" style="background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%); height: 100vh;     display: flex;
+                                                 justify-content: center;
+                                                 align-items: center;">
+                    @Body
+                </div>
+
             </NotAuthorized>
         </AuthorizeView>
-    </div>
-
-    <main>
-        <div class="top-row px-4" style="padding: 10px !important">
-            <LoginDisplay />
-
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
     </main>
 </div>
 

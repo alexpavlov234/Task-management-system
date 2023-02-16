@@ -1,39 +1,94 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Система за управление на задачи</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+﻿@if (!CollapseNavMenu)
+{
+    <div class="top-row navbar navbar-dark">
+        <div class="container-fluid" style="justify-content: center;">
+            <a class="navbar-brand" style="margin-right: 0px !important" href="">Система за управление на задачи</a>
+            <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
     </div>
-</div>
+    <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+        <nav class="flex-column">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <i class="fa-regular fa-sun"></i> &nbsp; &nbsp;Моят ден
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="Тasks" Match="NavLinkMatch.All">
+                    <i class="fa-solid fa-list-check fa-lg"></i> &nbsp; &nbsp;Задачи
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="Projects">
+                    <i class="fa-solid fa-clone fa-lg"></i> &nbsp; &nbsp;Проекти
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="Calendar">
+                    <i class="fa-solid fa-calendar fa-lg"></i>&nbsp; &nbsp;Календар
+                </NavLink>
+            </div>
+        </nav>
+    </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <i class="fa-regular fa-sun"></i> &nbsp; &nbsp;Моят ден
-            </NavLink>
+}
+else
+{
+    <style>
+        .sidebar {
+            width: auto !important;
+        }
+
+        .nav-link {
+            justify-content: center;
+        }
+    </style>
+    <div class="top-row navbar navbar-dark">
+        <div class="container-fluid" style="justify-content: center;">
+            <a class="navbar-brand" style="margin-right: 0px !important" href="">СУЗ</a>
+            <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Тasks" Match="NavLinkMatch.All">
-                <i class="fa-solid fa-list-check fa-lg"></i> &nbsp; &nbsp;Задачи
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Projects">
-                <i class="fa-solid fa-clone fa-lg"></i> &nbsp; &nbsp;Проекти
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Calendar">
-                <i class="fa-solid fa-calendar fa-lg"></i>&nbsp; &nbsp;Календар
-            </NavLink>
-        </div>
-        
-    </nav>
-</div>
+    </div>
+    <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+        <nav class="flex-column">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link text-center" href="" Match="NavLinkMatch.All">
+                    <i class="fa-regular fa-sun"></i>
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="Тasks" Match="NavLinkMatch.All">
+                    <i class="fa-solid fa-list-check fa-lg"></i>
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="Projects">
+                    <i class="fa-solid fa-clone fa-lg"></i>
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="Calendar">
+                    <i class="fa-solid fa-calendar fa-lg"></i>
+                </NavLink>
+            </div>
+         </nav>
+    </div>
+
+}
+<nav class="flex-column">
+    <div class="nav-item nav-toggle px-3">
+        <a class="nav-link active " style="justify-content: center" @onclick="ToggleCollapseNavMenu">
+            <i class="fa-solid fa-bars"></i>
+        </a>
+    </div>
+</nav>
 
 @code {
+    bool CollapseNavMenu = false;
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
@@ -41,5 +96,9 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+    private void ToggleCollapseNavMenu()
+    {
+        CollapseNavMenu = !CollapseNavMenu;
     }
 }

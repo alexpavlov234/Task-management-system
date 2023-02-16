@@ -9,5 +9,26 @@
         XsrfToken = Xsrf.GetAndStoreTokens(HttpContext).RequestToken
     };
 }
+<script>
+    var clock1;
+    var clock2;
+    function startTime1(element1) {
+        let timeString = new Date().toLocaleTimeString('bg-BG', { hour: '2-digit', minute: '2-digit', second: "2-digit"});
+        element1.innerHTML = timeString;
+        
+        clock1 = setTimeout(startTime1.bind(null, element1), 1000);
+      
+    }
+    function startTime2(element2) {
+        let dateString = new Date().toLocaleDateString('bg-BG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        element2.innerHTML = dateString;
 
+        clock2 = setTimeout(startTime2.bind(null, element2), 1000);
+
+    }
+    function stopTime() {
+        clearTimeout(clock1);
+        clearTimeout(clock2);
+    }
+</script>
 <component type="typeof(App)" param-InitialState="tokens" render-mode="ServerPrerendered" />

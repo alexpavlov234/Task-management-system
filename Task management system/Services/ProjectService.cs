@@ -100,7 +100,7 @@ public class ProjectService : Controller, IProjectService
         }
         catch (Exception)
         {
-            return "Неуспешно изтриване на проекта. Моля, опитайте отново.";
+            return "Неуспешно изтриване на проекта. Моля, изтрийте всички свързани задачи!";
         }
     }
 

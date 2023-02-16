@@ -5,7 +5,7 @@
 @using Task_management_system.Models
 @using Task_management_system.Services
 @inject IIssueService IssueService
-
+@inject IJSRuntime JSRuntime
 @page "/"
 
 <PageTitle>Моят ден</PageTitle>
@@ -31,72 +31,118 @@ else
             <div class="bottom-left">Здравейте, @userFullName</div>
         </div>
 
-        <div class="row" style="margin-right: 0px">
+        <div class="card-columns" style="margin-right: 1.2em;">
             @if (response != null)
             {
 
 
-                <div class="col-xxl-6 col-xl-6 col-lg-12 pr-0" style="padding-right: 0px;">
-                    <div class="custom-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Времето</h5>
-                            <div class="row">
-                                <div class="col-sm-6 middle-align">
-                                    <p class="weather-city">София</p>
-                                    <p class="weather-temp">@((int)response.Temperature.Metric.Value + "°" + response.Temperature.Metric.Unit)</p>
-                                    <p class="weather-info">@response.WeatherText</p>
-                                </div>
-                                <div class="col-sm-6 middle-align">
-                                    <img class="weather-icon" src="@image" alt="Banner">
-                                </div>
-                            </div>
 
+                <div class="custom-card">
+                    <div class="card-body">
+
+                        <h5 class="card-title">Времето</h5>
+
+                        <div class="row">
+                            <div class="col-sm-6 middle-align">
+                                <p class="weather-city">София</p>
+                                <p class="weather-temp">@((int)response.Temperature.Metric.Value + "°" + response.Temperature.Metric.Unit)</p>
+                                <p class="weather-info">@response.WeatherText</p>
+                            </div>
+                            <div class="col-sm-6 middle-align">
+                                <img class="weather-icon" src="@image" alt="Banner">
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <div class="form-group">
-                                <div class="text-right">
-                                    <a href="@response.Link" class="btn btn-primary">По подробно</a>
-                                </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <div class="form-group">
+                            <div class="text-right">
+                                <a href="@response.Link" class="btn btn-primary">По подробно</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-
-
-
-
-
             }
-            <div class="col-xxl-6 col-xl-6 col-lg-12" style="padding-right: 0px;">
-                <div class="custom-card">
-                    <div class="card-body">
-                        <h5 class="card-title">Задачи за деня</h5>
-                        <SfSchedule TValue="Issue" Height="300px" Width="auto" SelectedDate="@DateTime.Now" CurrentView="View.Agenda" ShowHeaderBar="false">
-                            <ScheduleEventSettings DataSource="@issues" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
-                            <ScheduleViews>
-                                <ScheduleView Option="View.Day"></ScheduleView>
-                                <ScheduleView Option="View.Week"></ScheduleView>
-                                <ScheduleView Option="View.WorkWeek"></ScheduleView>
-                                <ScheduleView Option="View.Month"></ScheduleView>
-                                <ScheduleView Option="View.Agenda"></ScheduleView>
-                            </ScheduleViews>
-                        </SfSchedule>
+
+            <div class="custom-card">
+                <div class="card-body">
+                    <h5 class="card-title">Задачи за деня</h5>
+                    <SfSchedule TValue="Issue" Height="300px" Width="auto" SelectedDate="@DateTime.Now" CurrentView="View.Agenda" ShowHeaderBar="false">
+                        <ScheduleEventSettings DataSource="@issues" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
+                        <ScheduleViews>
+                            <ScheduleView Option="View.Day"></ScheduleView>
+                            <ScheduleView Option="View.Week"></ScheduleView>
+                            <ScheduleView Option="View.WorkWeek"></ScheduleView>
+                            <ScheduleView Option="View.Month"></ScheduleView>
+                            <ScheduleView Option="View.Agenda"></ScheduleView>
+                        </ScheduleViews>
+                    </SfSchedule>
+                </div>
+                <div class="card-footer">
+                    <div class="form-group">
+                        <div class="text-right">
+                            <a href="/Calendar" class="btn btn-primary">По подробно</a>
+                        </div>
                     </div>
-                    <div class="card-footer">
-                        <div class="form-group">
-                            <div class="text-right">
-                                <a href="/Calendar" class="btn btn-primary">По подробно</a>
+                </div>
+            </div>
+            <div class="custom-card">
+                <div class="card-body">
+
+                    <h5 class="card-title">Час и дата</h5>
+
+                    <div class="row">
+                        <div class="col-sm-12 middle-align">
+                            <div>
+                                <p @ref="timeDiv" class="weather-temp"></p>
+                            </div><div>
+                                <p @ref="dateDiv"class="weather-info"></p>
                             </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="custom-card">
+                <div class="card-body">
+                    <h5 class="card-title">Проекти</h5>
+                    <Projects ShowHeader="false"></Projects>
+                </div>
+                <div class="card-footer">
+                    <div class="form-group">
+                        <div class="text-right">
+                            <a href="/Projects" class="btn btn-primary">По подробно</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <style>
+            .card-columns {
+                column-count: 2;
+            }
+        </style>
     </Authorized>
 
     <NotAuthorized>
+        <div>
 
+            <div class="flex flex-col justify-center items-center text-center" style=" color: white;">
+
+                <div class="mb-2 text-center" style="font-size: 100px">СУЗ</div>
+                <div class="mb-2 text-center"><b>Система за управление на задачи</b></div>
+                <div class="mb-4 text-center">Влезте в профила си, за да продължите</div>
+                <div class="flex flex-row gap-5">
+                    <a class="btn flex justify-center gap-2 btn-primary" href="Identity/Account/Login">Вход</a>
+
+                    <a class="btn flex justify-center gap-2 btn-primary" href="Identity/Account/Register">Регистрация</a>
+                </div>
+            </div>
+        </div>
     </NotAuthorized>
 </AuthorizeView>
 
@@ -105,7 +151,9 @@ else
     .e-quick-popup-wrapper .e-popup-footer .e-event-edit, .e-quick-popup-wrapper .e-popup-footer .e-event-delete {
         display: none;
     }
+
 </style>
+
 @code {
 
     String userFullName = null;
@@ -117,6 +165,7 @@ else
     String result = "";
     protected override async Task OnInitializedAsync()
     {
+        //aTimer = new Timer(Tick, null, 0, 1000);
         issues = IssueService.GetAllIssues();
         if (await userService.GetLoggedUser() != null)
         {
@@ -144,6 +193,41 @@ else
     {
 
         StateHasChanged();
+    }
+
+    string theTime;
+    string theDate;
+    Timer aTimer;
+
+
+
+    //private void Tick(object _)
+    //{
+    //    theTime = DateTime.Now.ToLongTimeString();
+    //    theDate = DateTime.Now.ToLongDateString();
+    //    InvokeAsync(StateHasChanged);
+    //}
+
+    //public void Dispose()
+    //{
+    //    aTimer?.Dispose();
+    //}
+
+    ElementReference timeDiv;
+    ElementReference dateDiv;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("startTime1", timeDiv);
+            await JSRuntime.InvokeVoidAsync("startTime2", dateDiv);
+        }
+    }
+
+    public void Dispose()
+    {
+        JSRuntime.InvokeVoidAsync("stopTime");
     }
 }
 

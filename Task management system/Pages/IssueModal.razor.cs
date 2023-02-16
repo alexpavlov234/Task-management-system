@@ -217,6 +217,7 @@ namespace Task_management_system.Pages
                     await CallbackAfterSubmit.InvokeAsync();
                     toast.sfSuccessToast.Title = "Успешно приложени промени!";
                     toast.sfSuccessToast.ShowAsync();
+                    issue = IssueService.GetIssueById(issue.IssueId);
                     await subtasksGrid.Refresh();
 
                 }
