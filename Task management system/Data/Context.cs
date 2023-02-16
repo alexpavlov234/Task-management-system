@@ -18,8 +18,7 @@ namespace Task_management_system.Data
         {
             modelBuilder.Entity<Project>().HasIndex(b => b.ProjectName)
             .IsUnique();
-            modelBuilder.Entity<Issue>().HasIndex(b => b.Subject).IsUnique();
-            modelBuilder.Entity<Issue>()
+             modelBuilder.Entity<Issue>()
                 .HasOne(i => i.Project)
                 .WithMany(p => p.Issues)
                 .HasForeignKey(i => i.ProjectId)

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -262,12 +263,13 @@ namespace Task_management_system.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AssigneeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AssignedТoId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Subject = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProjectId = table.Column<int>(type: "int", nullable: false),
+                    Priority = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsAllDay = table.Column<bool>(type: "bit", nullable: false),
                     RecurrenceRule = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -382,12 +384,6 @@ namespace Task_management_system.Migrations
                 name: "IX_Issue_ProjectId",
                 table: "Issue",
                 column: "ProjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Issue_Subject",
-                table: "Issue",
-                column: "Subject",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_KeyValue_IdKeyType",

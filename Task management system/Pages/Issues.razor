@@ -51,134 +51,151 @@
     </div>
 
     <div class="m-3">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="@tabsClasses[0]" @onclick="() => ChangeTab(1)">Задачи</a>
+            </li>
+            <li class="nav-item">
+                <a class="@tabsClasses[1]" @onclick="() => ChangeTab(2)">Kanban</a>
+            </li>
 
-        <div class="row m-0">
-            <div class="col-sm-12">
+        </ul>
 
-                <div class="project-issue-list">
+        @switch (tabId)
+        {
 
-                    @foreach (var project in projects)
-                    {
+            case 1:
 
-                        <CollapsibleCard>
-                            <CardHeader>
-                                <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; background-color: #f8f8ff">
-                                    <div style="width: 200px">
-                                        @project.ProjectName
-                                    </div>
-                                    <div class="vr"></div>
-                                    @if (project.Issues.Count() != 0)
-                                    {
-                                        <div class="progress" style="width: 220px; border-radius: 20.25rem;">
-                                            <div class="progress-bar" role="progressbar" aria-label="Завършени задачи" style="width: @((project.Issues == null ? 0 : Convert.ToDouble(project.Issues.Where(x => x.Status == "Затворена").Count()) / (project.Issues.Count()) * 100).ToString().Replace(',', '.'))%; background-color: #4f9b00" aria-valuenow="@(project.Issues == null ? 0 : (project.Issues.Where(x => x.Status == "Затворена").Count() / project.Issues.Count()) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                        <label style="color: gray">@(project.Issues == null ? 0 : project.Issues.Where(x => x.Status == "Затворена").Count())/@(project.Issues == null ? 0 : project.Issues.Count()) завършени задачи </label>
-                                    }
-                                    else
-                                    {
-                                        <label style="color: gray">Няма добавени задачи </label>
-                                    }
-                                    <div class="vr"></div>
+                <div class="row m-0">
+                    <div class="col-sm-12">
 
-                                    <div style="display: flex">
-                                        <SfTooltip Position="Position.BottomCenter" Content="Нова задача" OpensOn="Hover">
-                                            <button type="button" class="btn btn-outline-primary waves-effect md-trigger m-1" @onclick="(() => AddIssueToProject(project))">
-                                                <i class="fa-solid fa-plus"></i>
-                                            </button>
-                                        </SfTooltip>
-                                    </div>
+                        <div class="project-issue-list">
 
-                                </li>
-                            </CardHeader>
+                            @foreach (var project in projects)
+                            {
 
-                            <CardBody>
-                                @if (project.Issues != null)
-                                {
-                                    @if (project.Issues.Count() != 0)
-                                    {
-                                        @foreach (var issue in project.Issues)
+                                <CollapsibleCard>
+                                    <CardHeader>
+                                        <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; background-color: #f8f8ff">
+                                            <div style="width: 200px">
+                                                @project.ProjectName
+                                            </div>
+                                            <div class="vr"></div>
+                                            @if (project.Issues.Count() != 0)
+                                            {
+                                                <div class="progress" style="width: 220px; border-radius: 20.25rem;">
+                                                    <div class="progress-bar" role="progressbar" aria-label="Завършени задачи" style="width: @((project.Issues == null ? 0 : Convert.ToDouble(project.Issues.Where(x => x.Status == "Затворена").Count()) / (project.Issues.Count()) * 100).ToString().Replace(',', '.'))%; background-color: #4f9b00" aria-valuenow="@(project.Issues == null ? 0 : (project.Issues.Where(x => x.Status == "Затворена").Count() / project.Issues.Count()) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                                <label style="color: gray">@(project.Issues == null ? 0 : project.Issues.Where(x => x.Status == "Затворена").Count())/@(project.Issues == null ? 0 : project.Issues.Count()) завършени задачи </label>
+                                            }
+                                            else
+                                            {
+                                                <label style="color: gray">Няма добавени задачи </label>
+                                            }
+                                            <div class="vr"></div>
+
+                                            <div style="display: flex">
+                                                <SfTooltip Position="Position.BottomCenter" Content="Нова задача" OpensOn="Hover">
+                                                    <button type="button" class="btn btn-outline-primary waves-effect md-trigger m-1" @onclick="(() => AddIssueToProject(project))">
+                                                        <i class="fa-solid fa-plus"></i>
+                                                    </button>
+                                                </SfTooltip>
+                                            </div>
+
+                                        </li>
+                                    </CardHeader>
+
+                                    <CardBody>
+                                        @if (project.Issues != null)
                                         {
-
-                                            <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
-                                                <div style="width: 205px">
-                                                    @issue.Subject
-                                                </div>
-                                                <div class="vr"></div>
-                                                @if (issue.Subtasks != null)
+                                            @if (project.Issues.Count() != 0)
+                                            {
+                                                @foreach (var issue in project.Issues)
                                                 {
-                                                    @if (issue.Subtasks.Count() != 0)
-                                                    {
-                                                        <div class="progress" style="width: 220px; border-radius: 20.25rem;">
-                                                            <div class="progress-bar" role="progressbarsubtasks" aria-label="Завършени подзадачи" style="width: @((issue.Subtasks == null ? 0 : Convert.ToDouble(issue.Subtasks.Where(x => x.Status == "Затворена").Count()) / (issue.Subtasks.Count()) * 100).ToString().Replace(',', '.'))%; background-color: #4f9b00" aria-valuenow="@(issue.Subtasks == null ? 0 : (issue.Subtasks.Where(x => x.Status == "Затворена").Count() / issue.Subtasks.Count()) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
+
+                                                    <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
+                                                        <div style="width: 205px">
+                                                            @issue.Subject
                                                         </div>
-                                                        <label style="color: gray">@(issue.Subtasks == null ? 0 : (issue.Subtasks.Count() == 0 ? 0 : issue.Subtasks.Where(x => x.Status == "Затворена").Count()))/@(issue.Subtasks == null ? 0 : issue.Subtasks.ToArray().Length) завършени подзадачи </label>
-                                                    }
-                                                    else
-                                                    {
-                                                        <label style="color: gray">Няма добавени подзадачи </label>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <label style="color: gray">Няма добавени подзадачи </label>
-                                                }
-                                                <div class="vr"></div>
+                                                        <div class="vr"></div>
+                                                        @if (issue.Subtasks != null)
+                                                        {
+                                                            @if (issue.Subtasks.Count() != 0)
+                                                            {
+                                                                <div class="progress" style="width: 220px; border-radius: 20.25rem;">
+                                                                    <div class="progress-bar" role="progressbarsubtasks" aria-label="Завършени подзадачи" style="width: @((issue.Subtasks == null ? 0 : Convert.ToDouble(issue.Subtasks.Where(x => x.Status == "Затворена").Count()) / (issue.Subtasks.Count()) * 100).ToString().Replace(',', '.'))%; background-color: #4f9b00" aria-valuenow="@(issue.Subtasks == null ? 0 : (issue.Subtasks.Where(x => x.Status == "Затворена").Count() / issue.Subtasks.Count()) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                </div>
+                                                                <label style="color: gray">@(issue.Subtasks == null ? 0 : (issue.Subtasks.Count() == 0 ? 0 : issue.Subtasks.Where(x => x.Status == "Затворена").Count()))/@(issue.Subtasks == null ? 0 : issue.Subtasks.ToArray().Length) завършени подзадачи </label>
+                                                            }
+                                                            else
+                                                            {
+                                                                <label style="color: gray">Няма добавени подзадачи </label>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <label style="color: gray">Няма добавени подзадачи </label>
+                                                        }
+                                                        <div class="vr"></div>
 
-                                                <div style="display: flex">
-                                                    <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
-                                                        <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditIssue(issue))">
-                                                            <i class="fa-solid fa-pen-to-square"></i>
-                                                        </button>
-                                                    </SfTooltip>
-                                                    <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteIssue(issue))">
-                                                            <i class="fa-solid fa-trash"></i>
-                                                        </button>
-                                                    </SfTooltip>
-                                                </div>
+                                                        <div style="display: flex">
+                                                            <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
+                                                                <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditIssue(issue))">
+                                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                                </button>
+                                                            </SfTooltip>
+                                                            <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                                                <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteIssue(issue))">
+                                                                    <i class="fa-solid fa-trash"></i>
+                                                                </button>
+                                                            </SfTooltip>
+                                                        </div>
 
+                                                    </li>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <li class="list-group-item rounded d-flex align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px; text-align: center;">
+                                                    <label style="color: gray">Няма задачи в този проект!</label>
+                                                </li>
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li class="list-group-item rounded d-flex align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px; text-align: center;">
+                                                <label style="color: gray">Няма задачи в този проект!</label>
                                             </li>
                                         }
-                                    }
-                                    else
-                                    {
-                                        <li class="list-group-item rounded d-flex align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px; text-align: center;">
-                                            <label style="color: gray">Няма задачи в този проект!</label>
-                                        </li>
+                                    </CardBody>
+                                </CollapsibleCard>
 
-                                    }
-                                }
-                                else
-                                {
-                                    <li class="list-group-item rounded d-flex align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px; text-align: center;">
-                                        <label style="color: gray">Няма задачи в този проект!</label>
-                                    </li>
-                                }
-                            </CardBody>
-                        </CollapsibleCard>
+                            }
 
-                    }
-
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+                break;
+            case 2:
 
-
-        <SfKanban @ref="sfKanban" TValue="Issue" KeyField="Status" DataSource="@issues" AllowDragAndDrop="true">
-            <KanbanColumns>
-                <KanbanColumn HeaderText="Нова" KeyField="@(new List<string>() {"Нова"})"></KanbanColumn>
-                <KanbanColumn HeaderText="В изпълнение" KeyField="@(new List<string>() {"В изпълнение"})"></KanbanColumn>
-                <KanbanColumn HeaderText="За тестване" KeyField="@(new List<string>() {"За тестване"})"></KanbanColumn>
-                <KanbanColumn HeaderText="Върната за корекция" KeyField="@(new List<string>() {"Върната за корекция"})"></KanbanColumn>
-                <KanbanColumn HeaderText="Затворена" KeyField="@(new List<string>() {"Затворена"})"></KanbanColumn>
-            </KanbanColumns>
-            <KanbanEvents TValue="Issue" ActionComplete="@ActionCompleteHandler"></KanbanEvents>
-            <KanbanCardSettings HeaderField="Subject" ContentField="Description"></KanbanCardSettings>
-        </SfKanban>
-
-
+                <SfKanban @ref="sfKanban" TValue="Issue" KeyField="Status" DataSource="@issues" AllowDragAndDrop="true">
+                    <KanbanColumns>
+                        <KanbanColumn HeaderText="Нова" KeyField="@(new List<string>() {"Нова"})"></KanbanColumn>
+                        <KanbanColumn HeaderText="В изпълнение" KeyField="@(new List<string>() {"В изпълнение"})"></KanbanColumn>
+                        <KanbanColumn HeaderText="За тестване" KeyField="@(new List<string>() {"За тестване"})"></KanbanColumn>
+                        <KanbanColumn HeaderText="Върната за корекция" KeyField="@(new List<string>() {"Върната за корекция"})"></KanbanColumn>
+                        <KanbanColumn HeaderText="Затворена" KeyField="@(new List<string>() {"Затворена"})"></KanbanColumn>
+                    </KanbanColumns>
+                    <KanbanEvents TValue="Issue" ActionComplete="@ActionCompleteHandler"></KanbanEvents>
+                    <KanbanCardSettings HeaderField="Subject" ContentField="Description"></KanbanCardSettings>
+                </SfKanban>
+                break;
+        }
     </div>
 </div>
+
+
 
 
 
@@ -194,11 +211,30 @@
     private List<Issue> issues { get; set; }
     private SfKanban<Issue> sfKanban { get; set; }
     private IssueModal taskModal = new IssueModal();
-
+    private int tabId;
     private ToastMsg toast = new ToastMsg();
+    string[] tabsClasses = new string[2];
 
+    private void ChangeTab(int index)
+    {
+        switch (index)
+        {
+            case 1:
+                tabsClasses[0] = "nav-link active";
+                tabsClasses[1] = "nav-link";
+                tabId = 1; break;
+            case 2:
+                tabsClasses[1] = "nav-link active";
+                tabsClasses[0] = "nav-link";
+                tabId = 2; break;
+        }
+
+    }
     protected async override Task OnInitializedAsync()
     {
+        tabsClasses[0] = "nav-link active";
+        tabsClasses[1] = "nav-link";
+        tabId = 1;
         projects = projectService.GetAllProjects();
         issues = IssueService.GetAllIssues();
 
@@ -231,19 +267,23 @@
         }
         else
         {
-            taskModal.OpenDialog(new Issue { Status = "Нова", Assignee = await userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0 });
+            taskModal.OpenDialog(new Issue { Status = "Нова", Assignee = await userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Priority = "Нормален" });
         }
     }
     private async Task AddIssueToProject(Project project)
     {
-        taskModal.OpenDialog(new Issue { Status = "Нова", Project = project, ProjectId = project.ProjectId, Assignee = await userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0 });
+        taskModal.OpenDialog(new Issue { Status = "Нова", Project = project, ProjectId = project.ProjectId, Assignee = await userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Priority = "Нормален" });
     }
     private async Task UpdateAfterIssueModalSubmitAsync()
     {
 
         projects = projectService.GetAllProjects();
         issues = IssueService.GetAllIssues();
-        await sfKanban.RefreshAsync();
+        if (tabId == 2)
+        {
+            await sfKanban.RefreshAsync();
+        }
+
         this.StateHasChanged();
     }
     private async Task DeleteIssue(Issue issue)
@@ -255,7 +295,10 @@
             toast.sfSuccessToast.Title = result;
             toast.sfSuccessToast.ShowAsync();
 
-
+            projects = projectService.GetAllProjects();
+            issues = IssueService.GetAllIssues();
+            await sfKanban.RefreshAsync();
+            this.StateHasChanged();
         }
         else
         {

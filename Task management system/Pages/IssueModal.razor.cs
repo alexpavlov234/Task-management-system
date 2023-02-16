@@ -16,9 +16,11 @@ namespace Task_management_system.Pages
         private Issue issue = new Issue();
         private string statusLineColor = "";
         private SfDropDownList<string, KeyValue> statusDropDownList = new SfDropDownList<string, KeyValue>();
+        private SfDropDownList<string, KeyValue> priorityDropDownList = new SfDropDownList<string, KeyValue>();
         public string? issueAssignedToUserName { get; set; }
         //public string? issueProjectName { get; set; }
         private List<KeyValue> statuses = new List<KeyValue>();
+        private List<KeyValue> priorities = new List<KeyValue>();
         private SfGrid<Subtask> subtasksGrid = new SfGrid<Subtask>();
         private List<Project> projects { get; set; }
         private bool IsIssueNew = true;
@@ -96,6 +98,7 @@ namespace Task_management_system.Pages
         {
             IsIssueNew = IssueService.GetIssueById(issue.IssueId) == null;
             statuses = new List<KeyValue>();
+            priorities = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
             this.issue = issue;
             if (issue.AssignedТo != null)
             {

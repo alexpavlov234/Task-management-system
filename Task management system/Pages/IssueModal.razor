@@ -41,6 +41,7 @@
                 <InputText id="issueName" @bind-Value="issue.Subject" class="form-control my-4" placeholder="Име" style="font-size: 36px"></InputText>
                 <ValidationMessage For="@(() => issue.Subject)" />
                 <div class="row">
+                    <!-- Column 1 -->
                     <div class="col-md-6">
                         <div class="p-3 col-md-12" style="border: 1px solid lightgray; border-radius: 5px">
                             <div class="row py-1">
@@ -56,15 +57,24 @@
 
                                 </div>
 
-                                <div />
+                            </div>
+                            <div class="row py-1">
+                                <div class="col-md-3 d-flex align-items-center">
+                                    <i class="fa-solid fa-circle-exclamation" style="color: dimgray"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Приоритет</b></span> &nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <div class="col-md-9 d-flex align-items-center">
 
+                                    <SfDropDownList @ref="priorityDropDownList" ID="priority" TValue="string" Enabled="true" TItem="KeyValue" @bind-Value="issue.Priority" PopupHeight="350px" PopupWidth="350px" DataSource="@priorities">
+                                        <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
+                                    </SfDropDownList>
 
+                                </div>
 
                             </div>
-
                         </div>
-                        <ValidationMessage For="@(() => issue.Status)" />
+                        <ValidationMessage For="@(() => issue.Priority)"/>
                     </div>
+                    <!-- Column 2 -->
                     <div class="col-md-6">
                         <div class="p-3 col-md-12" style="border: 1px solid lightgray; border-radius: 5px">
                             <div class="row py-1">
@@ -78,8 +88,6 @@
                                     </SfDropDownList>
                                 </div>
 
-                                <div />
-
 
 
                             </div>
@@ -89,12 +97,12 @@
                                 </div>
                                 <div class="col-md-9 d-flex align-items-center">
                                     <SfDateRangePicker ID="datepicker" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@issue.StartTime" @bind-EndDate="@issue.EndTime" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
-                                    <ValidationMessage For="@(() => issue.EndTime)" />
-                                    <ValidationMessage For="@(() => issue.StartTime)" />
+                                    <ValidationMessage For="@(() => issue.EndTime)"/>
+                                    <ValidationMessage For="@(() => issue.StartTime)"/>
                                 </div>
                             </div>
                         </div>
-                        <ValidationMessage For="@(() => issue.Project)" />
+                        <ValidationMessage For="@(() => issue.Project)"/>
                     </div>
                 </div>
                 <label for="description">Описание на задача</label>

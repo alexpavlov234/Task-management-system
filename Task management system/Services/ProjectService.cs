@@ -52,7 +52,7 @@ public class ProjectService : Controller, IProjectService
             ApplicationUser? projectOwner = _context.Users.FirstOrDefault(u => u.Id == project.ProjectOwner.Id);
 
             project.ProjectOwner = projectOwner;
-
+            project.ProjectName = project.ProjectName.Trim();
             _context.Entry(project).State = EntityState.Added;
             _context.Projects.Add(project);
 
@@ -160,7 +160,15 @@ public class ProjectService : Controller, IProjectService
             foreach (ApplicationUserProject participant in projectParticipants)
             {
                 ApplicationUser participantUser = _context.Users.Where(x => x.Id == participant.UserId).First();
-                _context.Add(new ApplicationUserProject { User = participantUser, Project = project });
+                var applicationUserProject = new ApplicationUserProject { User = participantUser, Project = project };
+                ApplicationUserProject? localApplicationUserProject = _context.Set<ApplicationUserProject>().Local.FirstOrDefault(entry => entry.ProjectId.Equals(applicationUserProject.Project.ProjectId) && entry.UserId.Equals(applicationUserProject.User.Id));
+                if (localApplicationUserProject != null)
+                {
+                    // detach
+                    _context.Entry(applicationUserProject).State = EntityState.Detached;
+                }
+                _context.Entry(applicationUserProject).State = EntityState.Added;
+                
             }
 
 

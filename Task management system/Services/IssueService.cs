@@ -38,7 +38,7 @@ public class IssueService : Controller, IIssueService
             issue.AssignedТo = assignedTo;
             ApplicationUser? assignee = _context.Users.FirstOrDefault(u => u.Id == issue.Assignee.Id);
             issue.Assignee = assignee;
-
+            issue.Subject = issue.Subject.Trim();
             Project? project = _context.Projects.FirstOrDefault(p => p.ProjectId == issue.ProjectId);
             if (project == null)
             {

@@ -7,7 +7,6 @@ namespace Task_management_system.Models
 {
     [Table("Issue")]
     [Display(Name = "Задача")]
-    [Index(nameof(Subject), IsUnique = true)]
     public class Issue
     {
         [Key]
@@ -34,8 +33,12 @@ namespace Task_management_system.Models
         public DateTime EndTime { get; set; }
         [Required(ErrorMessage = "Полето 'Проект' е задължително!")]
         public int ProjectId { get; set; }
+
+        [Required(ErrorMessage = "Полето 'Приоритет' е задължително!")]
+        public string Priority { get; set; }
         public Project Project { get; set; }
 
+        
         public string Description { get; set; }
         public bool IsAllDay { get; set; }
         public string RecurrenceRule { get; set; }

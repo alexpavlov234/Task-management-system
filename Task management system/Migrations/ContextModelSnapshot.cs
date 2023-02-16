@@ -277,6 +277,10 @@ namespace Task_management_system.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
@@ -300,7 +304,7 @@ namespace Task_management_system.Migrations
 
                     b.Property<string>("Subject")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IssueId");
 
@@ -309,9 +313,6 @@ namespace Task_management_system.Migrations
                     b.HasIndex("AssigneeId");
 
                     b.HasIndex("ProjectId");
-
-                    b.HasIndex("Subject")
-                        .IsUnique();
 
                     b.ToTable("Issue");
                 });

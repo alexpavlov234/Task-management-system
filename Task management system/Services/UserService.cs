@@ -112,7 +112,6 @@ public class UserService : Controller, IUserService
             _context.Entry(local).State = EntityState.Detached;
         }
         ApplicationUser user = _context.Users.Where(x => x.UserName == Username).AsNoTracking().FirstOrDefault();// await _userManager.FindByNameAsync(Username);
-        _context.SaveChanges();
         return user;
     }
 
@@ -204,12 +203,12 @@ public class UserService : Controller, IUserService
     public async Task<ApplicationUser> ToExistingApplicationUser(InputModel inputModel)
     {
         ApplicationUser applicationUser = await GetApplicationUserByIdAsync(inputModel.Id);
-        applicationUser.PhoneNumber = inputModel.PhoneNumber;
-        applicationUser.FirstName = inputModel.FirstName;
-        applicationUser.LastName = inputModel.LastName;
-        applicationUser.UserName = inputModel.Username;
-        applicationUser.Email = inputModel.Email;
-        applicationUser.Role = inputModel.Role;
+        applicationUser.PhoneNumber = inputModel.PhoneNumber.Trim();
+        applicationUser.FirstName = inputModel.FirstName.Trim();
+        applicationUser.LastName = inputModel.LastName.Trim();
+        applicationUser.UserName = inputModel.Username.Trim();
+        applicationUser.Email = inputModel.Email.Trim();
+        applicationUser.Role = inputModel.Role.Trim();
         return applicationUser;
     }
 
