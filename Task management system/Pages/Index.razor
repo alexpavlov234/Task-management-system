@@ -44,9 +44,14 @@ else
 
                         <div class="row">
                             <div class="col-sm-6 middle-align">
-                                <p class="weather-city">София</p>
-                                <p class="weather-temp">@((int)response.Temperature.Metric.Value + "°" + response.Temperature.Metric.Unit)</p>
-                                <p class="weather-info">@response.WeatherText</p>
+                                <div class="row">
+                                    <p class="weather-city">София</p>
+                                </div>
+                                <div class="row">
+                                    <p class="weather-temp">@((int)response.Temperature.Metric.Value + "°" + response.Temperature.Metric.Unit)</p>
+                                </div><div class="row">
+                                    <p class="weather-info">@response.WeatherText</p>
+                                </div>
                             </div>
                             <div class="col-sm-6 middle-align">
                                 <img class="weather-icon" src="@image" alt="Banner">
@@ -97,7 +102,7 @@ else
                             <div>
                                 <p @ref="timeDiv" class="weather-temp"></p>
                             </div><div>
-                                <p @ref="dateDiv"class="weather-info"></p>
+                                <p @ref="dateDiv" class="weather-info"></p>
                             </div>
                         </div>
 
