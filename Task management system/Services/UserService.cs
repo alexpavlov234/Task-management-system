@@ -148,22 +148,31 @@ public class UserService : Controller, IUserService
     }
 
 
-    public async Task<ApplicationUser> GetLoggedUser()
+    public ApplicationUser GetLoggedUser()
     {
         _context.DetachAllEntities();
         using (Context context = _context.Clone())
         {
-            return await context.Users.SingleOrDefaultAsync(x => x.UserName == _httpContextAccessor.HttpContext.User.Identity.Name);
-        }
+            context.DetachAllEntities();
+            var user = context.Users.SingleOrDefault(x => x.UserName == _httpContextAccessor.HttpContext.User.Identity.Name);
 
+            return user;
+        }
+        
     }
 
 
 
 
-    public async Task<bool> IsLoggedUserAdmin()
+    public bool IsLoggedUserAdmin()
     {
-        return await _userManager.IsInRoleAsync(await GetLoggedUser(), "Admin");
+        
+
+            return _httpContextAccessor.HttpContext.User.IsInRole("Admin");
+
+
+
+
     }
 
     public async void Login(string username, string password, bool rememberMe)

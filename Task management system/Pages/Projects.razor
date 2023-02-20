@@ -16,9 +16,10 @@
 @inject RoleManager<IdentityRole> roleManager
 @inject UserManager<ApplicationUser> userManager
 @inject SignInManager<ApplicationUser> signInManager
+@inject IUserService userService
 @inject IKeyValueService keyValueService
 @inject IProjectService projectService
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Roles = "Admin,User")]
 
 <div class="content-wrapper">
 
@@ -30,20 +31,23 @@
                 <img class="banner" src="img/iStock-1203930843.jpg" alt="Banner">
                 <div class="bottom-left">
 
-                    <h3>Проекти</h3>
-                    <nav class="navbar navbar-expand">
-                        <!-- Left navbar links -->
-                        <ul class="navbar-nav float">
-                            <li class="nav-item d-none d-sm-inline-block">
-                                <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddNewProjectClickHandler">Нов проект</button>
+                    <h3>Проекти</h3> @if (isLoggedUserAdmin)
+                    {
+                        <nav class="navbar navbar-expand">
+                            <!-- Left navbar links -->
+                            <ul class="navbar-nav float">
+                                <li class="nav-item d-none d-sm-inline-block">
+
+                                    <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddNewProjectClickHandler">Нов проект</button>
 
 
-                            </li>
-                            <li class="nav-item d-none d-sm-inline-block">
-                                &nbsp;
-                            </li>
-                        </ul>
-                    </nav>
+                                </li>
+                                <li class="nav-item d-none d-sm-inline-block">
+                                    &nbsp;
+                                </li>
+                            </ul>
+                        </nav>
+                    }
                 </div>
             </div>
 
@@ -108,11 +112,14 @@
                                                                         <i class="fa-solid fa-pen-to-square"></i>
                                                                     </button>
                                                                 </SfTooltip>
-                                                                <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                                                                    <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
-                                                                        <i class="fa-solid fa-trash"></i>
-                                                                    </button>
-                                                                </SfTooltip>
+                                                                @if (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)
+                                                                {
+                                                                    <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
+                                                                            <i class="fa-solid fa-trash"></i>
+                                                                        </button>
+                                                                    </SfTooltip>
+                                                                }
                                                             </div>
                                                         </div>
                                                     </li>
@@ -181,16 +188,21 @@
 
                                                         <div>
                                                             <div style="display: flex">
+
                                                                 <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
                                                                     <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditProject(project))">
                                                                         <i class="fa-solid fa-pen-to-square"></i>
                                                                     </button>
                                                                 </SfTooltip>
-                                                                <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                                                                    <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
-                                                                        <i class="fa-solid fa-trash"></i>
-                                                                    </button>
-                                                                </SfTooltip>
+
+                                                                @if (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)
+                                                                {
+                                                                    <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
+                                                                            <i class="fa-solid fa-trash"></i>
+                                                                        </button>
+                                                                    </SfTooltip>
+                                                                }
                                                             </div>
                                                         </div>
                                                     </li>
@@ -228,27 +240,49 @@
     private ProjectModal projectModal = new ProjectModal();
     private ToastMsg toast = new ToastMsg();
 
+    bool isLoggedUserAdmin = false;
+    private ApplicationUser loggedUser { get; set; }
     [Parameter]
     public bool ShowHeader { get; set; } = true;
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
-        projects = projectService.GetAllProjects();
+        loggedUser = userService.GetLoggedUser();
+        isLoggedUserAdmin = userService.IsLoggedUserAdmin();
+
+        if (isLoggedUserAdmin)
+        {
+            projects = projectService.GetAllProjects();
+        }
+        else
+        {
+            projects = projectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
+                                                                  || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
+        }
 
     }
-    private async Task AddNewProjectClickHandler()
+    private void AddNewProjectClickHandler()
     {
-
         projectModal.OpenDialog(new Project { StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(1), ProjectParticipants = new List<ApplicationUserProject>() });
+
     }
-    private async Task UpdateAfterManagementModalSubmitAsync()
+    private void UpdateAfterManagementModalSubmitAsync()
     {
         projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
-        projects = projectService.GetAllProjects();
+        if (isLoggedUserAdmin)
+        {
+            projects = projectService.GetAllProjects();
+        }
+        else
+        {
+            projects = projectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
+                                                                  || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
+        }
         this.StateHasChanged();
+
     }
-    private async Task DeleteProject(Project project)
+    private void DeleteProject(Project project)
     {
 
         var result = projectService.DeleteProject(project.ProjectId);
@@ -265,12 +299,20 @@
             toast.sfErrorToast.ShowAsync();
         }
         projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
-        projects = projectService.GetAllProjects();
+        if (isLoggedUserAdmin)
+        {
+            projects = projectService.GetAllProjects();
+        }
+        else
+        {
+            projects = projectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
+                                                                  || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
+        }
         this.StateHasChanged();
 
     }
 
-    private async Task EditProject(Project project)
+    private void EditProject(Project project)
     {
         projectModal.OpenDialog(project);
     }

@@ -60,9 +60,9 @@
     private IUserService userService { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        if (await userService.GetLoggedUser() != null)
+        if (userService.GetLoggedUser() != null)
         {
-            isAdmin = await userService.IsLoggedUserAdmin();
+            isAdmin = userService.IsLoggedUserAdmin();
         }
     }
 }

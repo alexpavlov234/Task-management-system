@@ -21,7 +21,7 @@
 @inject IKeyValueService keyValueService
 @inject IProjectService projectService
 @inject IUserService userService
-@inject IIssueService IssueService
+@inject IIssueService issueService
 @attribute [Authorize(Roles = "Admin")]
 
 <div class="content-wrapper">
@@ -57,6 +57,9 @@
             </li>
             <li class="nav-item">
                 <a class="@tabsClasses[1]" @onclick="() => ChangeTab(2)">Kanban</a>
+            </li>
+            <li class="nav-item">
+                <a class="@tabsClasses[2]" @onclick="() => ChangeTab(3)">Изглед по приоритет</a>
             </li>
 
         </ul>
@@ -191,6 +194,101 @@
                     <KanbanCardSettings HeaderField="Subject" ContentField="Description"></KanbanCardSettings>
                 </SfKanban>
                 break;
+                case 3:
+                    <div class="m-3">
+                <div class="row m-0">
+                    <div class="col-sm-12">
+
+                        <div class="project-issue-list">
+
+                            @foreach (var priorityType in priorityTypes)
+                            {
+                                <CollapsibleCard>
+                                    <CardHeader>
+                                        @if (priorityType.Name == "Висок")
+                                        {
+                                            <div class="e-message e-error p-2" style="font-size: 20px">@priorityType.Name</div>
+
+                                        }
+                                        else if (priorityType.Name == "Нормален")
+                                        {
+                                            <div class="e-message e-warning p-2" style="font-size: 20px">@priorityType.Name</div>
+
+                                        }
+                                        else
+                                        {
+                                            <div class="e-message e-primary p-2" style="font-size: 20px">@priorityType.Name</div>
+
+                                        }
+                                    </CardHeader>
+                                    <CardBody>
+                                        <ul class="list-group">
+                                            @{
+                                                var hasItems = false;
+                                            }
+                                            @foreach (var issue in issues)
+                                            {
+                                                @if (issue.Priority == priorityType.Name)
+                                                {
+                                                    hasItems = true;
+                                                        <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
+                                                            <div style="width: 205px">
+                                                                @issue.Subject
+                                                            </div>
+                                                            <div class="vr"></div>
+                                                            @if (issue.Subtasks != null)
+                                                            {
+                                                                @if (issue.Subtasks.Count() != 0)
+                                                                {
+                                                                    <div class="progress" style="width: 220px; border-radius: 20.25rem;">
+                                                                        <div class="progress-bar" role="progressbarsubtasks" aria-label="Завършени подзадачи" style="width: @((issue.Subtasks == null ? 0 : Convert.ToDouble(issue.Subtasks.Where(x => x.Status == "Затворена").Count()) / (issue.Subtasks.Count()) * 100).ToString().Replace(',', '.'))%; background-color: #4f9b00" aria-valuenow="@(issue.Subtasks == null ? 0 : (issue.Subtasks.Where(x => x.Status == "Затворена").Count() / issue.Subtasks.Count()) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                    </div>
+                                                                    <label style="color: gray">@(issue.Subtasks == null ? 0 : (issue.Subtasks.Count() == 0 ? 0 : issue.Subtasks.Where(x => x.Status == "Затворена").Count()))/@(issue.Subtasks == null ? 0 : issue.Subtasks.ToArray().Length) завършени подзадачи </label>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label style="color: gray">Няма добавени подзадачи </label>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <label style="color: gray">Няма добавени подзадачи </label>
+                                                            }
+                                                            <div class="vr"></div>
+
+                                                            <div style="display: flex">
+                                                                <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
+                                                                    <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditIssue(issue))">
+                                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                                                    </button>
+                                                                </SfTooltip>
+                                                                <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                                                    <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteIssue(issue))">
+                                                                        <i class="fa-solid fa-trash"></i>
+                                                                    </button>
+                                                                </SfTooltip>
+                                                            </div>
+
+                                                        </li>
+                                                }
+                                            }
+                                            @if (!hasItems)
+                                            {
+                                                <div class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
+                                                    <label style="color: gray">Няма задачи с такъв приоритет!</label>
+                                                </div>
+                                            }
+                                        </ul>
+                                    </CardBody>
+                                </CollapsibleCard>
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    break;
         }
     </div>
 </div>
@@ -209,11 +307,12 @@
 
     private List<Project> projects { get; set; }
     private List<Issue> issues { get; set; }
+    private List<KeyValue> priorityTypes { get; set; }
     private SfKanban<Issue> sfKanban { get; set; }
     private IssueModal taskModal = new IssueModal();
     private int tabId;
     private ToastMsg toast = new ToastMsg();
-    string[] tabsClasses = new string[2];
+    string[] tabsClasses = new string[3];
 
     private void ChangeTab(int index)
     {
@@ -222,31 +321,40 @@
             case 1:
                 tabsClasses[0] = "nav-link active";
                 tabsClasses[1] = "nav-link";
+                tabsClasses[2] = "nav-link";
                 tabId = 1; break;
             case 2:
                 tabsClasses[1] = "nav-link active";
                 tabsClasses[0] = "nav-link";
+                tabsClasses[2] = "nav-link";
                 tabId = 2; break;
+            case 3:
+                tabsClasses[2] = "nav-link active";
+                tabsClasses[0] = "nav-link";
+                tabsClasses[1] = "nav-link";
+                tabId = 3; break;
         }
 
     }
-    protected async override Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
         tabsClasses[0] = "nav-link active";
         tabsClasses[1] = "nav-link";
+        tabsClasses[2] = "nav-link";
         tabId = 1;
         projects = projectService.GetAllProjects();
-        issues = IssueService.GetAllIssues();
-
+        issues = issueService.GetAllIssues();
+        priorityTypes = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
+        return Task.CompletedTask;
     }
     public async void ActionCompleteHandler(Syncfusion.Blazor.Kanban.ActionEventArgs<Issue> args)
     {
-        var result = IssueService.UpdateIssue(args.ChangedRecords.FirstOrDefault());
+        var result = issueService.UpdateIssue(args.ChangedRecords.FirstOrDefault());
         if (result.StartsWith("Успешно"))
         {
             toast.sfSuccessToast.Title = result;
             toast.sfSuccessToast.ShowAsync();
-            issues = IssueService.GetAllIssues();
+            issues = issueService.GetAllIssues();
             projects = projectService.GetAllProjects();
             await sfKanban.RefreshAsync();
             this.StateHasChanged();
@@ -267,18 +375,18 @@
         }
         else
         {
-            taskModal.OpenDialog(new Issue { Status = "Нова", Assignee = await userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Priority = "Нормален" });
+            taskModal.OpenDialog(new Issue { Status = "Нова", Assignee = userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Priority = "Нормален" });
         }
     }
     private async Task AddIssueToProject(Project project)
     {
-        taskModal.OpenDialog(new Issue { Status = "Нова", Project = project, ProjectId = project.ProjectId, Assignee = await userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Priority = "Нормален" });
+        taskModal.OpenDialog(new Issue { Status = "Нова", Project = project, ProjectId = project.ProjectId, Assignee = userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Priority = "Нормален" });
     }
     private async Task UpdateAfterIssueModalSubmitAsync()
     {
 
         projects = projectService.GetAllProjects();
-        issues = IssueService.GetAllIssues();
+        issues = issueService.GetAllIssues();
         if (tabId == 2)
         {
             await sfKanban.RefreshAsync();
@@ -289,14 +397,14 @@
     private async Task DeleteIssue(Issue issue)
     {
 
-        var result = IssueService.DeleteIssue(issue);
+        var result = issueService.DeleteIssue(issue);
         if (result.StartsWith("Успешно"))
         {
             toast.sfSuccessToast.Title = result;
             toast.sfSuccessToast.ShowAsync();
 
             projects = projectService.GetAllProjects();
-            issues = IssueService.GetAllIssues();
+            issues = issueService.GetAllIssues();
             if (tabId == 2)
             {
                 await sfKanban.RefreshAsync();
@@ -314,10 +422,11 @@
 
     }
 
-    private async Task EditIssue(Issue issue)
+    private Task EditIssue(Issue issue)
     {
         taskModal.OpenDialog(issue);
-        //  managementModal.OpenDialog(applicationUser);
+        return Task.CompletedTask;
+    //  managementModal.OpenDialog(applicationUser);
     }
 
 }

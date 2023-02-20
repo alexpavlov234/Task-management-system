@@ -172,9 +172,9 @@ else
     {
         //aTimer = new Timer(Tick, null, 0, 1000);
         issues = IssueService.GetAllIssues();
-        if (await userService.GetLoggedUser() != null)
+        if (userService.GetLoggedUser() != null)
         {
-            var user = await userService.GetLoggedUser();
+            var user = userService.GetLoggedUser();
             userFullName = user.FirstName + " " + user.LastName;
         }
         //CurrentConditions currentConditions = new CurrentConditions("bXyjKZghQjnIwBB2WKEHdNsVyZdaJECK", "bg-bg");

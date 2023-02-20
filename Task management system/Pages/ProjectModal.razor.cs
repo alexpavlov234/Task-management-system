@@ -18,6 +18,8 @@ namespace Task_management_system.Pages
         private DateTime MinDate = new DateTime(1900, 1, 1);
         private ToastMsg toast = new ToastMsg();
 
+        bool isLoggedUserAdmin = false;
+        private ApplicationUser loggedUser { get; set; }
         private SfMultiSelect<ApplicationUser[], ApplicationUser> projectParticipantsSfMultiSelect { get; set; } =
             new SfMultiSelect<ApplicationUser[], ApplicationUser>();
         private List<KeyValue> projectTypes { get; set; }
@@ -47,7 +49,8 @@ namespace Task_management_system.Pages
 
         {
             projectParticipants = null;
-
+            loggedUser = UserService.GetLoggedUser();
+            isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
             this.project = new Project() { ProjectId = project.ProjectId, ProjectParticipants = project.ProjectParticipants, Issues = project.Issues, ProjectOwner = project.ProjectOwner, ProjectTypeId = project.ProjectTypeId, EndDate = project.EndDate, ProjectDescription = project.ProjectDescription, ProjectName = project.ProjectName, ProjectType = project.ProjectType, StartDate = project.StartDate };
             // this.project = ProjectService.GetProjectById(project.ProjectId);
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");

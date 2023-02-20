@@ -9,9 +9,9 @@ public interface IUserService
     Task<ApplicationUser> GetApplicationUserByIdAsync(string Id);
     Task<ApplicationUser> GetApplicationUserByUsernameAsync(string Username);
     Task UpdateApplicationUser(ApplicationUser applicationUser);
-    Task<ApplicationUser> GetLoggedUser();
+    ApplicationUser GetLoggedUser();
 
-    Task<bool> IsLoggedUserAdmin();
+    bool IsLoggedUserAdmin();
     void Login(string username, string password, bool rememberMe);
     void Logout();
     Task AddRoleAsync(ApplicationUser user, string role);
