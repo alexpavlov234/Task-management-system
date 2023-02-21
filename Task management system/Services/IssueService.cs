@@ -34,7 +34,7 @@ public class IssueService : Controller, IIssueService
         try
         {
             _context.DetachAllEntities();
-            ApplicationUser? assignedTo = _context.Users.FirstOrDefault(u => u.Id == issue.AssignedТo.Id);
+            ApplicationUser? assignedTo = _context.Users.FirstOrDefault(u => u.Id == issue.AssignedТoId);
             issue.AssignedТo = assignedTo;
             ApplicationUser? assignee = _context.Users.FirstOrDefault(u => u.Id == issue.Assignee.Id);
             issue.Assignee = assignee;
@@ -98,13 +98,15 @@ public class IssueService : Controller, IIssueService
         try
         {
             _context.DetachAllEntities();
+            ApplicationUser? assignedTo = _context.Users.FirstOrDefault(u => u.Id == issue.AssignedТoId);
+            issue.AssignedТo = assignedTo;
+
             Issue? local = _context.Set<Issue>().Local.FirstOrDefault(entry => entry.IssueId.Equals(issue.IssueId));
             if (local != null)
             {
                 // detach
                 _context.Entry(local).State = EntityState.Detached;
             }
-
             _context.Entry(issue).State = EntityState.Modified;
             _context.SaveChanges();
             return "Успешно актуализиране на задача!";

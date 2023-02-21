@@ -588,7 +588,7 @@ namespace Task_management_system.Migrations
                     b.HasOne("Task_management_system.Areas.Identity.ApplicationUser", "AssignedТo")
                         .WithMany("AssignToUsers")
                         .HasForeignKey("AssignedТoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Task_management_system.Areas.Identity.ApplicationUser", "Assignee")

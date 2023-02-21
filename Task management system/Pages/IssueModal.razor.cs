@@ -17,7 +17,6 @@ namespace Task_management_system.Pages
         private string statusLineColor = "";
         private SfDropDownList<string, KeyValue> statusDropDownList = new SfDropDownList<string, KeyValue>();
         private SfDropDownList<string, KeyValue> priorityDropDownList = new SfDropDownList<string, KeyValue>();
-        public string? issueAssignedToUserName { get; set; }
         //public string? issueProjectName { get; set; }
         private List<KeyValue> statuses = new List<KeyValue>();
         private List<KeyValue> priorities = new List<KeyValue>();
@@ -31,6 +30,9 @@ namespace Task_management_system.Pages
         private List<KeyValue> projectTypes { get; set; }
         private List<ApplicationUser> users { get; set; }
         private ApplicationUser[] projectParticipants { get; set; }
+
+        bool isLoggedUserAdmin = false;
+        private ApplicationUser loggedUser { get; set; }
 
         [Parameter]
         public EventCallback CallbackAfterSubmit { get; set; }
@@ -47,12 +49,19 @@ namespace Task_management_system.Pages
         [Inject]
         private IIssueService IssueService { get; set; }
 
-
-        protected async override Task OnInitializedAsync()
+        private void UpdateData()
         {
-            projectTypes = keyValueService.GetAllKeyValuesByKeyType("IssueType");
-            users = UserService.GetAllUsers();
+            if (isLoggedUserAdmin)
+            {
+                projects = ProjectService.GetAllProjects();
+            }
+            else
+            {
+                projects = ProjectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
+                                                                      || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
+            }
         }
+       
         private async Task AddSubtask()
         {
             subtaskModal.OpenDialog(new Subtask { Status = "Нова", Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Issue = issue, IssueId = issue.IssueId });
@@ -100,10 +109,6 @@ namespace Task_management_system.Pages
             statuses = new List<KeyValue>();
             priorities = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
             this.issue = issue;
-            if (issue.AssignedТo != null)
-            {
-                issueAssignedToUserName = issue.AssignedТo.UserName;
-            }
             if (issue.Project != null)
             {
                 //issueProjectName = issue.Project.ProjectName;
@@ -128,8 +133,11 @@ namespace Task_management_system.Pages
                 this.issue.EndTime = DateTime.Now.AddMonths(1);
             }
             GetStatus(this.issue.Status);
-            projects = ProjectService.GetAllProjects();
-
+            isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
+            loggedUser = UserService.GetLoggedUser();
+            UpdateData();
+            projectTypes = keyValueService.GetAllKeyValuesByKeyType("IssueType");
+            users = ProjectService.GetProjectById(this.issue.ProjectId).ProjectParticipants.ToList().Select(x=> x.User).ToList();
             editContext = new EditContext(issue);
             IsVisible = true;
             StateHasChanged();
@@ -205,10 +213,7 @@ namespace Task_management_system.Pages
 
                 if (IssueService.GetIssueById(issue.IssueId) != null)
                 {
-                    if (issueAssignedToUserName != null)
-                    {
-                        issue.AssignedТo = await UserService.GetApplicationUserByUsernameAsync(issueAssignedToUserName);
-                    }
+
 
                     //issue.Project = projects.Where(x => x.ProjectName == issueProjectName).First();
                     //issue.ProjectId = issue.Project.ProjectId;
@@ -223,10 +228,6 @@ namespace Task_management_system.Pages
                 }
                 else
                 {
-                    if (issueAssignedToUserName != null)
-                    {
-                        issue.AssignedТo = await UserService.GetApplicationUserByUsernameAsync(issueAssignedToUserName);
-                    }
 
 
                     string result = IssueService.CreateIssue(issue);

@@ -125,7 +125,7 @@ namespace Task_management_system.Pages
 
             {
 
-                if (ProjectService.GetProjectById(project.ProjectId) != null)
+                if (!(project.ProjectId == 0))
                 {
                     string result = ProjectService.UpdateProject(project);
                     await CallbackAfterSubmit.InvokeAsync();

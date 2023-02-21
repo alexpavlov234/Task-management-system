@@ -15,7 +15,7 @@ namespace Task_management_system.Models
         public string AssigneeId { get; set; }
         public ApplicationUser Assignee { get; set; }
 
-
+        public string AssignedТoId { get; set; }
         public ApplicationUser AssignedТo { get; set; }
 
         [Required(ErrorMessage = "Полето 'Име' е задължително!")]

@@ -283,8 +283,7 @@ namespace Task_management_system.Migrations
                         name: "FK_Issue_AspNetUsers_AssignedТoId",
                         column: x => x.AssignedТoId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Issue_AspNetUsers_AssigneeId",
                         column: x => x.AssigneeId,

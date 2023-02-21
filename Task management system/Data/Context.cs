@@ -28,8 +28,13 @@ namespace Task_management_system.Data
                 .WithMany(u => u.AssigneeUsers)
                 .HasForeignKey(i => i.AssigneeId)
                 .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Issue>()
+                .HasOne(i => i.AssignedТo)
+                .WithMany(p => p.AssignToUsers)
+                .HasForeignKey(i => i.AssignedТoId)
+                .OnDelete(DeleteBehavior.NoAction);
             // modelBuilder.Entity<Issue>().HasOne(x => x.Assignee).WithMany(y => y.AssigneeUsers).OnDelete(DeleteBehavior.Cascade); 
-            modelBuilder.Entity<Issue>().HasOne(x => x.AssignedТo).WithMany(y => y.AssignToUsers).OnDelete(DeleteBehavior.Cascade);
+            // modelBuilder.Entity<Issue>().HasOne(x => x.AssignedТo).WithMany(y => y.AssignToUsers).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Project>().HasOne(x => x.ProjectOwner).WithMany(y => y.ProjectsOwners).OnDelete(DeleteBehavior.Cascade);
             //modelBuilder.Entity<Project>().HasMany(x => x.ProjectsParticipants).WithMany(y => y.ProjectsParticipants).UsingEntity<ApplicationUserProject>("ApplicationUserProject"); 
             //modelBuilder.Entity<ApplicationUserProject>().HasKey(sc => new { sc.ProjectId, sc.UserId});

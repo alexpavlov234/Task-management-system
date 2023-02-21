@@ -12,7 +12,7 @@ using Task_management_system.Data;
 namespace Task_management_system.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230216081519_InitialCreate")]
+    [Migration("20230221175430_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -590,7 +590,7 @@ namespace Task_management_system.Migrations
                     b.HasOne("Task_management_system.Areas.Identity.ApplicationUser", "AssignedТo")
                         .WithMany("AssignToUsers")
                         .HasForeignKey("AssignedТoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Task_management_system.Areas.Identity.ApplicationUser", "Assignee")

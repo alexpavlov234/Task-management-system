@@ -22,7 +22,7 @@
 @inject IProjectService projectService
 @inject IUserService userService
 @inject IIssueService issueService
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Roles = "Admin, User")]
 
 <div class="content-wrapper">
 
@@ -314,6 +314,24 @@
     private ToastMsg toast = new ToastMsg();
     string[] tabsClasses = new string[3];
 
+    bool isLoggedUserAdmin = false;
+    private ApplicationUser loggedUser { get; set; }
+
+    private void UpdateData()
+    {
+        if (isLoggedUserAdmin)
+        {
+            projects = projectService.GetAllProjects();
+            issues = issueService.GetAllIssues();
+        }
+        else
+        {
+            projects = projectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
+                                                                  || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
+            issues = issueService.GetAllIssues().Where(p => p.AssignedТo.Id == loggedUser.Id || p.Assignee.Id == loggedUser.Id).ToList();
+        }
+    }
+
     private void ChangeTab(int index)
     {
         switch (index)
@@ -342,8 +360,10 @@
         tabsClasses[1] = "nav-link";
         tabsClasses[2] = "nav-link";
         tabId = 1;
-        projects = projectService.GetAllProjects();
-        issues = issueService.GetAllIssues();
+        isLoggedUserAdmin = userService.IsLoggedUserAdmin();
+        loggedUser = userService.GetLoggedUser();
+        UpdateData();
+        
         priorityTypes = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
         return Task.CompletedTask;
     }
@@ -354,8 +374,7 @@
         {
             toast.sfSuccessToast.Title = result;
             toast.sfSuccessToast.ShowAsync();
-            issues = issueService.GetAllIssues();
-            projects = projectService.GetAllProjects();
+            UpdateData();
             await sfKanban.RefreshAsync();
             this.StateHasChanged();
         }
@@ -385,8 +404,7 @@
     private async Task UpdateAfterIssueModalSubmitAsync()
     {
 
-        projects = projectService.GetAllProjects();
-        issues = issueService.GetAllIssues();
+        UpdateData();
         if (tabId == 2)
         {
             await sfKanban.RefreshAsync();
@@ -403,8 +421,7 @@
             toast.sfSuccessToast.Title = result;
             toast.sfSuccessToast.ShowAsync();
 
-            projects = projectService.GetAllProjects();
-            issues = issueService.GetAllIssues();
+            UpdateData();
             if (tabId == 2)
             {
                 await sfKanban.RefreshAsync();
@@ -422,10 +439,10 @@
 
     }
 
-    private Task EditIssue(Issue issue)
+    private void EditIssue(Issue issue)
     {
         taskModal.OpenDialog(issue);
-        return Task.CompletedTask;
+
     //  managementModal.OpenDialog(applicationUser);
     }
 

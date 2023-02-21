@@ -115,9 +115,10 @@ public class ProjectService : Controller, IProjectService
         return projects;
     }
 
-    public Project GetProjectById(int ProjectId)
+    public Project? GetProjectById(int ProjectId)
     {
-        return _context.Projects.AsNoTracking().Where(x => x.ProjectId == ProjectId).FirstOrDefault();
+        return _context.Projects.AsNoTracking().Include(x => x.ProjectParticipants)
+            .ThenInclude(pp => pp.User).Include(p => p.ProjectType).Include(p => p.ProjectOwner).Include(p => p.Issues).ThenInclude(i => i.AssignedТo).Include(p => p.Issues).ThenInclude(i => i.Assignee).Include(i => i.Issues).ThenInclude(y => y.Subtasks).FirstOrDefault();
     }
 
     public string UpdateProject(Project project)
