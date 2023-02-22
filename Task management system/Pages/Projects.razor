@@ -31,23 +31,22 @@
                 <img class="banner" src="img/iStock-1203930843.jpg" alt="Banner">
                 <div class="bottom-left">
 
-                    <h3>Проекти</h3> @if (isLoggedUserAdmin)
-                    {
-                        <nav class="navbar navbar-expand">
-                            <!-- Left navbar links -->
-                            <ul class="navbar-nav float">
-                                <li class="nav-item d-none d-sm-inline-block">
+                    <h3>Проекти</h3>
+                    <nav class="navbar navbar-expand">
+                        <!-- Left navbar links -->
+                        <ul class="navbar-nav float">
+                            <li class="nav-item d-none d-sm-inline-block">
 
-                                    <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddNewProjectClickHandler">Нов проект</button>
+                                <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddNewProjectClickHandler">Нов проект</button>
 
 
-                                </li>
-                                <li class="nav-item d-none d-sm-inline-block">
-                                    &nbsp;
-                                </li>
-                            </ul>
-                        </nav>
-                    }
+                            </li>
+                            <li class="nav-item d-none d-sm-inline-block">
+                                &nbsp;
+                            </li>
+                        </ul>
+                    </nav>
+
                 </div>
             </div>
 
@@ -264,7 +263,7 @@
     }
     private void AddNewProjectClickHandler()
     {
-        projectModal.OpenDialog(new Project { StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(1), ProjectParticipants = new List<ApplicationUserProject>() });
+        projectModal.OpenDialog(new Project { StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(1), ProjectParticipants = new List<ApplicationUserProject>(), ProjectOwner = new ApplicationUser()});
 
     }
     private void UpdateAfterManagementModalSubmitAsync()

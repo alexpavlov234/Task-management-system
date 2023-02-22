@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Syncfusion.Blazor.DropDowns;
+using Syncfusion.Blazor.Popups;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
@@ -17,6 +18,7 @@ namespace Task_management_system.Pages
         private bool IsVisible = false;
         private DateTime MinDate = new DateTime(1900, 1, 1);
         private ToastMsg toast = new ToastMsg();
+        private SfDialog sfDialog = new SfDialog();
 
         bool isLoggedUserAdmin = false;
         private ApplicationUser loggedUser { get; set; }
@@ -40,11 +42,11 @@ namespace Task_management_system.Pages
         private IUserService UserService { get; set; }
 
 
-        //protected async override Task OnInitializedAsync()
-        //{
-        //    projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
-        //    users = UserService.GetAllUsers();
-        //}
+        protected async override Task OnInitializedAsync()
+        {
+            projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
+            users = UserService.GetAllUsers();
+        }
         public async void OpenDialog(Project project)
 
         {
@@ -52,7 +54,6 @@ namespace Task_management_system.Pages
             loggedUser = UserService.GetLoggedUser();
             isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
             this.project = new Project() { ProjectId = project.ProjectId, ProjectParticipants = project.ProjectParticipants, Issues = project.Issues, ProjectOwner = project.ProjectOwner, ProjectTypeId = project.ProjectTypeId, EndDate = project.EndDate, ProjectDescription = project.ProjectDescription, ProjectName = project.ProjectName, ProjectType = project.ProjectType, StartDate = project.StartDate };
-            // this.project = ProjectService.GetProjectById(project.ProjectId);
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
             users = UserService.GetAllUsers();
             projectParticipantsSfMultiSelect.DataSource = users;

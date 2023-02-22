@@ -39,7 +39,6 @@
 
 
                 <InputText id="issueName" @bind-Value="issue.Subject" class="form-control my-4" placeholder="Име" style="font-size: 36px"></InputText>
-                <ValidationMessage For="@(() => issue.Subject)" />
                 <div class="row">
                     <!-- Column 1 -->
                     <div class="col-md-6">
@@ -72,7 +71,6 @@
 
                             </div>
                         </div>
-                        <ValidationMessage For="@(() => issue.Priority)"/>
                     </div>
                     <!-- Column 2 -->
                     <div class="col-md-6">
@@ -82,7 +80,7 @@
                                     <i class="fa-solid fa-clone fa-lg" style="color: dimgray"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Проект</b></span> &nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
                                 <div class="col-md-9 d-flex align-items-center">
-                                    <SfDropDownList ID="project" TValue="int" TItem="Project" @bind-Value="issue.ProjectId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете проект" DataSource="@projects">
+                                    <SfDropDownList ID="project" Enabled="isLoggedUserAdmin" TValue="int" TItem="Project" @bind-Value="issue.ProjectId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете проект" DataSource="@projects">
                                         <DropDownListFieldSettings Value="ProjectId" Text="ProjectName"></DropDownListFieldSettings>
                                         <DropDownListEvents TItem="Project" TValue="int" ValueChange="@OnValueSelectHandlerProject"></DropDownListEvents>
                                     </SfDropDownList>
@@ -97,29 +95,27 @@
                                 </div>
                                 <div class="col-md-9 d-flex align-items-center">
                                     <SfDateRangePicker ID="datepicker" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@issue.StartTime" @bind-EndDate="@issue.EndTime" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
-                                    <ValidationMessage For="@(() => issue.EndTime)"/>
-                                    <ValidationMessage For="@(() => issue.StartTime)"/>
+                                    <ValidationMessage For="@(() => issue.EndTime)" />
+                                    <ValidationMessage For="@(() => issue.StartTime)" />
                                 </div>
                             </div>
                         </div>
-                        <ValidationMessage For="@(() => issue.Project)"/>
+                        <ValidationMessage For="@(() => issue.Project)" />
                     </div>
                 </div>
                 <label for="description">Описание на задача</label>
                 <div class="multiline">
                     <SfTextBox id="description" Multiline=true Placeholder="Въведете описание на задача" @bind-Value="@issue.Description"></SfTextBox>
-                    <ValidationMessage For="@(() => issue.Description)" />
                 </div>
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="owner">Възложена на</label>
-                        <SfDropDownList ID="owner" TValue="string" TItem="ApplicationUser" @bind-Value="issue.AssignedТoId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете, на кого е възложена" DataSource="@users">
+                        <SfDropDownList ID="owner" TValue="string" Enabled="(isLoggedUserAdmin || IsIssueNew) || issue.AssigneeId == loggedUser.Id" TItem="ApplicationUser" @bind-Value="issue.AssignedТoId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете, на кого е възложена" DataSource="@users">
                             <DropDownListFieldSettings Value="Id" Text="FullName"></DropDownListFieldSettings>
                         </SfDropDownList>
                         @*<SfDropDownList ID="owner" TValue="string" TItem="ApplicationUser" @bind-Value="issueAssignedToUserName" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете, на кого е възложена " DataSource="@users">
                         <DropDownListFieldSettings Value="UserName" Text="FullName"></DropDownListFieldSettings>
                         </SfDropDownList>*@
-                        <ValidationMessage For="@(() => issue.AssignedТo)" />
                     </div>
                     @if (!this.IsIssueNew)
                     {
@@ -146,8 +142,8 @@
                                             </ul>
                                         </nav>
                                         <SfGrid ID="subtasksGrid" DataSource="this.issue.Subtasks" AllowSorting="true" AllowFiltering="true" EnableAltRow="true" EnableHover="false"
-                                                AllowTextWrap="true" @ref="subtasksGrid" AllowSelection="true"
-                                                AllowPaging="true">
+                                            AllowTextWrap="true" @ref="subtasksGrid" AllowSelection="true"
+                                            AllowPaging="true">
                                             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
                                             <GridPageSettings PageCount="5" PageSize=20 PageSizes="true"></GridPageSettings>
 
@@ -186,12 +182,12 @@
                                     </ChildContent>
                                     <ContentTemplate>
                                         <h1 class="m-3">В процес на разработка! 😊 </h1>
-                                        </ContentTemplate>
+                                    </ContentTemplate>
                                 </TabItem>
                             </TabItems>
                         </SfTab>
                     }
-                    </div>
+                </div>
 
 
             </EditForm>

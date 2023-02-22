@@ -106,7 +106,8 @@ namespace Task_management_system.Pages
 
         {
             IsIssueNew = IssueService.GetIssueById(issue.IssueId) == null;
-            statuses = new List<KeyValue>();
+            
+                statuses = new List<KeyValue>();
             priorities = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
             this.issue = issue;
             if (issue.Project != null)

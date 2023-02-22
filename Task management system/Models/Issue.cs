@@ -38,7 +38,7 @@ namespace Task_management_system.Models
         public string Priority { get; set; }
         public Project Project { get; set; }
 
-        
+        [Required(ErrorMessage = "Полето 'Описание на задача' е задължително!")]
         public string Description { get; set; }
         public bool IsAllDay { get; set; }
         public string RecurrenceRule { get; set; }

@@ -2544,49 +2544,49 @@
     <value>Save</value>
   </data>
   <data name="Kanban_AddTitle" xml:space="preserve">
-    <value>Add New Card</value>
+    <value>Добавяне на нова задача</value>
   </data>
   <data name="Kanban_Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Отказ</value>
   </data>
   <data name="Kanban_CardsSelected" xml:space="preserve">
-    <value>Cards Selected</value>
+    <value>Избрани задачи</value>
   </data>
   <data name="Kanban_Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Изтрий</value>
   </data>
   <data name="Kanban_DeleteContent" xml:space="preserve">
-    <value>Are you sure you want to delete this card?</value>
+    <value>Сигурни ли сте, че искате да изтриете тази задача?</value>
   </data>
   <data name="Kanban_DeleteTitle" xml:space="preserve">
-    <value>Delete Card</value>
+    <value>Изтрий задача</value>
   </data>
   <data name="Kanban_EditTitle" xml:space="preserve">
-    <value>Edit Card Details</value>
+    <value>Редактиране на задачата</value>
   </data>
   <data name="Kanban_Item" xml:space="preserve">
-    <value>item</value>
+    <value>задача</value>
   </data>
   <data name="Kanban_Items" xml:space="preserve">
-    <value>items</value>
+    <value>задачи</value>
   </data>
   <data name="Kanban_Max" xml:space="preserve">
-    <value>Max</value>
+    <value>Макс.</value>
   </data>
   <data name="Kanban_Min" xml:space="preserve">
-    <value>Min</value>
+    <value>Мин.</value>
   </data>
   <data name="Kanban_No" xml:space="preserve">
-    <value>No</value>
+    <value>Не</value>
   </data>
   <data name="Kanban_No_Cards" xml:space="preserve">
-    <value>No cards to display</value>
+    <value>Няма задачи за показване</value>
   </data>
   <data name="Kanban_Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Запиши</value>
   </data>
   <data name="Kanban_Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Да</value>
   </data>
   <data name="ListBox_ActionFailureTemplate" xml:space="preserve">
     <value>Request failed</value>
