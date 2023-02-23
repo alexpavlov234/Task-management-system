@@ -194,13 +194,16 @@
                                                                     </button>
                                                                 </SfTooltip>
 
-                                                                @if (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)
+                                                                @if (!isLoggedUserAdmin)
                                                                 {
-                                                                    <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                                                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
-                                                                            <i class="fa-solid fa-trash"></i>
-                                                                        </button>
-                                                                    </SfTooltip>
+                                                                    @if (project.ProjectOwner.Id == loggedUser.Id)
+                                                                    {
+                                                                        <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                                                            <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
+                                                                                <i class="fa-solid fa-trash"></i>
+                                                                            </button>
+                                                                        </SfTooltip>
+                                                                    }
                                                                 }
                                                             </div>
                                                         </div>
@@ -263,7 +266,7 @@
     }
     private void AddNewProjectClickHandler()
     {
-        projectModal.OpenDialog(new Project { StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(1), ProjectParticipants = new List<ApplicationUserProject>(), ProjectOwner = new ApplicationUser()});
+        projectModal.OpenDialog(new Project { StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(1), ProjectParticipants = new List<ApplicationUserProject>(), ProjectOwner = new ApplicationUser() });
 
     }
     private void UpdateAfterManagementModalSubmitAsync()

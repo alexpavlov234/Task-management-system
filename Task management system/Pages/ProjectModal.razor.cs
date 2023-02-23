@@ -53,6 +53,11 @@ namespace Task_management_system.Pages
             projectParticipants = null;
             loggedUser = UserService.GetLoggedUser();
             isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
+            if (!isLoggedUserAdmin)
+            {
+                project.ProjectOwner = loggedUser;
+            }
+            
             this.project = new Project() { ProjectId = project.ProjectId, ProjectParticipants = project.ProjectParticipants, Issues = project.Issues, ProjectOwner = project.ProjectOwner, ProjectTypeId = project.ProjectTypeId, EndDate = project.EndDate, ProjectDescription = project.ProjectDescription, ProjectName = project.ProjectName, ProjectType = project.ProjectType, StartDate = project.StartDate };
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
             users = UserService.GetAllUsers();
