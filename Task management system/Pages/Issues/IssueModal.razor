@@ -5,13 +5,13 @@
 @using Syncfusion.Blazor.Navigations
 @using Task_management_system.Areas.Identity
 @using Task_management_system.Models
-@using Task_management_system.Pages.Common
 @using Task_management_system.Services.Common
 @using Syncfusion.Blazor.Popups
+@using Task_management_system.Interfaces
 @inject IProjectService ProjectService
 
 
-<SfDialog Width="85%" Height="auto" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@IsVisible">
+<SfDialog Width="85%" Height="auto" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@_isVisible">
     <DialogTemplates>
         <Header>
             @if (this.issue != null)
@@ -42,12 +42,12 @@
                 <div class="row">
                     <!-- Column 1 -->
                     <div class="col-md-6">
-                        <div class="p-3 col-md-12" style="border: 1px solid lightgray; border-radius: 5px">
+                        <div class="p-3 col-md-12 my-1" style="border: 1px solid lightgray; border-radius: 5px">
                             <div class="row py-1">
-                                <div class="col-md-3 d-flex align-items-center">
+                                <div class="col-md-3 col-sm-4 col-xs-4 d-flex align-items-center">
                                     <i class="fa-solid fa-arrows-spin" style="color: dimgray"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Статус</b></span> &nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
-                                <div class="col-md-9 d-flex align-items-center">
+                                <div class="col-md-9 col-sm-8 col-xs-8 d-flex align-items-center">
 
                                     <SfDropDownList @ref="statusDropDownList" ID="status" TValue="string" Enabled="true" TItem="KeyValue" @bind-Value="issue.Status" PopupHeight="350px" PopupWidth="350px" DataSource="@statuses">
                                         <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
@@ -58,10 +58,10 @@
 
                             </div>
                             <div class="row py-1">
-                                <div class="col-md-3 d-flex align-items-center">
+                                <div class="col-md-3 col-sm-4 col-xs-4 d-flex align-items-center">
                                     <i class="fa-solid fa-circle-exclamation" style="color: dimgray"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Приоритет</b></span> &nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
-                                <div class="col-md-9 d-flex align-items-center">
+                                <div class="col-md-9 col-sm-8 col-xs-8 d-flex align-items-center">
 
                                     <SfDropDownList @ref="priorityDropDownList" ID="priority" TValue="string" Enabled="true" TItem="KeyValue" @bind-Value="issue.Priority" PopupHeight="350px" PopupWidth="350px" DataSource="@priorities">
                                         <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
@@ -74,13 +74,13 @@
                     </div>
                     <!-- Column 2 -->
                     <div class="col-md-6">
-                        <div class="p-3 col-md-12" style="border: 1px solid lightgray; border-radius: 5px">
+                        <div class="p-3 col-md-12 my-1" style="border: 1px solid lightgray; border-radius: 5px">
                             <div class="row py-1">
-                                <div class="col-md-3 d-flex align-items-center">
+                                <div class="col-md-3 col-sm-4 col-xs-4 d-flex align-items-center">
                                     <i class="fa-solid fa-clone fa-lg" style="color: dimgray"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Проект</b></span> &nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
-                                <div class="col-md-9 d-flex align-items-center">
-                                    <SfDropDownList ID="project" Enabled="isLoggedUserAdmin" TValue="int" TItem="Project" @bind-Value="issue.ProjectId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете проект" DataSource="@projects">
+                                <div class="col-md-9 col-sm-8 col-xs-8 d-flex align-items-center">
+                                    <SfDropDownList ID="project" Enabled="isLoggedUserAdmin || _isIssueNew" TValue="int" TItem="Project" @bind-Value="issue.ProjectId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете проект" DataSource="@projects">
                                         <DropDownListFieldSettings Value="ProjectId" Text="ProjectName"></DropDownListFieldSettings>
                                         <DropDownListEvents TItem="Project" TValue="int" ValueChange="@OnValueSelectHandlerProject"></DropDownListEvents>
                                     </SfDropDownList>
@@ -90,10 +90,10 @@
 
                             </div>
                             <div class="row py-1">
-                                <div class="col-md-3 d-flex align-items-center">
+                                <div class="col-md-3 col-sm-4 col-xs-4 d-flex align-items-center">
                                     <i class="fa-solid fa-clock fa-lg" style="color: dimgray"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Срок</b></span> &nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
-                                <div class="col-md-9 d-flex align-items-center">
+                                <div class="col-md-9 col-sm-8 col-xs-8 d-flex align-items-center">
                                     <SfDateRangePicker ID="datepicker" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@issue.StartTime" @bind-EndDate="@issue.EndTime" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
                                     <ValidationMessage For="@(() => issue.EndTime)" />
                                     <ValidationMessage For="@(() => issue.StartTime)" />
@@ -110,14 +110,14 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="owner">Възложена на</label>
-                        <SfDropDownList ID="owner" TValue="string" Enabled="(isLoggedUserAdmin || IsIssueNew) || issue.AssigneeId == loggedUser.Id" TItem="ApplicationUser" @bind-Value="issue.AssignedТoId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете, на кого е възложена" DataSource="@users">
+                        <SfDropDownList ID="owner" TValue="string" Enabled="(isLoggedUserAdmin || _isIssueNew) || issue.AssigneeId == loggedUser.Id" TItem="ApplicationUser" @bind-Value="issue.AssignedТoId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете, на кого е възложена" DataSource="@users">
                             <DropDownListFieldSettings Value="Id" Text="FullName"></DropDownListFieldSettings>
                         </SfDropDownList>
                         @*<SfDropDownList ID="owner" TValue="string" TItem="ApplicationUser" @bind-Value="issueAssignedToUserName" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете, на кого е възложена " DataSource="@users">
                         <DropDownListFieldSettings Value="UserName" Text="FullName"></DropDownListFieldSettings>
                         </SfDropDownList>*@
                     </div>
-                    @if (!this.IsIssueNew)
+                    @if (!this._isIssueNew)
                     {
                         <SfTab>
                             <TabItems>

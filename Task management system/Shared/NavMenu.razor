@@ -1,7 +1,7 @@
 ﻿@if (!CollapseNavMenu)
 {
     <div class="top-row navbar navbar-dark">
-        <div class="container-fluid" style="justify-content: center;">
+        <div class="container-fluid">
             <a class="navbar-brand" style="margin-right: 0px !important" href="">Система за управление на задачи</a>
             <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
                 <span class="navbar-toggler-icon"></span>
@@ -46,7 +46,7 @@ else
         }
     </style>
     <div class="top-row navbar navbar-dark">
-        <div class="container-fluid" style="justify-content: center;">
+        <div class="container-fluid">
             <a class="navbar-brand" style="margin-right: 0px !important" href="">СУЗ</a>
             <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
                 <span class="navbar-toggler-icon"></span>
@@ -75,11 +75,11 @@ else
                     <i class="fa-solid fa-calendar fa-lg"></i>
                 </NavLink>
             </div>
-         </nav>
+        </nav>
     </div>
 
 }
-<nav class="flex-column">
+<nav class="flex-column button-collapse">
     <div class="nav-item nav-toggle px-3">
         <a class="nav-link active " style="justify-content: center" @onclick="ToggleCollapseNavMenu">
             <i class="fa-solid fa-bars"></i>
@@ -96,6 +96,7 @@ else
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+        CollapseNavMenu = !CollapseNavMenu;
     }
     private void ToggleCollapseNavMenu()
     {

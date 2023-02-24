@@ -1,4 +1,4 @@
-﻿namespace Task_management_system.Pages.Common
+﻿namespace Task_management_system.Services.Common
 {
     public class BaseHelper
     {

@@ -5,20 +5,19 @@ using Syncfusion.Blazor.Popups;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
-using Task_management_system.Pages.Common;
 using Task_management_system.Services.Common;
 
-namespace Task_management_system.Pages
+namespace Task_management_system.Pages.Projects
 {
     public partial class ProjectModal
     {
         protected EditContext editContext;
         private Project project = new Project();
-        private bool IsUserNew = false;
+        private readonly bool IsUserNew = false;
         private bool IsVisible = false;
-        private DateTime MinDate = new DateTime(1900, 1, 1);
+        private readonly DateTime MinDate = new DateTime(1900, 1, 1);
         private ToastMsg toast = new ToastMsg();
-        private SfDialog sfDialog = new SfDialog();
+        private readonly SfDialog sfDialog = new SfDialog();
 
         bool isLoggedUserAdmin = false;
         private ApplicationUser loggedUser { get; set; }
@@ -57,7 +56,7 @@ namespace Task_management_system.Pages
             {
                 project.ProjectOwner = loggedUser;
             }
-            
+
             this.project = new Project() { ProjectId = project.ProjectId, ProjectParticipants = project.ProjectParticipants, Issues = project.Issues, ProjectOwner = project.ProjectOwner, ProjectTypeId = project.ProjectTypeId, EndDate = project.EndDate, ProjectDescription = project.ProjectDescription, ProjectName = project.ProjectName, ProjectType = project.ProjectType, StartDate = project.StartDate };
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
             users = UserService.GetAllUsers();
@@ -138,14 +137,14 @@ namespace Task_management_system.Pages
                     if (result.StartsWith("Успешно"))
                     {
                         toast.sfSuccessToast.Title = result;
-                        toast.sfSuccessToast.ShowAsync();
+                        _ = toast.sfSuccessToast.ShowAsync();
 
                         UpdateDialog();
                     }
                     else
                     {
                         toast.sfErrorToast.Title = result;
-                        toast.sfErrorToast.ShowAsync();
+                        _ = toast.sfErrorToast.ShowAsync();
                     }
 
                     UpdateDialog();
@@ -157,14 +156,14 @@ namespace Task_management_system.Pages
                     if (result.StartsWith("Успешно"))
                     {
                         toast.sfSuccessToast.Title = result;
-                        toast.sfSuccessToast.ShowAsync();
+                        _ = toast.sfSuccessToast.ShowAsync();
 
                         UpdateDialog();
                     }
                     else
                     {
                         toast.sfErrorToast.Title = result;
-                        toast.sfErrorToast.ShowAsync();
+                        _ = toast.sfErrorToast.ShowAsync();
                     }
 
                     await CallbackAfterSubmit.InvokeAsync();
@@ -174,7 +173,7 @@ namespace Task_management_system.Pages
             else
             {
                 toast.sfErrorToast.Title = editContext.GetValidationMessages().FirstOrDefault();
-                toast.sfErrorToast.ShowAsync();
+                _ = toast.sfErrorToast.ShowAsync();
 
             }
         }

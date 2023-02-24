@@ -4,6 +4,8 @@ using Newtonsoft.Json;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
 
+namespace Task_management_system.Services;
+
 /// <summary>
 ///	Accuweather Current Conditions Api
 ///	This class implements the ICurrentConditions interface and is a wrapper for the Accuweather API for current conditions.

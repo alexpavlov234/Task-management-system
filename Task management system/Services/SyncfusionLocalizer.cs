@@ -1,5 +1,7 @@
 ﻿using Syncfusion.Blazor;
 
+namespace Task_management_system.Services;
+
 public class SyncfusionLocalizer : ISyncfusionStringLocalizer
 {
     public string GetText(string key)

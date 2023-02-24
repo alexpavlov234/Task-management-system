@@ -1,31 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Data;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
 
+namespace Task_management_system.Services;
+
 public class ProjectService : Controller, IProjectService
 {
     private readonly Context _context;
-    private readonly IEmailSender _emailSender;
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUserStore<ApplicationUser> _userStore;
     private readonly IKeyValueService _keyValueService;
 
-    public ProjectService(Context context, UserManager<ApplicationUser> userManager,
-            IUserStore<ApplicationUser> userStore,
-            SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender, IKeyValueService keyValueService)
+    public ProjectService(Context context, IKeyValueService keyValueService)
     {
         _context = context;
-        _userManager = userManager;
-        _userStore = userStore;
-        _signInManager = signInManager;
-        _emailSender = emailSender;
         _keyValueService = keyValueService;
     }
 
@@ -41,29 +30,37 @@ public class ProjectService : Controller, IProjectService
             }
 
             List<ApplicationUserProject> projectParticipants = new List<ApplicationUserProject>();
-            projectParticipants.AddRange(project.ProjectParticipants.Select(i => new ApplicationUserProject()
+            if (project.ProjectParticipants != null)
             {
-                ProjectId = i.ProjectId,
-                Project = i.Project,
-                User = i.User,
-                UserId = i.UserId
-            }));
+                projectParticipants.AddRange(project.ProjectParticipants.Select(i => new ApplicationUserProject()
+                {
+                    ProjectId = i.ProjectId,
+                    Project = i.Project,
+                    User = i.User,
+                    UserId = i.UserId
+                }));
+            }
+
             project.ProjectParticipants = new List<ApplicationUserProject>();
             ApplicationUser? projectOwner = _context.Users.FirstOrDefault(u => u.Id == project.ProjectOwner.Id);
 
-            project.ProjectOwner = projectOwner;
+            if (projectOwner != null)
+            {
+                project.ProjectOwner = projectOwner;
+            }
+
             project.ProjectName = project.ProjectName.Trim();
             _context.Entry(project).State = EntityState.Added;
-            _context.Projects.Add(project);
+            _ = _context.Projects.Add(project);
 
             foreach (ApplicationUserProject participant in projectParticipants)
             {
                 ApplicationUser participantUser = _context.Users.Where(x => x.Id == participant.UserId).First();
-                _context.Add(new ApplicationUserProject { User = participantUser, Project = project });
+                _ = _context.Add(new ApplicationUserProject { User = participantUser, Project = project });
             }
 
 
-            _context.SaveChanges();
+            _ = _context.SaveChanges();
             _context.DetachAllEntities();
             return "Успешно създаване на проект!";
         }
@@ -89,13 +86,13 @@ public class ProjectService : Controller, IProjectService
 
             foreach (ApplicationUserProject? participant in participants)
             {
-                _context.ApplicationUserProjects.Remove(participant);
+                _ = _context.ApplicationUserProjects.Remove(participant);
             }
 
-            _context.Projects.Remove(project);
+            _ = _context.Projects.Remove(project);
 
 
-            _context.SaveChanges();
+            _ = _context.SaveChanges();
             return "Успешно изтриване на проекта.";
         }
         catch (Exception)
@@ -108,17 +105,17 @@ public class ProjectService : Controller, IProjectService
     public List<Project> GetAllProjects()
     {
         // return _context.Projects.Include(x => x.ProjectParticipants).ThenInclude(pp => pp.User).ToList();
-        List<Project> projects = _context.Projects.AsNoTracking().Include(x => x.ProjectParticipants)
+        List<Project> projects = _context.Projects.AsNoTracking().Include(x => x.ProjectParticipants)!
             .ThenInclude(pp => pp.User).Include(p => p.ProjectType).Include(p => p.ProjectOwner).Include(p => p.Issues).ThenInclude(i => i.AssignedТo).Include(p => p.Issues).ThenInclude(i => i.Assignee).Include(i => i.Issues).ThenInclude(y => y.Subtasks).ToList();
 
 
         return projects;
     }
 
-    public Project? GetProjectById(int ProjectId)
+    public Project GetProjectById(int projectId)
     {
-        return _context.Projects.AsNoTracking().Include(x => x.ProjectParticipants)
-            .ThenInclude(pp => pp.User).Include(p => p.ProjectType).Include(p => p.ProjectOwner).Include(p => p.Issues).ThenInclude(i => i.AssignedТo).Include(p => p.Issues).ThenInclude(i => i.Assignee).Include(i => i.Issues).ThenInclude(y => y.Subtasks).FirstOrDefault();
+        return _context.Projects.AsNoTracking().Include(x => x.ProjectParticipants)!
+            .ThenInclude(pp => pp.User).Include(p => p.ProjectType).Include(p => p.ProjectOwner).Include(p => p.Issues).ThenInclude(i => i.AssignedТo).Include(p => p.Issues).ThenInclude(i => i.Assignee).Include(i => i.Issues).ThenInclude(y => y.Subtasks).FirstOrDefault()!;
     }
 
     public string UpdateProject(Project project)
@@ -129,19 +126,27 @@ public class ProjectService : Controller, IProjectService
             project.ProjectType = _keyValueService.GetKeyValueById(project.ProjectTypeId);
 
             List<ApplicationUserProject> projectParticipants = new List<ApplicationUserProject>();
-            projectParticipants.AddRange(project.ProjectParticipants.Select(i => new ApplicationUserProject()
+            if (project.ProjectParticipants != null)
             {
-                ProjectId = i.ProjectId,
-                Project = i.Project,
-                User = i.User,
-                UserId = i.UserId
-            }));
+                projectParticipants.AddRange(project.ProjectParticipants.Select(i => new ApplicationUserProject()
+                {
+                    ProjectId = i.ProjectId,
+                    Project = i.Project,
+                    User = i.User,
+                    UserId = i.UserId
+                }));
+            }
+
             project.ProjectParticipants = new List<ApplicationUserProject>();
             ApplicationUser? projectOwner = _context.Users.FirstOrDefault(u => u.Id == project.ProjectOwner.Id);
             _context.Entry(project.ProjectOwner).State = EntityState.Detached;
 
 
-            project.ProjectOwner = projectOwner;
+            if (projectOwner != null)
+            {
+                project.ProjectOwner = projectOwner;
+            }
+
             _context.Entry(project.ProjectOwner).State = EntityState.Modified;
             Project? local = _context.Set<Project>().Local.FirstOrDefault(entry => entry.ProjectId.Equals(project.ProjectId));
             if (local != null)
@@ -155,13 +160,13 @@ public class ProjectService : Controller, IProjectService
 
             foreach (ApplicationUserProject? participant in participantsToRemove)
             {
-                _context.ApplicationUserProjects.Remove(participant);
+                _ = _context.ApplicationUserProjects.Remove(participant);
             }
 
             foreach (ApplicationUserProject participant in projectParticipants)
             {
                 ApplicationUser participantUser = _context.Users.Where(x => x.Id == participant.UserId).First();
-                var applicationUserProject = new ApplicationUserProject { User = participantUser, Project = project };
+                ApplicationUserProject applicationUserProject = new ApplicationUserProject { User = participantUser, Project = project };
                 ApplicationUserProject? localApplicationUserProject = _context.Set<ApplicationUserProject>().Local.FirstOrDefault(entry => entry.ProjectId.Equals(applicationUserProject.Project.ProjectId) && entry.UserId.Equals(applicationUserProject.User.Id));
                 if (localApplicationUserProject != null)
                 {
@@ -169,12 +174,12 @@ public class ProjectService : Controller, IProjectService
                     _context.Entry(applicationUserProject).State = EntityState.Detached;
                 }
                 _context.Entry(applicationUserProject).State = EntityState.Added;
-                
+
             }
 
 
 
-            _context.SaveChanges();
+            _ = _context.SaveChanges();
             _context.Entry(project.ProjectOwner).State = EntityState.Detached;
             _context.DetachAllEntities();
             return "Успешно актуализиране на проекта!";

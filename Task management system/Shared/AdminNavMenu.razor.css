@@ -68,4 +68,15 @@
         /* Never collapse the sidebar for wide screens */
         display: block;
     }
+
+    .container-fluid {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 641px) {
+    .button-collapse {
+        display: none;
+    }
+
 }

@@ -1,4 +1,3 @@
-using KeyValue_management_system.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.Blazor;
@@ -6,7 +5,8 @@ using Task_management_system.Areas;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Data;
 using Task_management_system.Interfaces;
-using Task_management_system.Pages.Common;
+using Task_management_system.Services;
+using Task_management_system.Services.Common;
 
 namespace Task_management_system
 {
@@ -17,13 +17,13 @@ namespace Task_management_system
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddRazorPages();
-            builder.Services.AddServerSideBlazor();
+            _ = builder.Services.AddRazorPages();
+            _ = builder.Services.AddServerSideBlazor();
             //Важно
-            builder.Services.AddDbContext<Context>(options =>
+            _ = builder.Services.AddDbContext<Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection1")), ServiceLifetime.Scoped);
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+            _ = builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
@@ -31,15 +31,15 @@ namespace Task_management_system
                 .AddEntityFrameworkStores<Context>();
 
             //builder.Services.AddSingleton<WeatherForecastService>();
-            builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
-            builder.Services.AddScoped<TokenProvider>();
-            builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IIssueService, IssueService>();
-            builder.Services.AddScoped<IProjectService, ProjectService>();
+            _ = builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
+            _ = builder.Services.AddScoped<TokenProvider>();
+            _ = builder.Services.AddScoped<IUserService, UserService>();
+            _ = builder.Services.AddScoped<IIssueService, IssueService>();
+            _ = builder.Services.AddScoped<IProjectService, ProjectService>();
 
-            builder.Services.AddScoped<IKeyValueService, KeyValueService>();
-            builder.Services.AddScoped<BaseHelper>();
-            builder.Services.AddSingleton(typeof(ISyncfusionStringLocalizer), typeof(SyncfusionLocalizer));
+            _ = builder.Services.AddScoped<IKeyValueService, KeyValueService>();
+            _ = builder.Services.AddScoped<BaseHelper>();
+            _ = builder.Services.AddSingleton(typeof(ISyncfusionStringLocalizer), typeof(SyncfusionLocalizer));
 
             WebApplication app = builder.Build();
 
@@ -69,23 +69,23 @@ namespace Task_management_system
             if (!app.Environment.IsDevelopment())
             {
 
-                app.UseExceptionHandler("/Error");
+                _ = app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                _ = app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseRequestLocalization("bg");
+            _ = app.UseHttpsRedirection();
+            _ = app.UseRequestLocalization("bg");
 
 
-            app.UseStaticFiles();
+            _ = app.UseStaticFiles();
 
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
+            _ = app.UseRouting();
+            _ = app.UseAuthentication();
+            _ = app.UseAuthorization();
 
-            app.MapBlazorHub();
-            app.MapFallbackToPage("/_Host");
+            _ = app.MapBlazorHub();
+            _ = app.MapFallbackToPage("/_Host");
 
             app.Run();
         }

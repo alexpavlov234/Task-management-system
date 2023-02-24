@@ -67,13 +67,12 @@
     <None Include="Areas\Identity\Pages\_ViewImports.cshtml" />
     <None Include="Areas\Identity\Pages\_ViewStart.cshtml" />
     <None Include="Pages\Calendar.razor" />
-    <None Include="Pages\Counter.razor" />
     <None Include="Pages\Error.cshtml" />
     <None Include="Pages\Index.razor" />
-    <None Include="Pages\Management.razor" />
-    <None Include="Pages\ManagementModal.razor" />
-    <None Include="Pages\ProjectModal.razor" />
-    <None Include="Pages\Projects.razor" />
+    <None Include="Pages\Management\Management.razor" />
+    <None Include="Pages\Management\ManagementModal.razor" />
+    <None Include="Pages\Projects\ProjectModal.razor" />
+    <None Include="Pages\Projects\Projects.razor" />
     <None Include="Pages\Shared\_Layout.cshtml" />
     <None Include="Pages\Shared\_LoginPartial.cshtml" />
     <None Include="Pages\Shared\_ValidationScriptsPartial.cshtml" />

@@ -116,7 +116,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
-            await _userManager.UpdateAsync(user);
+            _ = await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Вашият профил е актуализиран";
             return RedirectToPage();

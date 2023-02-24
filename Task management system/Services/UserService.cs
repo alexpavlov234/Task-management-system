@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Data;
+using Task_management_system.Interfaces;
 using Task_management_system.Models;
+
+namespace Task_management_system.Services;
 
 public class UserService : Controller, IUserService
 {
@@ -16,9 +19,9 @@ public class UserService : Controller, IUserService
     private readonly IUserStore<ApplicationUser> _userStore;
     private readonly IHttpContextAccessor _httpContextAccessor;
     public UserService(Context context, UserManager<ApplicationUser> userManager,
-            IUserStore<ApplicationUser> userStore,
-            SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender, IHttpContextAccessor httpContextAccessor)
+        IUserStore<ApplicationUser> userStore,
+        SignInManager<ApplicationUser> signInManager,
+        IEmailSender emailSender, IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
         _userManager = userManager;
@@ -43,7 +46,7 @@ public class UserService : Controller, IUserService
         }
         else
         {
-            await _userManager.AddToRoleAsync(applicationUser, "User");
+            _ = await _userManager.AddToRoleAsync(applicationUser, "User");
             // Успешно създаден потребител
             return "Успешно създаден потребител!";
         }
@@ -71,7 +74,7 @@ public class UserService : Controller, IUserService
             _context.Entry(applicationUser).State = EntityState.Deleted;
 
             // Запазване на промените
-            _context.SaveChanges();
+            _ = _context.SaveChanges();
             return "Успешно изтриване!";
         }
         catch (DbUpdateException)
@@ -127,9 +130,9 @@ public class UserService : Controller, IUserService
         }
         _context.Entry(applicationUser).State = EntityState.Modified;
 
-        _context.SaveChanges();
+        _ = _context.SaveChanges();
 
-        if (applicationUser.Role == "Admin" && !(await IsInRoleAsync(applicationUser, "Admin")))
+        if (applicationUser.Role == "Admin" && !await IsInRoleAsync(applicationUser, "Admin"))
         {
             if (await IsInRoleAsync(applicationUser, "User"))
             {
@@ -151,14 +154,12 @@ public class UserService : Controller, IUserService
     public ApplicationUser GetLoggedUser()
     {
         _context.DetachAllEntities();
-        using (Context context = _context.Clone())
-        {
-            context.DetachAllEntities();
-            var user = context.Users.SingleOrDefault(x => x.UserName == _httpContextAccessor.HttpContext.User.Identity.Name);
+        using Context context = _context.Clone();
+        context.DetachAllEntities();
+        ApplicationUser? user = context.Users.SingleOrDefault(x => x.UserName == _httpContextAccessor.HttpContext.User.Identity.Name);
 
-            return user;
-        }
-        
+        return user;
+
     }
 
 
@@ -166,9 +167,9 @@ public class UserService : Controller, IUserService
 
     public bool IsLoggedUserAdmin()
     {
-        
 
-            return _httpContextAccessor.HttpContext.User.IsInRole("Admin");
+
+        return _httpContextAccessor.HttpContext.User.IsInRole("Admin");
 
 
 
@@ -185,17 +186,17 @@ public class UserService : Controller, IUserService
     }
     public void Logout()
     {
-        _signInManager.SignOutAsync();
+        _ = _signInManager.SignOutAsync();
     }
 
     public async Task AddRoleAsync(ApplicationUser user, string role)
     {
-        await _userManager.AddToRoleAsync(user, role);
+        _ = await _userManager.AddToRoleAsync(user, role);
     }
 
     public async Task RemoveRoleAsync(ApplicationUser user, string role)
     {
-        await _userManager.RemoveFromRoleAsync(user, role);
+        _ = await _userManager.RemoveFromRoleAsync(user, role);
     }
 
     public async Task<IList<string>> GetRoleAsync(ApplicationUser user)
@@ -223,13 +224,15 @@ public class UserService : Controller, IUserService
 
     public ApplicationUser ToApplicationUser(InputModel inputModel)
     {
-        ApplicationUser applicationUser = new ApplicationUser();
-        applicationUser.Id = inputModel.Id;
-        applicationUser.PhoneNumber = inputModel.PhoneNumber;
-        applicationUser.FirstName = inputModel.FirstName;
-        applicationUser.UserName = inputModel.Username;
-        applicationUser.LastName = inputModel.LastName;
-        applicationUser.Email = inputModel.Email;
+        ApplicationUser applicationUser = new ApplicationUser
+        {
+            Id = inputModel.Id,
+            PhoneNumber = inputModel.PhoneNumber,
+            FirstName = inputModel.FirstName,
+            UserName = inputModel.Username,
+            LastName = inputModel.LastName,
+            Email = inputModel.Email
+        };
         return applicationUser;
     }
 }

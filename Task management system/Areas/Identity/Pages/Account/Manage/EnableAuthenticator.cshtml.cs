@@ -120,7 +120,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            await _userManager.SetTwoFactorEnabledAsync(user, true);
+            _ = await _userManager.SetTwoFactorEnabledAsync(user, true);
             string userId = await _userManager.GetUserIdAsync(user);
             _logger.LogInformation("User with ID '{UserId}' has enabled 2FA with an authenticator app.", userId);
 
@@ -144,7 +144,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
             string unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
             if (string.IsNullOrEmpty(unformattedKey))
             {
-                await _userManager.ResetAuthenticatorKeyAsync(user);
+                _ = await _userManager.ResetAuthenticatorKeyAsync(user);
                 unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
             }
 
@@ -160,12 +160,12 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
             int currentPosition = 0;
             while (currentPosition + 4 < unformattedKey.Length)
             {
-                result.Append(unformattedKey.AsSpan(currentPosition, 4)).Append(' ');
+                _ = result.Append(unformattedKey.AsSpan(currentPosition, 4)).Append(' ');
                 currentPosition += 4;
             }
             if (currentPosition < unformattedKey.Length)
             {
-                result.Append(unformattedKey.AsSpan(currentPosition));
+                _ = result.Append(unformattedKey.AsSpan(currentPosition));
             }
 
             return result.ToString().ToLowerInvariant();

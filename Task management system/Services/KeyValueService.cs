@@ -7,7 +7,7 @@ using Task_management_system.Data;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
 
-namespace KeyValue_management_system.Services
+namespace Task_management_system.Services
 {
     public class KeyValueService : Controller, IKeyValueService
     {
@@ -32,37 +32,38 @@ namespace KeyValue_management_system.Services
         public void CreateKeyValue(KeyValue keyValue, string KeyTypeIntCode)
         {
             _context.DetachAllEntities();
-            KeyType keyType = _context.KeyType.FirstOrDefault((c) => (c.KeyTypeIntCode == KeyTypeIntCode));
-            KeyValue keyValue1 = _context.KeyValue.FirstOrDefault((c) => (c.KeyValueIntCode == keyValue.KeyValueIntCode));
+            KeyType keyType = _context.KeyType.FirstOrDefault((c) => c.KeyTypeIntCode == KeyTypeIntCode);
+            KeyValue keyValue1 =
+                _context.KeyValue.FirstOrDefault((c) => c.KeyValueIntCode == keyValue.KeyValueIntCode);
             if (keyValue1 == null && keyType != null)
             {
                 keyValue.KeyType = keyType;
-                _context.KeyValue.Add(keyValue);
-                _context.SaveChanges();
+                _ = _context.KeyValue.Add(keyValue);
+                _ = _context.SaveChanges();
             }
         }
 
         public void CreateKeyType(KeyType keyType)
         {
-            KeyType keyType1 = _context.KeyType.FirstOrDefault((c) => (c.KeyTypeIntCode == keyType.KeyTypeIntCode));
+            KeyType keyType1 = _context.KeyType.FirstOrDefault((c) => c.KeyTypeIntCode == keyType.KeyTypeIntCode);
 
             if (keyType == null)
             {
-                _context.KeyType.Add(keyType);
-                _context.SaveChanges();
+                _ = _context.KeyType.Add(keyType);
+                _ = _context.SaveChanges();
             }
         }
 
         public void DeleteKeyValue(KeyValue keyValue)
         {
-            _context.KeyValue.Remove(keyValue);
-            _context.SaveChanges();
+            _ = _context.KeyValue.Remove(keyValue);
+            _ = _context.SaveChanges();
         }
 
         public void DeleteKeyValue(int IdKeyValue)
         {
-            _context.KeyValue.Remove(new KeyValue { IdKeyValue = IdKeyValue });
-            _context.SaveChanges();
+            _ = _context.KeyValue.Remove(new KeyValue { IdKeyValue = IdKeyValue });
+            _ = _context.SaveChanges();
         }
 
         public List<KeyValue> GetAllKeyValues()
@@ -96,19 +97,19 @@ namespace KeyValue_management_system.Services
                 _context.Entry(local).State = EntityState.Detached;
             }
             _context.Entry(keyValue).State = EntityState.Modified;
-            _context.SaveChanges();
+            _ = _context.SaveChanges();
         }
 
         public void DeleteKeyType(KeyType keyType)
         {
-            _context.KeyType.Remove(keyType);
-            _context.SaveChanges();
+            _ = _context.KeyType.Remove(keyType);
+            _ = _context.SaveChanges();
         }
 
         public void DeleteKeyType(int IdKeyType)
         {
-            _context.KeyType.Remove(new KeyType { IdKeyType = IdKeyType });
-            _context.SaveChanges();
+            _ = _context.KeyType.Remove(new KeyType { IdKeyType = IdKeyType });
+            _ = _context.SaveChanges();
         }
 
         public List<KeyType> GetAllKeyTypes()
@@ -135,7 +136,7 @@ namespace KeyValue_management_system.Services
                 _context.Entry(local).State = EntityState.Detached;
             }
             _context.Entry(keyType).State = EntityState.Modified;
-            _context.SaveChanges();
+            _ = _context.SaveChanges();
         }
     }
 }

@@ -2,19 +2,18 @@
 using Microsoft.AspNetCore.Components.Forms;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Models;
-using Task_management_system.Pages.Common;
 using Task_management_system.Services.Common;
 
-namespace Task_management_system.Pages
+namespace Task_management_system.Pages.Management
 {
     public partial class ManagementModal
     {
         protected EditContext editContext;
-        private InputModel inputModel = new InputModel();
+        private readonly InputModel inputModel = new InputModel();
         private bool IsUserNew = false;
         private bool IsVisible = false;
 
-        private List<Role> Roles = new List<Role> {
+        private readonly List<Role> Roles = new List<Role> {
             new Role() { ID= "Admin", Text= "Администратор" },
              new Role() { ID= "User", Text= "Потребител" }
         };
@@ -43,7 +42,7 @@ namespace Task_management_system.Pages
             inputModel.Email = applicationUser.Email;
             inputModel.Role = applicationUser.Role;
             inputModel.PhoneNumber = applicationUser.PhoneNumber;
-            IsUserNew = applicationUser != null ? (await UserService.GetApplicationUserByIdAsync(applicationUser.Id)) == null : false;
+            IsUserNew = applicationUser != null && (await UserService.GetApplicationUserByIdAsync(applicationUser.Id)) == null;
             editContext = new EditContext(inputModel);
             if (IsUserNew) { GeneratePassword(); }
             else
@@ -80,7 +79,7 @@ namespace Task_management_system.Pages
                     await UserService.UpdateApplicationUser(User);
                     await CallbackAfterSubmit.InvokeAsync();
                     toast.sfSuccessToast.Title = "Успешно приложени промени!";
-                    toast.sfSuccessToast.ShowAsync();
+                    _ = toast.sfSuccessToast.ShowAsync();
                     IsVisible = false;
                 }
                 else
@@ -89,12 +88,12 @@ namespace Task_management_system.Pages
                     if (result.StartsWith("Успешно"))
                     {
                         toast.sfSuccessToast.Title = result;
-                        toast.sfSuccessToast.ShowAsync();
+                        _ = toast.sfSuccessToast.ShowAsync();
                     }
                     else
                     {
                         toast.sfErrorToast.Title = result;
-                        toast.sfErrorToast.ShowAsync();
+                        _ = toast.sfErrorToast.ShowAsync();
                     }
 
                     await CallbackAfterSubmit.InvokeAsync();

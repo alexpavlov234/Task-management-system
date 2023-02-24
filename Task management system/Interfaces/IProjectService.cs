@@ -1,5 +1,7 @@
 ﻿using Task_management_system.Models;
 
+namespace Task_management_system.Interfaces;
+
 internal interface IProjectService
 {
     string CreateProject(Project project);

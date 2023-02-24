@@ -5,10 +5,9 @@ using Syncfusion.Blazor.Grids;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
-using Task_management_system.Pages.Common;
 using Task_management_system.Services.Common;
 
-namespace Task_management_system.Pages
+namespace Task_management_system.Pages.Issues
 {
     public partial class IssueModal
     {
@@ -22,9 +21,9 @@ namespace Task_management_system.Pages
         private List<KeyValue> priorities = new List<KeyValue>();
         private SfGrid<Subtask> subtasksGrid = new SfGrid<Subtask>();
         private List<Project> projects { get; set; }
-        private bool IsIssueNew = true;
-        private bool IsVisible = false;
-        private DateTime MinDate = new DateTime(1900, 1, 1);
+        private bool _isIssueNew = true;
+        private bool _isVisible = false;
+        private readonly DateTime MinDate = new DateTime(1900, 1, 1);
         private ToastMsg toast = new ToastMsg();
         private SubtaskModal subtaskModal = new SubtaskModal();
         private List<KeyValue> projectTypes { get; set; }
@@ -61,7 +60,7 @@ namespace Task_management_system.Pages
                                                                       || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
             }
         }
-       
+
         private async Task AddSubtask()
         {
             subtaskModal.OpenDialog(new Subtask { Status = "Нова", Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Issue = issue, IssueId = issue.IssueId });
@@ -75,12 +74,12 @@ namespace Task_management_system.Pages
             if (result.StartsWith("Успешно"))
             {
                 toast.sfSuccessToast.Title = result;
-                toast.sfSuccessToast.ShowAsync();
+                _ = toast.sfSuccessToast.ShowAsync();
             }
             else
             {
                 toast.sfErrorToast.Title = result;
-                toast.sfErrorToast.ShowAsync();
+                _ = toast.sfErrorToast.ShowAsync();
             }
             issue = IssueService.GetIssueById(issue.IssueId);
             await CallbackAfterSubmit.InvokeAsync();
@@ -105,9 +104,9 @@ namespace Task_management_system.Pages
         public async void OpenDialog(Issue issue)
 
         {
-            IsIssueNew = IssueService.GetIssueById(issue.IssueId) == null;
-            
-                statuses = new List<KeyValue>();
+            _isIssueNew = IssueService.GetIssueById(issue.IssueId) == null;
+
+            statuses = new List<KeyValue>();
             priorities = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
             this.issue = issue;
             if (issue.Project != null)
@@ -133,14 +132,14 @@ namespace Task_management_system.Pages
                 this.issue.StartTime = DateTime.Now;
                 this.issue.EndTime = DateTime.Now.AddMonths(1);
             }
-            GetStatus(this.issue.Status);
+            _ = GetStatus(this.issue.Status);
             isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
             loggedUser = UserService.GetLoggedUser();
             UpdateData();
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("IssueType");
-            users = ProjectService.GetProjectById(this.issue.ProjectId).ProjectParticipants.ToList().Select(x=> x.User).ToList();
+            users = ProjectService.GetProjectById(this.issue.ProjectId).ProjectParticipants.ToList().Select(x => x.User).ToList();
             editContext = new EditContext(issue);
-            IsVisible = true;
+            _isVisible = true;
             StateHasChanged();
         }
         private async Task GetStatus(string status)
@@ -195,11 +194,11 @@ namespace Task_management_system.Pages
         }
         private void OnValueSelectHandlerStatus(ChangeEventArgs<string, KeyValue> args)
         {
-            GetStatus(args.Value);
+            _ = GetStatus(args.Value);
         }
         private void CloseDialog()
         {
-            IsVisible = false;
+            _isVisible = false;
             StateHasChanged();
         }
 
@@ -218,11 +217,11 @@ namespace Task_management_system.Pages
 
                     //issue.Project = projects.Where(x => x.ProjectName == issueProjectName).First();
                     //issue.ProjectId = issue.Project.ProjectId;
-                    IssueService.UpdateIssue(issue);
+                    _ = IssueService.UpdateIssue(issue);
 
                     await CallbackAfterSubmit.InvokeAsync();
                     toast.sfSuccessToast.Title = "Успешно приложени промени!";
-                    toast.sfSuccessToast.ShowAsync();
+                    _ = toast.sfSuccessToast.ShowAsync();
                     issue = IssueService.GetIssueById(issue.IssueId);
                     await subtasksGrid.Refresh();
 
@@ -237,14 +236,14 @@ namespace Task_management_system.Pages
                     if (result.StartsWith("Успешно"))
                     {
                         toast.sfSuccessToast.Title = result;
-                        toast.sfSuccessToast.ShowAsync();
-                        IsIssueNew = false;
+                        _ = toast.sfSuccessToast.ShowAsync();
+                        _isIssueNew = false;
 
                     }
                     else
                     {
                         toast.sfErrorToast.Title = result;
-                        toast.sfErrorToast.ShowAsync();
+                        _ = toast.sfErrorToast.ShowAsync();
                     }
 
                     await CallbackAfterSubmit.InvokeAsync();
@@ -254,7 +253,7 @@ namespace Task_management_system.Pages
             else
             {
                 toast.sfErrorToast.Title = editContext.GetValidationMessages().FirstOrDefault();
-                toast.sfErrorToast.ShowAsync();
+                _ = toast.sfErrorToast.ShowAsync();
 
             }
         }

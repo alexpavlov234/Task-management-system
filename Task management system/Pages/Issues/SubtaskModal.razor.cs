@@ -4,10 +4,9 @@ using Syncfusion.Blazor.DropDowns;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
-using Task_management_system.Pages.Common;
 using Task_management_system.Services.Common;
 
-namespace Task_management_system.Pages
+namespace Task_management_system.Pages.Issues
 {
     public partial class SubtaskModal
     {
@@ -19,9 +18,9 @@ namespace Task_management_system.Pages
         //public string? issueProjectName { get; set; }
         private List<KeyValue> statuses = new List<KeyValue>();
         private List<Project> projects { get; set; }
-        private bool IsUserNew = false;
+        private readonly bool IsUserNew = false;
         private bool IsVisible = false;
-        private DateTime MinDate = new DateTime(1900, 1, 1);
+        private readonly DateTime MinDate = new DateTime(1900, 1, 1);
         private ToastMsg toast = new ToastMsg();
         private List<KeyValue> projectTypes { get; set; }
         private List<ApplicationUser> users { get; set; }
@@ -75,7 +74,7 @@ namespace Task_management_system.Pages
                 this.subtask.StartTime = DateTime.Now;
                 this.subtask.EndTime = DateTime.Now.AddMonths(1);
             }
-            GetStatus(this.subtask.Status);
+            _ = GetStatus(this.subtask.Status);
             projects = ProjectService.GetAllProjects();
 
             editContext = new EditContext(subtask);
@@ -121,7 +120,7 @@ namespace Task_management_system.Pages
 
         private void OnValueSelectHandlerStatus(ChangeEventArgs<string, KeyValue> args)
         {
-            GetStatus(args.Value);
+            _ = GetStatus(args.Value);
         }
         private void CloseDialog()
         {
@@ -150,12 +149,12 @@ namespace Task_management_system.Pages
                     if (result.StartsWith("Успешно"))
                     {
                         toast.sfSuccessToast.Title = result;
-                        toast.sfSuccessToast.ShowAsync();
+                        _ = toast.sfSuccessToast.ShowAsync();
                     }
                     else
                     {
                         toast.sfErrorToast.Title = result;
-                        toast.sfErrorToast.ShowAsync();
+                        _ = toast.sfErrorToast.ShowAsync();
                     }
 
                 }
@@ -168,12 +167,12 @@ namespace Task_management_system.Pages
                     if (result.StartsWith("Успешно"))
                     {
                         toast.sfSuccessToast.Title = result;
-                        toast.sfSuccessToast.ShowAsync();
+                        _ = toast.sfSuccessToast.ShowAsync();
                     }
                     else
                     {
                         toast.sfErrorToast.Title = result;
-                        toast.sfErrorToast.ShowAsync();
+                        _ = toast.sfErrorToast.ShowAsync();
                     }
 
                     await CallbackAfterSubmit.InvokeAsync();
@@ -183,7 +182,7 @@ namespace Task_management_system.Pages
             else
             {
                 toast.sfErrorToast.Title = editContext.GetValidationMessages().FirstOrDefault();
-                toast.sfErrorToast.ShowAsync();
+                _ = toast.sfErrorToast.ShowAsync();
 
             }
         }

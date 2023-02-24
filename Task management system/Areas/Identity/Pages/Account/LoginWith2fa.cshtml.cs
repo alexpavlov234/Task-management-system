@@ -102,8 +102,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account
             string authenticatorCode = Input.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
 
             Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, Input.RememberMachine);
-
-            string userId = await _userManager.GetUserIdAsync(user);
+            _ = await _userManager.GetUserIdAsync(user);
 
             if (result.Succeeded)
             {

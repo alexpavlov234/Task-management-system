@@ -1,31 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Syncfusion.Blazor.Data;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Data;
+using Task_management_system.Interfaces;
 using Task_management_system.Models;
 using Issue = Task_management_system.Models.Issue;
+
+namespace Task_management_system.Services;
 
 public class IssueService : Controller, IIssueService
 {
     private readonly Context _context;
-    private readonly IEmailSender _emailSender;
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUserStore<ApplicationUser> _userStore;
 
-    public IssueService(Context context, UserManager<ApplicationUser> userManager,
-            IUserStore<ApplicationUser> userStore,
-            SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender)
+    public IssueService(Context context)
     {
         _context = context;
-        _userManager = userManager;
-        _userStore = userStore;
-        _signInManager = signInManager;
-        _emailSender = emailSender;
     }
 
 
@@ -35,9 +24,17 @@ public class IssueService : Controller, IIssueService
         {
             _context.DetachAllEntities();
             ApplicationUser? assignedTo = _context.Users.FirstOrDefault(u => u.Id == issue.AssignedТoId);
-            issue.AssignedТo = assignedTo;
+            if (assignedTo != null)
+            {
+                issue.AssignedТo = assignedTo;
+            }
+
             ApplicationUser? assignee = _context.Users.FirstOrDefault(u => u.Id == issue.Assignee.Id);
-            issue.Assignee = assignee;
+            if (assignee != null)
+            {
+                issue.Assignee = assignee;
+            }
+
             issue.Subject = issue.Subject.Trim();
             Project? project = _context.Projects.FirstOrDefault(p => p.ProjectId == issue.ProjectId);
             if (project == null)
@@ -46,8 +43,8 @@ public class IssueService : Controller, IIssueService
             }
             issue.Project = project;
 
-            _context.Issues.Add(issue);
-            _context.SaveChanges();
+            _ = _context.Issues.Add(issue);
+            _ = _context.SaveChanges();
             return "Успешно създадена задача!";
         }
         catch (Exception)
@@ -69,7 +66,7 @@ public class IssueService : Controller, IIssueService
             }
 
             _context.Entry(issue).State = EntityState.Deleted;
-            _context.SaveChanges();
+            _ = _context.SaveChanges();
             return "Успешно изтриване на задача!";
         }
         catch
@@ -85,9 +82,9 @@ public class IssueService : Controller, IIssueService
         return issues;
     }
 
-    public Issue GetIssueById(int TaskId)
+    public Issue GetIssueById(int taskId)
     {
-        Issue issue1 = _context.Issues.AsNoTracking().Where(x => x.IssueId == TaskId).Include(x => x.Subtasks).Include(t => t.Project).Include(t => t.Assignee).Include(t => t.AssignedТo).FirstOrDefault();
+        Issue issue1 = _context.Issues.AsNoTracking().Where(x => x.IssueId == taskId).Include(x => x.Subtasks).Include(t => t.Project).Include(t => t.Assignee).Include(t => t.AssignedТo).FirstOrDefault()!;
         return issue1;
     }
 
@@ -99,7 +96,10 @@ public class IssueService : Controller, IIssueService
         {
             _context.DetachAllEntities();
             ApplicationUser? assignedTo = _context.Users.FirstOrDefault(u => u.Id == issue.AssignedТoId);
-            issue.AssignedТo = assignedTo;
+            if (assignedTo != null)
+            {
+                issue.AssignedТo = assignedTo;
+            }
 
             Issue? local = _context.Set<Issue>().Local.FirstOrDefault(entry => entry.IssueId.Equals(issue.IssueId));
             if (local != null)
@@ -108,7 +108,7 @@ public class IssueService : Controller, IIssueService
                 _context.Entry(local).State = EntityState.Detached;
             }
             _context.Entry(issue).State = EntityState.Modified;
-            _context.SaveChanges();
+            _ = _context.SaveChanges();
             return "Успешно актуализиране на задача!";
         }
         catch
@@ -132,8 +132,8 @@ public class IssueService : Controller, IIssueService
 
             _context.Entry(subtask).State = EntityState.Added;
 
-            _context.Subtasks.Add(subtask);
-            _context.SaveChanges();
+            _ = _context.Subtasks.Add(subtask);
+            _ = _context.SaveChanges();
             return "Успешно създаване на подзадача!";
         }
         catch
@@ -159,7 +159,7 @@ public class IssueService : Controller, IIssueService
             }
 
             _context.Entry(subtask).State = EntityState.Modified;
-            _context.SaveChanges();
+            _ = _context.SaveChanges();
             return "Успешно актуализиране на подзадача!";
         }
         catch
@@ -180,7 +180,7 @@ public class IssueService : Controller, IIssueService
                 _context.Entry(local).State = EntityState.Detached;
             }
             _context.Entry(subtask).State = EntityState.Deleted;
-            _context.SaveChanges();
+            _ = _context.SaveChanges();
             return "Успешно изтриване на подзадача!";
         }
         catch
@@ -189,9 +189,9 @@ public class IssueService : Controller, IIssueService
         }
     }
 
-    public Subtask GetSubtaskById(int SubtaskId)
+    public Subtask GetSubtaskById(int subtaskId)
     {
-        return _context.Subtasks.Where(x => x.SubtaskId == SubtaskId).AsNoTracking().Include(s => s.Issue).FirstOrDefault();
+        return _context.Subtasks.Where(x => x.SubtaskId == subtaskId).AsNoTracking().Include(s => s.Issue).FirstOrDefault()!;
     }
 
 

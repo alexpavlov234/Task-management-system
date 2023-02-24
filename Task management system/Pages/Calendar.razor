@@ -10,9 +10,9 @@
 @using Task_management_system.Data
 @using Task_management_system.Interfaces
 @using Task_management_system.Models
-@using Task_management_system.Pages.Common
 @using Task_management_system.Pages
 @using Syncfusion.Blazor.Schedule
+@using Task_management_system.Pages.Issues
 @inject RoleManager<IdentityRole> roleManager
 @inject UserManager<ApplicationUser> userManager
 @inject SignInManager<ApplicationUser> signInManager
@@ -20,7 +20,7 @@
 @inject IProjectService projectService
 @inject IUserService userService
 @inject IIssueService IssueService
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Roles = "Admin, User")]
 
 <div class="content-wrapper">
 

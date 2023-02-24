@@ -2,7 +2,9 @@
 @using Microsoft.AspNetCore.Identity
 @using Syncfusion.Blazor.Calendars
 @using Syncfusion.Blazor.Schedule
+@using Task_management_system.Interfaces
 @using Task_management_system.Models
+@using Task_management_system.Pages.Projects
 @using Task_management_system.Services
 @inject IIssueService IssueService
 @inject IJSRuntime JSRuntime
@@ -130,6 +132,13 @@ else
             .card-columns {
                 column-count: 2;
             }
+
+            @@media (max-width: 852px) {
+                .card-columns {
+                    column-count: 1;
+                }
+
+            }
         </style>
     </Authorized>
 
@@ -170,7 +179,6 @@ else
     String result = "";
     protected override async Task OnInitializedAsync()
     {
-        //aTimer = new Timer(Tick, null, 0, 1000);
         issues = IssueService.GetAllIssues();
         if (userService.GetLoggedUser() != null)
         {
@@ -203,20 +211,6 @@ else
     string theTime;
     string theDate;
     Timer aTimer;
-
-
-
-    //private void Tick(object _)
-    //{
-    //    theTime = DateTime.Now.ToLongTimeString();
-    //    theDate = DateTime.Now.ToLongDateString();
-    //    InvokeAsync(StateHasChanged);
-    //}
-
-    //public void Dispose()
-    //{
-    //    aTimer?.Dispose();
-    //}
 
     ElementReference timeDiv;
     ElementReference dateDiv;

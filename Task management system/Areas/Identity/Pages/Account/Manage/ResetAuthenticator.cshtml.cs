@@ -50,9 +50,9 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Невъзможно е да заредите потребител с ID '{_userManager.GetUserId(User)}'.");
             }
 
-            await _userManager.SetTwoFactorEnabledAsync(user, false);
-            await _userManager.ResetAuthenticatorKeyAsync(user);
-            string userId = await _userManager.GetUserIdAsync(user);
+            _ = await _userManager.SetTwoFactorEnabledAsync(user, false);
+            _ = await _userManager.ResetAuthenticatorKeyAsync(user);
+            _ = await _userManager.GetUserIdAsync(user);
             _logger.LogInformation("Потребител с ID '{UserId}' е нулирал своя ключ на приложението за удостоверяване.", user.Id);
 
             await _signInManager.RefreshSignInAsync(user);

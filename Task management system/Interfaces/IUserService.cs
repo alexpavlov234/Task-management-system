@@ -1,6 +1,8 @@
 ﻿using Task_management_system.Areas.Identity;
 using Task_management_system.Models;
 
+namespace Task_management_system.Interfaces;
+
 public interface IUserService
 {
     Task<string> CreateApplicationUser(ApplicationUser applicationUser, String Password);
