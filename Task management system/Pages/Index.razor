@@ -10,7 +10,7 @@
 @inject IJSRuntime JSRuntime
 @page "/"
 
-<PageTitle>Моят ден</PageTitle>
+
 
 @*
 @if (loginState.IsLoggedIn.Equals(false))
@@ -27,7 +27,7 @@ else
 *@
 <AuthorizeView>
     <Authorized>
-
+        <PageTitle>Моят ден</PageTitle>
         <div class="frame container">
             <img class="banner" src="img/13186366_5125963-ai.svg" alt="Banner">
             <div class="bottom-left">Здравейте, @userFullName</div>
@@ -143,9 +143,10 @@ else
     </Authorized>
 
     <NotAuthorized>
+        <PageTitle>Система за управление на задачи</PageTitle>
         <div>
 
-            <div class="flex flex-col justify-center items-center text-center" style=" color: white;">
+            <div class="flex flex-col justify-center items-center text-center" style="color: white;">
 
                 <div class="mb-2 text-center" style="font-size: 100px">СУЗ</div>
                 <div class="mb-2 text-center"><b>Система за управление на задачи</b></div>
