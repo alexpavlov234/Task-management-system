@@ -51,6 +51,7 @@ namespace Task_management_system
                 try
                 {
                     Context context = services.GetRequiredService<Context>();
+                    context.Database.Migrate();
                     UserManager<ApplicationUser> userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     RoleManager<IdentityRole> roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     ContextSeed.SeedRolesAsync(userManager, roleManager).Wait();

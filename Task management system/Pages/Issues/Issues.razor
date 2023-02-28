@@ -24,10 +24,6 @@
 @attribute [Authorize(Roles = "Admin, User")]
 
 <div class="content-wrapper">
-
-
-
-
     <div class="frame container">
         <img class="banner" src="img/iStock-1203930843.jpg" alt="Banner">
         <div class="bottom-left">
@@ -36,13 +32,8 @@
             <nav class="navbar navbar-expand">
                 <!-- Left navbar links -->
                 <ul class="navbar-nav float">
-                    <li class="nav-item d-none d-sm-inline-block">
+                    <li class="nav-item d-sm-inline-block">
                         <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddNewTaskClickHandler">Новa задача</button>
-
-
-                    </li>
-                    <li class="nav-item d-none d-sm-inline-block">
-                        &nbsp;
                     </li>
                 </ul>
             </nav>
@@ -109,51 +100,59 @@
 
                                     <CardBody>
                                         @if (project.Issues != null)
-                                        {
-                                            @if (project.Issues.Count() != 0)
                                             {
-                                                @foreach (var issue in project.Issues)
+                                                @if (project.Issues.Count() != 0)
                                                 {
+                                                    @foreach (var issue in project.Issues)
+                                                    {
 
-                                                    <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
-                                                        <div style="width: auto">
-                                                            @issue.Subject
-                                                        </div>
-                                                        <div class="vr hide840"></div>
-                                                        @if (issue.Subtasks != null)
-                                                        {
-                                                            @if (issue.Subtasks.Count() != 0)
+                                                        <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
+                                                            <div style="width: auto">
+                                                                @issue.Subject
+                                                            </div>
+                                                            <div class="vr hide840"></div>
+                                                            @if (issue.Subtasks != null)
                                                             {
-                                                                <div class="progress hide1100" style="width: 220px; border-radius: 20.25rem;">
-                                                                    <div class="progress-bar hide1100" role="progressbarsubtasks" aria-label="Завършени подзадачи" style="width: @((issue.Subtasks == null ? 0 : Convert.ToDouble(issue.Subtasks.Where(x => x.Status == "Затворена").Count()) / (issue.Subtasks.Count()) * 100).ToString().Replace(',', '.'))%; background-color: #4f9b00" aria-valuenow="@(issue.Subtasks == null ? 0 : (issue.Subtasks.Where(x => x.Status == "Затворена").Count() / issue.Subtasks.Count()) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
-                                                                </div>
-                                                                <label class="hide840" style="color: gray">@(issue.Subtasks == null ? 0 : (issue.Subtasks.Count() == 0 ? 0 : issue.Subtasks.Where(x => x.Status == "Затворена").Count()))/@(issue.Subtasks == null ? 0 : issue.Subtasks.ToArray().Length) завършени подзадачи </label>
+                                                                @if (issue.Subtasks.Count() != 0)
+                                                                {
+                                                                    <div class="progress hide1100" style="width: 220px; border-radius: 20.25rem;">
+                                                                        <div class="progress-bar hide1100" role="progressbarsubtasks" aria-label="Завършени подзадачи" style="width: @((issue.Subtasks == null ? 0 : Convert.ToDouble(issue.Subtasks.Where(x => x.Status == "Затворена").Count()) / (issue.Subtasks.Count()) * 100).ToString().Replace(',', '.'))%; background-color: #4f9b00" aria-valuenow="@(issue.Subtasks == null ? 0 : (issue.Subtasks.Where(x => x.Status == "Затворена").Count() / issue.Subtasks.Count()) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                    </div>
+                                                                    <label class="hide840" style="color: gray">@(issue.Subtasks == null ? 0 : (issue.Subtasks.Count() == 0 ? 0 : issue.Subtasks.Where(x => x.Status == "Затворена").Count()))/@(issue.Subtasks == null ? 0 : issue.Subtasks.ToArray().Length) завършени подзадачи </label>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label class="hide840" style="color: gray">Няма добавени подзадачи </label>
+                                                                }
                                                             }
                                                             else
                                                             {
-                                                                <label class="hide840" style="color: gray">Няма добавени подзадачи </label>
+                                                                <label style="color: gray">Няма добавени подзадачи </label>
                                                             }
-                                                        }
-                                                        else
-                                                        {
-                                                            <label style="color: gray">Няма добавени подзадачи </label>
-                                                        }
-                                                        <div class="vr hide840"></div>
+                                                            <div class="vr hide840"></div>
 
-                                                        <div style="display: flex">
-                                                            <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
-                                                                <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditIssue(issue))">
-                                                                    <i class="fa-solid fa-pen-to-square"></i>
-                                                                </button>
-                                                            </SfTooltip>
-                                                            <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                                                                <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteIssue(issue))">
-                                                                    <i class="fa-solid fa-trash"></i>
-                                                                </button>
-                                                            </SfTooltip>
-                                                        </div>
+                                                            <div style="display: flex">
+                                                                <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
+                                                                    <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditIssue(issue))">
+                                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                                                    </button>
+                                                                </SfTooltip>
+                                                                <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                                                    <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteIssue(issue))">
+                                                                        <i class="fa-solid fa-trash"></i>
+                                                                    </button>
+                                                                </SfTooltip>
+                                                            </div>
 
+                                                        </li>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <li class="list-group-item rounded d-flex align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px; text-align: center;">
+                                                        <label style="color: gray">Няма задачи в този проект!</label>
                                                     </li>
+
                                                 }
                                             }
                                             else
@@ -161,20 +160,18 @@
                                                 <li class="list-group-item rounded d-flex align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px; text-align: center;">
                                                     <label style="color: gray">Няма задачи в този проект!</label>
                                                 </li>
-
                                             }
-                                        }
-                                        else
-                                        {
-                                            <li class="list-group-item rounded d-flex align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px; text-align: center;">
-                                                <label style="color: gray">Няма задачи в този проект!</label>
-                                            </li>
-                                        }
+                                        
                                     </CardBody>
                                 </CollapsibleCard>
 
                             }
-
+                        @if (this.issues.Count() == 0)
+                        {
+                            <li class="list-group-item rounded d-flex mt-3 align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px; text-align: center;">
+                                <label style="color: gray">Няма създадени задачи!</label>
+                            </li>
+                        }
                         </div>
                     </div>
                 </div>
