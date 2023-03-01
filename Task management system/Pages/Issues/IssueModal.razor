@@ -113,9 +113,6 @@
                         <SfDropDownList ID="owner" TValue="string" Enabled="(isLoggedUserAdmin || _isIssueNew) || issue.AssigneeId == loggedUser.Id" TItem="ApplicationUser" @bind-Value="issue.AssignedТoId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете, на кого е възложена" DataSource="@users">
                             <DropDownListFieldSettings Value="Id" Text="FullName"></DropDownListFieldSettings>
                         </SfDropDownList>
-                        @*<SfDropDownList ID="owner" TValue="string" TItem="ApplicationUser" @bind-Value="issueAssignedToUserName" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете, на кого е възложена " DataSource="@users">
-                        <DropDownListFieldSettings Value="UserName" Text="FullName"></DropDownListFieldSettings>
-                        </SfDropDownList>*@
                     </div>
                     @if (!this._isIssueNew)
                     {

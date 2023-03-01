@@ -35,6 +35,8 @@ public class UserService : Controller, IUserService
     public async Task<string> CreateApplicationUser(ApplicationUser applicationUser, String Password)
     {
         _context.DetachAllEntities();
+        applicationUser.FirstName.Trim();
+        applicationUser.LastName.Trim();
         // Използване на метода CreateAsync от UserManager за създаване на нов потребител
         IdentityResult result = await _userManager.CreateAsync(applicationUser, Password);
         // Отделяне на потребителя от локалния контекст
@@ -121,6 +123,8 @@ public class UserService : Controller, IUserService
     public async Task UpdateApplicationUser(ApplicationUser applicationUser)
     {
         _context.DetachAllEntities();
+        applicationUser.FirstName.Trim();
+        applicationUser.LastName.Trim();
         ApplicationUser? local = _context.Set<ApplicationUser>().Local.FirstOrDefault(entry => entry.Id.Equals(applicationUser.Id));
         // check if local is not null
         if (local != null)

@@ -23,6 +23,7 @@ public class IssueService : Controller, IIssueService
         try
         {
             _context.DetachAllEntities();
+            issue.Subject = issue.Subject.Trim();
             ApplicationUser? assignedTo = _context.Users.FirstOrDefault(u => u.Id == issue.AssignedТoId);
             if (assignedTo != null)
             {
@@ -95,6 +96,7 @@ public class IssueService : Controller, IIssueService
         try
         {
             _context.DetachAllEntities();
+            issue.Subject = issue.Subject.Trim();
             ApplicationUser? assignedTo = _context.Users.FirstOrDefault(u => u.Id == issue.AssignedТoId);
             if (assignedTo != null)
             {
@@ -122,6 +124,7 @@ public class IssueService : Controller, IIssueService
         try
         {
             _context.DetachAllEntities();
+            subtask.Subject = subtask.Subject.Trim();
             Issue? local = _context.Set<Issue>().Local
                 .FirstOrDefault(entry => entry.IssueId.Equals(subtask.Issue.IssueId));
             if (local != null)
@@ -150,6 +153,7 @@ public class IssueService : Controller, IIssueService
     {
         try
         {
+            subtask.Subject = subtask.Subject.Trim();
             Subtask? local = _context.Set<Subtask>().Local
                 .FirstOrDefault(entry => entry.SubtaskId.Equals(subtask.SubtaskId));
             if (local != null)

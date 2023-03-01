@@ -30,7 +30,6 @@ namespace Task_management_system.Pages.Management
         {
             inputModel.Password = BaseHelper.GeneratePassword();
             inputModel.ConfirmPassword = inputModel.Password;
-            inputModel.PhoneNumber = "";
         }
 
         public async void OpenDialog(ApplicationUser applicationUser)
@@ -80,7 +79,6 @@ namespace Task_management_system.Pages.Management
                     await CallbackAfterSubmit.InvokeAsync();
                     toast.sfSuccessToast.Title = "Успешно приложени промени!";
                     _ = toast.sfSuccessToast.ShowAsync();
-                    IsVisible = false;
                 }
                 else
                 {

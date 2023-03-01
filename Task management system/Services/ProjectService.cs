@@ -23,6 +23,7 @@ public class ProjectService : Controller, IProjectService
         try
         {
             _context.DetachAllEntities();
+            project.ProjectName = project.ProjectName.Trim();
             project.ProjectType = _keyValueService.GetKeyValueById(project.ProjectTypeId);
             if (_context.Projects.Any(p => p.ProjectName == project.ProjectName))
             {
@@ -123,6 +124,7 @@ public class ProjectService : Controller, IProjectService
         try
         {
             _context.DetachAllEntities();
+            project.ProjectName = project.ProjectName.Trim();
             project.ProjectType = _keyValueService.GetKeyValueById(project.ProjectTypeId);
 
             List<ApplicationUserProject> projectParticipants = new List<ApplicationUserProject>();

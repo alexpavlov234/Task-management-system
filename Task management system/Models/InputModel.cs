@@ -12,9 +12,11 @@ namespace Task_management_system.Models
         [Display(Name = "Потребителско име")]
         public string Username { get; set; }
         [Required(ErrorMessage = "Полето 'Име' е задължително!")]
+        [RegularExpression(@"^[A-ZА-ЯЁ][A-Za-zА-ЯЁа-яё]+-?[A-Za-zА-ЯЁа-яё]+$", ErrorMessage = "Невалидно име!")]
         [Display(Name = "Име")]
         public string FirstName { get; set; }
         [Required(ErrorMessage = "Полето 'Фамилия' е задължително!")]
+        [RegularExpression(@"^[A-ZА-ЯЁ][A-Za-zА-ЯЁа-яё]+-?[A-Za-zА-ЯЁа-яё]+$", ErrorMessage = "Невалидно фамилно име!")]
         [Display(Name = "Фамилия")]
         public string LastName { get; set; }
 

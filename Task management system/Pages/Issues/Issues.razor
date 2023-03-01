@@ -166,7 +166,7 @@
                                 </CollapsibleCard>
 
                             }
-                        @if (this.issues.Count() == 0)
+                        @if (this.issues.Count() == 0 && this.projects.Count() == 0)
                         {
                             <li class="list-group-item rounded d-flex mt-3 align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px; text-align: center;">
                                 <label style="color: gray">Няма създадени задачи!</label>
@@ -438,8 +438,6 @@
     private void EditIssue(Issue issue)
     {
         taskModal.OpenDialog(issue);
-
-    //  managementModal.OpenDialog(applicationUser);
     }
 
 }
