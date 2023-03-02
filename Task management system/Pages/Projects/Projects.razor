@@ -277,9 +277,11 @@
     }
     private void AddNewProjectClickHandler()
     {
-        projectModal.OpenDialog(new Project { StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(1), ProjectParticipants = new List<ApplicationUserProject>(), ProjectOwner = new ApplicationUser() });
+        projectModal.OpenDialog(new Project { StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(1), ProjectParticipants = null, ProjectOwner = null });
 
     }
+
+
     private void UpdateAfterManagementModalSubmitAsync()
     {
         projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");

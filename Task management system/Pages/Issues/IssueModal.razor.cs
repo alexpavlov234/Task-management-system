@@ -52,20 +52,18 @@ namespace Task_management_system.Pages.Issues
         {
             if (isLoggedUserAdmin)
             {
-                projects = ProjectService.GetAllProjects();
+                projects = ProjectService.GetAllProjects().OrderBy(x => x.ProjectName).ToList();
             }
             else
             {
                 projects = ProjectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
-                                                                      || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
+                                                                      || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).OrderBy(x => x.ProjectName).ToList();
             }
         }
 
         private async Task AddSubtask()
         {
             subtaskModal.OpenDialog(new Subtask { Status = "Нова", Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Issue = issue, IssueId = issue.IssueId });
-
-            //managementModal.OpenDialog(new ApplicationUser());
         }
         private async Task DeleteSubtask(Subtask subtask)
         {
@@ -104,8 +102,10 @@ namespace Task_management_system.Pages.Issues
         public async void OpenDialog(Issue issue)
 
         {
-            _isIssueNew = IssueService.GetIssueById(issue.IssueId) == null;
-
+            _isIssueNew = IssueService.GetIssueById(issue.IssueId) == null;   
+            isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
+            loggedUser = UserService.GetLoggedUser();
+            UpdateData();
             statuses = new List<KeyValue>();
             priorities = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
             this.issue = issue;
@@ -127,15 +127,13 @@ namespace Task_management_system.Pages.Issues
             }
             else
             {
-
-                //issueProjectName = "";
+                this.issue.ProjectId = projects.First().ProjectId;
                 this.issue.StartTime = DateTime.Now;
                 this.issue.EndTime = DateTime.Now.AddMonths(1);
             }
             _ = GetStatus(this.issue.Status);
-            isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
-            loggedUser = UserService.GetLoggedUser();
-            UpdateData();
+         
+            
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("IssueType");
             users = ProjectService.GetProjectById(this.issue.ProjectId).ProjectParticipants.ToList().Select(x => x.User).ToList();
             editContext = new EditContext(issue);
@@ -191,6 +189,11 @@ namespace Task_management_system.Pages.Issues
                 issue.StartTime = DateTime.Now;
                 issue.EndTime = DateTime.Now.AddMonths(1);
             }
+        }
+
+        private void OnValueSelectHandlerAssignedTo(ChangeEventArgs<string, KeyValue> args)
+        {
+            this.issue.AssignedТo = users.Find(x => x.Id == args.Value)!;
         }
         private void OnValueSelectHandlerStatus(ChangeEventArgs<string, KeyValue> args)
         {

@@ -12,7 +12,7 @@
         <Header>Данни за потребител <span style="color: #009cfc;">@this.inputModel.FirstName @this.inputModel.LastName</span></Header>
         <Content>
 
-            <EditForm EditContext="editContext">
+            <EditForm id="userForm" EditContext="editContext" OnValidSubmit="@SaveUser">
 
                 <DataAnnotationsValidator />
 
@@ -20,17 +20,14 @@
                     <div class="col-md-4">
                         <label for="userName">Потребителско име</label>
                         <InputText id="userName" @bind-Value="inputModel.Username" class="form-control"></InputText>
-                        <ValidationMessage For="@(() => inputModel.Username)" />
                     </div>
                     <div class="col-md-4">
                         <label for="firstName">Име</label>
                         <InputText id="firstName" @bind-Value="inputModel.FirstName" class="form-control"></InputText>
-                        <ValidationMessage For="@(() => inputModel.FirstName)" />
                     </div>
                     <div class="col-md-4">
                         <label for="lastName">Фамилия</label>
                         <InputText id="lastName" @bind-Value="inputModel.LastName" class="form-control"></InputText>
-                        <ValidationMessage For="@(() => inputModel.LastName)" />
                     </div>
                 </div>
                 <div class="row">
@@ -39,12 +36,10 @@
                         <div class="col-md-4">
                             <label for="telephone">Телефон</label>
                             <InputText id="telephone" @bind-Value="inputModel.PhoneNumber" class="form-control"></InputText>
-                            <ValidationMessage For="@(() => inputModel.PhoneNumber)" />
                         </div>
                         <div class="col-md-4">
                             <label for="email">Имейл</label>
                             <InputText id="email" @bind-Value="inputModel.Email" class="form-control"></InputText>
-                            <ValidationMessage For="@(() => inputModel.Email)" />
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
@@ -67,12 +62,10 @@
                         <div class="col-md-6">
                             <label for="telephone">Телефон</label>
                             <InputText id="telephone" @bind-Value="inputModel.PhoneNumber" class="form-control"></InputText>
-                            <ValidationMessage For="@(() => inputModel.PhoneNumber)" />
                         </div>
                         <div class="col-md-6">
                             <label for="email">Имейл</label>
-                            <InputText id="email" @bind-Value="inputModel.Email" class="form-control"></InputText>
-                            <ValidationMessage For="@(() => inputModel.Email)" />
+                            <InputText id="email" @bind-Value="inputModel.Email" class="form-control"></InputText> 
                         </div>
                         <div class="col-md-6">
                             <label for="role">Роля</label>
@@ -90,7 +83,7 @@
         <FooterTemplate>
             <div class="form-group">
                 <div class="text-right">
-                    <button type="button" class="btn btn-primary" @onclick="SaveUser">Запиши</button>
+                    <button type="submit" class="btn btn-primary" form="userForm">Запиши</button>
                     <button type="button" class="btn btn-secondary" @onclick="CloseDialog">Отказ</button>
                 </div>
             </div>

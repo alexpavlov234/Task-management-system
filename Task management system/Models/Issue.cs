@@ -13,7 +13,7 @@ namespace Task_management_system.Models
 
         public string AssigneeId { get; set; }
         public ApplicationUser Assignee { get; set; }
-
+        [Required(ErrorMessage = "Полето 'Възложена на' е задължително!")]
         public string AssignedТoId { get; set; }
         public ApplicationUser AssignedТo { get; set; }
 

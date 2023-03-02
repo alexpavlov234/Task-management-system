@@ -49,7 +49,14 @@ namespace Task_management_system.Pages.Projects
         public async void OpenDialog(Project project)
 
         {
+            projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
+            users = UserService.GetAllUsers();
             projectParticipants = null;
+
+            if (project.ProjectId == 0)
+            {
+                project.ProjectTypeId = projectTypes.First().IdKeyValue;
+            }
             loggedUser = UserService.GetLoggedUser();
             isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
             if (!isLoggedUserAdmin)
@@ -58,15 +65,11 @@ namespace Task_management_system.Pages.Projects
             }
 
             this.project = new Project() { ProjectId = project.ProjectId, ProjectParticipants = project.ProjectParticipants, Issues = project.Issues, ProjectOwner = project.ProjectOwner, ProjectTypeId = project.ProjectTypeId, EndDate = project.EndDate, ProjectDescription = project.ProjectDescription, ProjectName = project.ProjectName, ProjectType = project.ProjectType, StartDate = project.StartDate };
-            projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
-            users = UserService.GetAllUsers();
+
             projectParticipantsSfMultiSelect.DataSource = users;
             if (this.project.ProjectParticipants != null)
             {
-                //TODO:Да го фикснеш;
-                // this.project.ProjectParticipants.Remove(x => x.);
                 projectParticipants = this.project.ProjectParticipants.Select(x => x.User).Where(x => x != null).ToArray();
-
             }
             else
             {
@@ -77,7 +80,25 @@ namespace Task_management_system.Pages.Projects
             IsVisible = true;
             StateHasChanged();
         }
+        private void OnValueSelectHandlerParticipants(MultiSelectChangeEventArgs<ApplicationUser[]> args)
+        {
+            if (projectParticipants != null)
+            {
+                IEnumerable<ApplicationUserProject> participants = projectParticipants.Select(x =>
+                    new ApplicationUserProject
+                    {
+                        UserId = x.Id,
+                        ProjectId = project.ProjectId
+                    });
 
+
+                project.ProjectParticipants = participants.ToList();
+            }
+            else
+            {
+                project.ProjectParticipants = null;
+            }
+        }
         private void CloseDialog()
         {
             IsVisible = false;
@@ -107,23 +128,6 @@ namespace Task_management_system.Pages.Projects
         }
         private async void SaveProject()
         {
-
-            //this.projectParticipants.DistinctBy(i => i.User);
-            //TODO: Да се обмисли
-            if (projectParticipants == null)
-            {
-                projectParticipants = new ApplicationUser[] { };
-            }
-
-            IEnumerable<ApplicationUserProject> participants = projectParticipants.Select(x => new ApplicationUserProject
-            {
-                UserId = x.Id,
-                ProjectId = project.ProjectId
-            });
-
-
-            project.ProjectParticipants = participants.ToList();
-
 
             // project.ProjectParticipants = new List<ApplicationUser>(projectParticipants);
             if (editContext.Validate())
@@ -178,6 +182,19 @@ namespace Task_management_system.Pages.Projects
             }
         }
 
+        private void ValidateParticipants()
+        {
+            if (this.project.ProjectParticipants == null)
+            {
 
+                this.toast.sfErrorToast.Title = "Моля въведете участници в проекта!";
+                _ = this.toast.sfErrorToast.ShowAsync();
+            }
+            else if (this.project.ProjectParticipants.Count() == 0)
+            {
+                this.toast.sfErrorToast.Title = "Моля въведете участници в проекта!";
+                _ = this.toast.sfErrorToast.ShowAsync();
+            }
+        }
     }
 }

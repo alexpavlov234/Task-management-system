@@ -16,7 +16,7 @@
            <span style="color: #009cfc;">@this.project.ProjectName</span></Header>
         <Content>
 
-            <EditForm EditContext="editContext">
+            <EditForm id="projectForm" EditContext="editContext" OnValidSubmit="@SaveProject">
 
                 <DataAnnotationsValidator />
 
@@ -24,26 +24,21 @@
                     <div class="col-md-4">
                         <label for="projectName">Име на проект</label>
                         <InputText id="projectName" @bind-Value="project.ProjectName" placeholder="Въведете име" class="form-control"></InputText>
-                        <ValidationMessage For="@(() => project.ProjectName)" />
                     </div>
                     <div class="col-md-4">
                         <label for="datepicker">Диапазон на проект</label>
                         <SfDateRangePicker ID="datepicker"  TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@project.StartDate" @bind-EndDate="@project.EndDate" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
-                        <ValidationMessage For="@(() => project.StartDate)" />
-                        <ValidationMessage For="@(() => project.EndDate)" />
                     </div>
                     <div class="col-md-4">
                         <label for="type">Тип проект</label>
                         <SfDropDownList ID="type"  TValue="int" TItem="KeyValue" @bind-Value="project.ProjectTypeId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете тип" DataSource="@projectTypes">
                             <DropDownListFieldSettings Value="IdKeyValue" Text="Name"></DropDownListFieldSettings>
                         </SfDropDownList>
-                        <ValidationMessage For="@(() => project.ProjectTypeId)" />
                     </div>
                 </div>
                 <label for="description">Описание на проект</label>
                 <div class="multiline">
                     <SfTextBox id="description"  Multiline=true Placeholder="Въведете описание" @bind-Value="@project.ProjectDescription"></SfTextBox>
-                    <ValidationMessage For="@(() => project.ProjectDescription)" />
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -51,12 +46,12 @@
                         <SfDropDownList ID="owner" TValue="ApplicationUser" Enabled="project.ProjectOwner != null ? isLoggedUserAdmin : true " TItem="ApplicationUser" @bind-Value="project.ProjectOwner" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете собственик" DataSource="@users">
                             <DropDownListFieldSettings Value="UserName" Text="FullName"></DropDownListFieldSettings>
                         </SfDropDownList>
-                        <ValidationMessage For="@(() => project.ProjectOwner)" />
                     </div>
                     <div class="col-md-12">
                         <label for="participants">Участници в проекта</label>
-                        <SfMultiSelect  @ref="projectParticipantsSfMultiSelect"  TValue="ApplicationUser[]" TItem="ApplicationUser" Placeholder="Изберете участници" DataSource="@users" @bind-Value="projectParticipants">
+                        <SfMultiSelect @ref="projectParticipantsSfMultiSelect" TValue="ApplicationUser[]" TItem="ApplicationUser" Placeholder="Изберете участници" DataSource="@users" @bind-Value="projectParticipants">
                             <MultiSelectFieldSettings Text="FullName" Value="UserName"></MultiSelectFieldSettings>
+                            <MultiSelectEvents TItem="ApplicationUser" TValue="ApplicationUser[]" ValueChange="@OnValueSelectHandlerParticipants"></MultiSelectEvents>
                         </SfMultiSelect>
                         
                     </div>
@@ -69,7 +64,7 @@
             <div class="form-group">
                 <div class="text-right">
 
-                    <button type="button" class="btn btn-primary" @onclick="SaveProject">Запиши</button>
+                    <button type="submit" class="btn btn-primary" form="projectForm" @onclick="@ValidateParticipants">Запиши</button>
                     <button type="button" class="btn btn-secondary" @onclick="CloseDialog">Отказ</button>
                 </div>
             </div>
