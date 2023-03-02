@@ -1,0 +1,327 @@
+﻿@page "/Search"
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.TreeGrid
+@using Syncfusion.PdfExport
+@using Task_management_system.Areas.Identity
+@using Task_management_system.Data
+@using Task_management_system.Interfaces
+@using Task_management_system.Models
+@using Task_management_system.Pages
+@using Task_management_system.Pages.Shared
+@using System.Globalization
+@using Task_management_system.Pages.Issues
+@using Task_management_system.Pages.Projects
+@using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs
+@inject RoleManager<IdentityRole> roleManager
+@inject UserManager<ApplicationUser> userManager
+@inject SignInManager<ApplicationUser> signInManager
+@inject IUserService userService
+@inject IKeyValueService keyValueService
+@inject IProjectService projectService
+@inject IIssueService issueService
+@attribute [Authorize(Roles = "Admin,User")]
+
+<div class="content-wrapper">
+
+
+    <div>
+        @if (ShowHeader)
+        {
+            <div class="frame container">
+                <img class="banner" src="img/iStock-1203930843.jpg" alt="Banner">
+                <div class="bottom-left">
+
+                    <h3>Търсене</h3>
+                    <nav class="navbar navbar-expand">
+                        <div class="form-control">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="btn btn-outline-primary">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </div>
+                                </div>
+                                <input type="text" @bind-value="query" @bind-value:event="oninput" class="form-control" @onkeydown="@(e => { if (e.Key == "Enter") SearchInput(); })" />
+                                <div class="input-group-append">
+                                    <button type="button" @onclick="SearchInput" class="btn btn-primary">
+                                        Търсене
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="m-3">
+                <h5>Проекти</h5>
+                <div class="project-issue-list">
+
+                    <ul class="search-list">
+                        @foreach (var project in projectsResult)
+                        {
+
+                            <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
+                                <div style="width: auto">
+                                    @project.ProjectName
+                                </div>
+
+                                <div class="vr hide840"></div>
+                                @if (project.Issues.Count() != 0)
+                                {
+                                    <div class="progress hide1100" style="width: 220px; border-radius: 20.25rem;">
+                                        <div class="progress-bar hide1100" role="progressbar" aria-label="Завършени задачи" style="width: @((project.Issues == null ? 0 : Convert.ToDouble(project.Issues.Count(x => x.Status == "Затворена")) / (project.Issues.Count()) * 100).ToString().Replace(',', '.'))%; background-color: #4f9b00" aria-valuenow="@(project.Issues == null ? 0 : (project.Issues.Count(x => x.Status == "Затворена") / project.Issues.Count()) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <label class="hide840" style="color: gray">@(project.Issues == null ? 0 : project.Issues.Count(x => x.Status == "Затворена") / project.Issues.Count())/@(project.Issues == null ? 0 : project.Issues.ToArray().Length) завършени задачи </label>
+                                }
+                                else
+                                {
+                                    <label class="hide840" style="color: gray">Няма добавени задачи </label>
+                                }
+                                <div class="vr hide840"></div>
+                                <div>
+                                    <div @key="project.ProjectId" style="display: flex">
+
+                                        @if (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)
+                                        {
+                                            <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
+                                                <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditProject(project))">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </button>
+                                            </SfTooltip>
+
+
+                                            <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                                <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </SfTooltip>
+                                        }
+                                        else
+                                        {
+                                            <SfTooltip Position="Position.BottomCenter" Content="Преглед" OpensOn="Hover">
+                                                <button type="button" class="btn btn-outline-primary waves-effect md-trigger m-1" @onclick="(() => EditProject(project))">
+                                                    <i class="fa-solid fa-eye"></i>
+                                                </button>
+                                            </SfTooltip>
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+
+                        }
+
+
+                    </ul>
+
+
+
+                </div>
+
+            </div>
+
+            <div class="m-3">
+                <h5>Задачи</h5>
+
+
+                <div>
+
+                    <ul class="search-list">
+                        @foreach (var issue in issuesResult)
+                        {
+
+                            <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
+                                <div style="width: auto">
+                                    @issue.Subject
+                                </div>
+                                <div class="vr hide840"></div>
+                                @if (issue.Subtasks != null)
+                                {
+                                    @if (issue.Subtasks.Count() != 0)
+                                    {
+                                        <div class="progress hide1100" style="width: 220px; border-radius: 20.25rem;">
+                                            <div class="progress-bar hide1100" role="progressbarsubtasks" aria-label="Завършени подзадачи" style="width: @((issue.Subtasks == null ? 0 : Convert.ToDouble(issue.Subtasks.Where(x => x.Status == "Затворена").Count()) / (issue.Subtasks.Count()) * 100).ToString().Replace(',', '.'))%; background-color: #4f9b00" aria-valuenow="@(issue.Subtasks == null ? 0 : (issue.Subtasks.Where(x => x.Status == "Затворена").Count() / issue.Subtasks.Count()) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <label class="hide840" style="color: gray">@(issue.Subtasks == null ? 0 : (issue.Subtasks.Count() == 0 ? 0 : issue.Subtasks.Where(x => x.Status == "Затворена").Count()))/@(issue.Subtasks == null ? 0 : issue.Subtasks.ToArray().Length) завършени подзадачи </label>
+                                    }
+                                    else
+                                    {
+                                        <label class="hide840" style="color: gray">Няма добавени подзадачи </label>
+                                    }
+                                }
+                                else
+                                {
+                                    <label style="color: gray">Няма добавени подзадачи </label>
+                                }
+                                <div class="vr hide840"></div>
+
+                                <div style="display: flex">
+                                    <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
+                                        <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditIssue(issue))">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </SfTooltip>
+                                    <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteIssue(issue))">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </SfTooltip>
+                                </div>
+
+                            </li>
+                        }
+
+
+                    </ul>
+
+
+
+                </div>
+            </div>
+
+        }
+
+    </div>
+</div>
+
+<ToastMsg @ref="toast" />
+<ProjectModal @ref="projectModal" CallbackAfterSubmit="UpdateAfterManagementModalSubmitAsync" />
+<IssueModal @ref="taskModal" CallbackAfterSubmit="UpdateAfterIssueModalSubmitAsync" />
+<style>
+    .form-control {
+        padding: 0.2px 5px;
+    }
+</style>
+@code {
+    //https://learn.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-7.0
+
+
+    private List<Project> projects { get; set; }
+    private List<Issue> issues { get; set; }
+    private List<Project> projectsResult { get; set; }
+    private List<Issue> issuesResult { get; set; }
+    private ProjectModal projectModal = new();
+    private ToastMsg toast = new();
+    private IssueModal taskModal = new IssueModal();
+    private string query = "";
+    bool isLoggedUserAdmin = false;
+    private ApplicationUser loggedUser { get; set; }
+    [Parameter]
+    public bool ShowHeader { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        loggedUser = userService.GetLoggedUser();
+        isLoggedUserAdmin = userService.IsLoggedUserAdmin();
+
+        UpdateData();
+
+    }
+
+    private void UpdateData()
+    {
+        projectsResult = new List<Project>();
+        issuesResult = new List<Issue>();
+        if (isLoggedUserAdmin)
+        {
+            projects = projectService.GetAllProjects();
+            issues = issueService.GetAllIssues();
+        }
+        else
+        {
+            projects = projectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
+                                                                  || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
+            issues = issueService.GetAllIssues().Where(p => p.AssignedТo.Id == loggedUser.Id || p.Assignee.Id == loggedUser.Id).ToList();
+        }
+    }
+
+    private async Task UpdateAfterIssueModalSubmitAsync()
+    {
+
+        UpdateData();
+
+        this.StateHasChanged();
+    }
+    private void UpdateAfterManagementModalSubmitAsync()
+    {
+
+        UpdateData();
+        this.StateHasChanged();
+
+    }
+    private async Task DeleteIssue(Issue issue)
+    {
+
+        var result = issueService.DeleteIssue(issue);
+        if (result.StartsWith("Успешно"))
+        {
+            toast.sfSuccessToast.Title = result;
+            toast.sfSuccessToast.ShowAsync();
+
+            this.StateHasChanged();
+        }
+        else
+        {
+            toast.sfErrorToast.Title = result;
+            toast.sfErrorToast.ShowAsync();
+        }
+
+        projects = projectService.GetAllProjects();
+        this.StateHasChanged();
+
+    }
+
+    private void EditIssue(Issue issue)
+    {
+        taskModal.OpenDialog(issue);
+    }
+    private void DeleteProject(Project project)
+    {
+
+        var result = projectService.DeleteProject(project.ProjectId);
+        if (result.StartsWith("Успешно"))
+        {
+            toast.sfSuccessToast.Title = result;
+            toast.sfSuccessToast.ShowAsync();
+
+
+        }
+        else
+        {
+            toast.sfErrorToast.Title = result;
+            toast.sfErrorToast.ShowAsync();
+        }
+        if (isLoggedUserAdmin)
+        {
+            projects = projectService.GetAllProjects();
+        }
+        else
+        {
+            projects = projectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
+                                                                  || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
+        }
+        this.StateHasChanged();
+
+    }
+
+    private void EditProject(Project project)
+    {
+        projectModal.OpenDialog(project);
+        this.OnInitializedAsync();
+    }
+
+    public void SearchInput()
+    {
+        if (query != "")
+        {
+            projectsResult = this.projects.Where(p => p.ProjectName.Contains(query) || p.ProjectDescription.Contains(query)).ToList();
+            issuesResult = this.issues.Where(t => t.Subject.Contains(query) || t.Description.Contains(query)).ToList();
+
+            this.StateHasChanged();
+        }
+    }
+}

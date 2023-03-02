@@ -156,9 +156,14 @@ button.nav-link.btn.btn-link {
     margin: 5px 0 5px 0;
 }
 
-.input-group-prepend button {
+.input-group-prepend * {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+}
+
+.input-group-append *{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .e-rowcell button {
@@ -231,9 +236,14 @@ button.nav-link.btn.btn-link {
     position: absolute;
     bottom: 24px;
     left: 24px;
+    right: 24px;
     font-size: 28px;
     font-family: SegoeUIBold;
     text-align: left;
+}
+.search-list {
+    margin: 0px;
+    padding: 0px;
 }
 
 .center-absolute {
