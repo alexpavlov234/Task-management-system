@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Newtonsoft.Json.Linq;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Kanban;
 using Syncfusion.ExcelExport;
 using Syncfusion.XlsIO;
 using Task_management_system.Areas.Identity;
@@ -28,7 +30,7 @@ namespace Task_management_system.Pages.Issues
         private bool _isVisible = false;
         private List<Issue> issues = new List<Issue>();
         private ToastMsg toast = new ToastMsg();
-
+        private IssueImportModal importIssueModal = new IssueImportModal();
         protected EditContext editContext;
         private Issue issue = new Issue();
         private string statusLineColor = "";
@@ -55,6 +57,7 @@ namespace Task_management_system.Pages.Issues
         public void OpenDialog(Project project)
 
         {
+            this.issues.Clear();
             this.project = project;
             isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
             loggedUser = UserService.GetLoggedUser();
@@ -69,7 +72,7 @@ namespace Task_management_system.Pages.Issues
         {
 
             var file = e.File;
-
+            bool hasErrors = false;
             if (file != null)
             {
                 using (var stream = new MemoryStream())
@@ -91,38 +94,54 @@ namespace Task_management_system.Pages.Issues
                         IRange dataRange = worksheet.UsedRange;
 
                         // Loop through the rows and map the data to Issue objects
-                        for (int i = 2; i <= dataRange.Rows.Count(); i++)
+                        for (int i = 2; i <= dataRange.Rows.Count()+1; i++)
                         {
+                            string subject = dataRange[i, 1].Value;
+                            string description = dataRange[i, 2].Value;
+                            string assignedTo = dataRange[i, 3].Value;
+                            string status = dataRange[i, 4].Value;
+                            DateTime startTime = dataRange[i, 5].DateTime;
+                            DateTime endTime = dataRange[i, 6].DateTime;
+                            string priority = dataRange[i, 7].Value;
+
+                            if (string.IsNullOrEmpty(subject) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(assignedTo) || string.IsNullOrEmpty(status) || string.IsNullOrEmpty(priority))
+                            {
+                                hasErrors = true;
+                                continue;
+                            }
+
                             Issue issue = new Issue
                             {
-                                Subject = dataRange[i, 1].Value,
-                                Description = dataRange[i, 2].Value,
-                                AssignedТo = new ApplicationUser {UserName = dataRange[i, 3].Value},
-                                Status = dataRange[i, 4].Value,
-                                StartTime = dataRange[i, 5].DateTime,
-                                EndTime = dataRange[i, 6].DateTime,
-                                Priority = dataRange[i, 7].Value
-                                
-                                
+                                Subject = subject,
+                                Description = description,
+                                AssignedТo = new ApplicationUser { UserName = assignedTo },
+                                Status = status,
+                                StartTime = startTime,
+                                EndTime = endTime,
+                                Priority = priority
                             };
+
                             issue.AssignedТoId = (await UserService.GetApplicationUserByUsernameAsync(issue.AssignedТo.UserName)) != null ? (await UserService.GetApplicationUserByUsernameAsync(issue.AssignedТo.UserName)).Id : null;
-                            issue.AssignedТo = null;
+                            issue.AssignedТo = await UserService.GetApplicationUserByIdAsync(issue.AssignedТoId);
                             issue.Assignee = UserService.GetLoggedUser();
                             issue.ProjectId = this.project.ProjectId;
+                            issue.Location = "";
+                            issue.RecurrenceException = "";
+                            issue.RecurrenceRule = "";
+                            issue.Subtasks = new List<Subtask>();
                             issues.Add(issue);
                         }
-
 
                         workbook.Close();
                     }
                 }
             }
-            else
+
+            if (hasErrors)
             {
-
-
+                this.toast.sfErrorToast.Title = "Изключени са задачите с невалидни данни!";
+                this.toast.sfErrorToast.ShowAsync();
             }
-
             this.sfGrid.Refresh();
             StateHasChanged();
 
@@ -130,22 +149,51 @@ namespace Task_management_system.Pages.Issues
 
         private async Task UploadIssues()
         {
-            _showOverlay = true;
-            int currentQuestion;
-            foreach (Issue issue in issues)
+
+
+            if (issues.Any())
             {
-                currentQuestion = issues.IndexOf(issue) + 1;
-                currentIssueIndex = currentQuestion;
-               _progressPercentage = (int)((float)currentQuestion / issues.Count() * 100); 
-                IssueService.CreateIssue(issue);
+                foreach (Issue issue in issues)
+                {
+                    IssueService.CreateIssue(issue);
+                }
+                this.toast.sfSuccessToast.Title = "Успешно импортиране!";
+                this.toast.sfSuccessToast.ShowAsync();
+                this.issues.Clear();
             }
-            _showOverlay = false;
+            else
+            {
+                this.toast.sfErrorToast.Title = "Няма качени задачи!";
+                this.toast.sfErrorToast.ShowAsync();
+
+            }
+
             await CallbackAfterSubmit.InvokeAsync();
         }
         private void CloseDialog()
         {
             _isVisible = false;
             StateHasChanged();
+        }
+
+        private async Task DeleteIssue(Issue issue)
+        {
+
+            issues.Remove(issue);
+            this.StateHasChanged();
+
+
+        }
+
+        private void UpdateData(Issue issue)
+        {
+            int index = issues.IndexOf(issue);
+            issues[index] = issue;
+            this.StateHasChanged();
+        }
+        private void EditIssue(Issue issue)
+        {
+            importIssueModal.OpenDialog(issue);
         }
     }
 }

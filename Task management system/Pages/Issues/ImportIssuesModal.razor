@@ -18,42 +18,67 @@
             <span style="color: #009cfc;">Импортиране на задачи от файл</span>
         </Header>
         <Content>
-            <InputFile class="form-control" OnChange="@LoadQuestions" />
-            <SfGrid @ref="sfGrid"DataSource="@issues" AllowPaging="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" })" Height="315">
-                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true"></GridEditSettings>
-                <GridColumns>
-                    <GridColumn Field=@nameof(Issue.Subject) HeaderText="Име" Width="120"></GridColumn>
-                    <GridColumn Field=@nameof(Issue.Description) HeaderText="Описание" Width="120"></GridColumn>
-                    <GridColumn Field=@nameof(Issue.AssignedТo) HeaderText="Възложена на" Width="120">
-                    <EditTemplate>
-                            <SfDropDownList ID="owner" TValue="string" Enabled="(isLoggedUserAdmin || _isIssueNew) || issue.AssigneeId == loggedUser.Id" TItem="ApplicationUser" @bind-Value="((context as Issue).AssignedТoId)" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете, на кого е възложена" DataSource="@users">
-                            <DropDownListFieldSettings Value="Id" Text="FullName"></DropDownListFieldSettings>
-                        </SfDropDownList>
-                    </EditTemplate>
-                    </GridColumn>
-                    <GridColumn Field=@nameof(Issue.Status) HeaderText="Статус" Width="120">
-                    <EditTemplate>
-                        <SfDropDownList @ref="statusDropDownList" ID="status" TValue="string" Enabled="true" TItem="KeyValue" @bind-Value="@((context as Issue).Status)" PopupHeight="350px" PopupWidth="350px" DataSource="@statuses">
-                            <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
-                        </SfDropDownList>
-                        </EditTemplate>
-                    </GridColumn>
-                    <GridColumn Field=@nameof(Issue.StartTime) HeaderText="От" EditType="EditType.DatePickerEdit" Format="d" TextAlign="TextAlign.Right" Width="130" Type="ColumnType.Date"></GridColumn>
-                    <GridColumn Field=@nameof(Issue.EndTime) HeaderText="До" EditType="EditType.DatePickerEdit" Format="d" TextAlign="TextAlign.Right" Width="130" Type="ColumnType.Date"></GridColumn>
-                    <GridColumn Field=@nameof(Issue.Priority) HeaderText="Приоритет" Width="120"><EditTemplate>
-                            <SfDropDownList @ref="priorityDropDownList" ID="priority" TValue="string" Enabled="true" TItem="KeyValue" @bind-Value="@((context as Issue).Status)" PopupHeight="350px" PopupWidth="350px" DataSource="@priorities">
-                                <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
-                            </SfDropDownList>
+            <InputFile class="form-control mb-2" OnChange="@LoadQuestions" />
+          
+                @foreach (var issue in issues)
+                {
 
-                        </EditTemplate>
-                    </GridColumn>
-                </GridColumns>
-            </SfGrid>
+
+                <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
+                    <div style="width: 220px">
+                            @issue.Subject
+                    </div>
+                    <div class="vr hide840"></div>
+
+                    <div class="hide840" style="width: 220px; border-radius: 20.25rem;">
+                        <i style="color: gray" class="fa-solid fa-arrows-spin"></i>
+                        &nbsp;
+                        <span>@issue.Status</span>
+
+                    </div> 
+                    <div class="hide840" style="width: 220px; border-radius: 20.25rem;">
+                        <i style="color: gray" class="fa-solid fa-circle-exclamation"></i>
+                        &nbsp;
+                        <span>@issue.Priority</span>
+
+                    </div>
+                    <div class="hide840" style="width: 220px; border-radius: 20.25rem;">
+                        <i style="color: gray" class="fa-regular fa-calendar"></i>
+                        &nbsp;
+                        <span>@issue.StartTime.ToString("dd.MM.yyyy") - @issue.EndTime.ToString("dd.MM.yyyy")</span>
+
+                    </div>
+
+                    <div class="vr hide840"></div>
+
+                    <div style="display: flex">
+                        <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
+                            <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditIssue(issue))">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                        </SfTooltip>
+                        <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                            <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteIssue(issue))">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </SfTooltip>
+                    </div>
+
+                </li>
+                }
+
+                @if (!issues.Any())
+                {
+                <div class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
+                    <label style="color: gray">Няма качени задачи!</label>
+                </div>
+                }
+            
 
 
 
         </Content>
-            
+
         <FooterTemplate>
             <div class="form-group">
                 <div class="text-right">
@@ -65,51 +90,7 @@
     </DialogTemplates>
 </SfDialog>
 <ToastMsg @ref="toast" />
-<div class="@(_showOverlay ? "overlay" : "")">
-    <article class="overlay-inner">
-        <div class="flex flex-col justify-center items-center text-center" style="color: white; @(_showOverlay ? "display:block" : "display:none")">
-
-
-            <svg version="1.1" id="L4" style="width: 200px !important;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                 viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
-            <circle fill="#fff" stroke="none" cx="28" cy="50" r="6">
-            <animate attributeName="opacity"
-                     dur="1s"
-                     values="0;1;0"
-                     repeatCount="indefinite"
-                     begin="0.1" />    
-                    </circle>
-            <circle fill="#fff" stroke="none" cx="48" cy="50" r="6">
-            <animate attributeName="opacity"
-                     dur="1s"
-                     values="0;1;0"
-                     repeatCount="indefinite"
-                     begin="0.2" />       
-                    </circle>
-            <circle fill="#fff" stroke="none" cx="68" cy="50" r="6">
-            <animate attributeName="opacity"
-                     dur="1s"
-                     values="0;1;0"
-                     repeatCount="indefinite"
-                     begin="0.3" />     
-                    </circle>
-                </svg>
-
-            <div class="mb-4 text-center" style="font-size:20px">Импортиране...</div>
-            <div class="mb-4 text-center" style="font-size:16px">Текуща задача: @currentIssueIndex/@issues.Count()</div>
-            <br />
-            <div class="mb-4 d-flex justify-content-center align-items-center">
-
-
-                <div class="progress" style="width: 220px; border-radius: 20.25rem;">
-                    <div class="progress-bar" role="progressbar" aria-label="Завършени задачи" style="width: @_progressPercentage%" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-
-            </div>
-        </div>
-    </article>
-</div>
-
+<IssueImportModal @ref="importIssueModal" CallbackAfterSubmit="UpdateData"></IssueImportModal>
 
 
 
