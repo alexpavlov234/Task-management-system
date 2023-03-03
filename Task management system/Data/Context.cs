@@ -74,23 +74,13 @@ namespace Task_management_system.Data
         }
         public void DetachAllEntities()
         {
-            try
-            {
-                List<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry> changedEntriesCopy = ChangeTracker
-                    .Entries()
-                    .Where(e => e.State == EntityState.Added ||
-                                e.State == EntityState.Modified ||
-                                e.State == EntityState.Deleted)
-                    .ToList();
+            var changedEntries = this.ChangeTracker
+                .Entries()
+                .ToList();
 
-                foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry? entry in changedEntriesCopy)
-                {
-                    entry.State = EntityState.Detached;
-                }
-            }
-            catch
+            foreach (var entry in changedEntries)
             {
-
+                entry.State = EntityState.Detached;
             }
         }
 

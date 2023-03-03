@@ -52,17 +52,18 @@ namespace Task_management_system.Pages.Projects
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
             users = UserService.GetAllUsers();
             projectParticipants = null;
-
+            loggedUser = UserService.GetLoggedUser();
+            isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
             if (project.ProjectId == 0)
             {
                 project.ProjectTypeId = projectTypes.First().IdKeyValue;
+                if (!isLoggedUserAdmin)
+                {
+                    project.ProjectOwner = loggedUser;
+                }
+
             }
-            loggedUser = UserService.GetLoggedUser();
-            isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
-            if (!isLoggedUserAdmin)
-            {
-                project.ProjectOwner = loggedUser;
-            }
+
 
             this.project = new Project() { ProjectId = project.ProjectId, ProjectParticipants = project.ProjectParticipants, Issues = project.Issues, ProjectOwner = project.ProjectOwner, ProjectTypeId = project.ProjectTypeId, EndDate = project.EndDate, ProjectDescription = project.ProjectDescription, ProjectName = project.ProjectName, ProjectType = project.ProjectType, StartDate = project.StartDate };
 

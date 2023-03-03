@@ -23,22 +23,22 @@
                 <div class="row">
                     <div class="col-md-4">
                         <label for="projectName">Име на проект</label>
-                        <InputText id="projectName" @bind-Value="project.ProjectName" placeholder="Въведете име" class="form-control"></InputText>
+                        <InputText disabled="@(!(project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)))" id="projectName" @bind-Value="project.ProjectName" placeholder="Въведете име" class="form-control"></InputText>
                     </div>
                     <div class="col-md-4">
                         <label for="datepicker">Диапазон на проект</label>
-                        <SfDateRangePicker ID="datepicker"  TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@project.StartDate" @bind-EndDate="@project.EndDate" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
+                        <SfDateRangePicker Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" ID="datepicker"  TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@project.StartDate" @bind-EndDate="@project.EndDate" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
                     </div>
                     <div class="col-md-4">
                         <label for="type">Тип проект</label>
-                        <SfDropDownList ID="type"  TValue="int" TItem="KeyValue" @bind-Value="project.ProjectTypeId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете тип" DataSource="@projectTypes">
+                        <SfDropDownList Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" ID="type"  TValue="int" TItem="KeyValue" @bind-Value="project.ProjectTypeId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете тип" DataSource="@projectTypes">
                             <DropDownListFieldSettings Value="IdKeyValue" Text="Name"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
                 </div>
                 <label for="description">Описание на проект</label>
                 <div class="multiline">
-                    <SfTextBox id="description"  Multiline=true Placeholder="Въведете описание" @bind-Value="@project.ProjectDescription"></SfTextBox>
+                    <SfTextBox Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" id="description"  Multiline=true Placeholder="Въведете описание" @bind-Value="@project.ProjectDescription"></SfTextBox>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -49,7 +49,7 @@
                     </div>
                     <div class="col-md-12">
                         <label for="participants">Участници в проекта</label>
-                        <SfMultiSelect @ref="projectParticipantsSfMultiSelect" TValue="ApplicationUser[]" TItem="ApplicationUser" Placeholder="Изберете участници" DataSource="@users" @bind-Value="projectParticipants">
+                        <SfMultiSelect @ref="projectParticipantsSfMultiSelect" Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" TValue="ApplicationUser[]" TItem="ApplicationUser" Placeholder="Изберете участници" DataSource="@users" @bind-Value="projectParticipants">
                             <MultiSelectFieldSettings Text="FullName" Value="UserName"></MultiSelectFieldSettings>
                             <MultiSelectEvents TItem="ApplicationUser" TValue="ApplicationUser[]" ValueChange="@OnValueSelectHandlerParticipants"></MultiSelectEvents>
                         </SfMultiSelect>

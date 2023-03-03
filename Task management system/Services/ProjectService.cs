@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Data;
 using Task_management_system.Interfaces;
@@ -75,30 +76,44 @@ public class ProjectService : Controller, IProjectService
     {
         try
         {
+
             _context.DetachAllEntities();
             Project? project = _context.Projects.Find(id);
-
             if (project == null)
             {
                 return "Проектът не е намерен.";
             }
-
-            List<ApplicationUserProject> participants = _context.ApplicationUserProjects.Where(pp => pp.ProjectId == project.ProjectId).ToList();
-
-            foreach (ApplicationUserProject? participant in participants)
+            else
             {
-                _ = _context.ApplicationUserProjects.Remove(participant);
+                EntityEntry<Project> entry = this._context.Entry(project);
+
+                if (entry.State == EntityState.Detached)
+                {
+                    this._context.Set<Project>().Attach(project);
+                }
+
+                entry.State = EntityState.Deleted;
+
+
+                List<ApplicationUserProject> participants = _context.ApplicationUserProjects
+                    .Where(pp => pp.ProjectId == project.ProjectId).ToList();
+
+                foreach (ApplicationUserProject? participant in participants)
+                {
+                    _ = _context.Entry(participant).State = EntityState.Deleted;
+                }
+
+
+                //_ = _context.Projects.Remove(project);
+
+
+                _ = _context.SaveChanges();
+                return "Успешно изтриване на проект.";
             }
-
-            _ = _context.Projects.Remove(project);
-
-
-            _ = _context.SaveChanges();
-            return "Успешно изтриване на проекта.";
         }
         catch (Exception)
         {
-            return "Неуспешно изтриване на проекта. Моля, изтрийте всички свързани задачи!";
+            return "Неуспешно изтриване на проект. Моля, изтрийте всички свързани задачи!";
         }
     }
 
@@ -184,11 +199,11 @@ public class ProjectService : Controller, IProjectService
             _ = _context.SaveChanges();
             _context.Entry(project.ProjectOwner).State = EntityState.Detached;
             _context.DetachAllEntities();
-            return "Успешно актуализиране на проекта!";
+            return "Успешно актуализиране на проект!";
         }
         catch (Exception)
         {
-            return "Неуспешно актуализиране на проекта. Моля, опитайте отново.";
+            return "Неуспешно актуализиране на проект. Моля, опитайте отново.";
         }
     }
 
