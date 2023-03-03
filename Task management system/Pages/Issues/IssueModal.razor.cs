@@ -26,7 +26,6 @@ namespace Task_management_system.Pages.Issues
         private readonly DateTime MinDate = new DateTime(1900, 1, 1);
         private ToastMsg toast = new ToastMsg();
         private SubtaskModal subtaskModal = new SubtaskModal();
-        private List<KeyValue> projectTypes { get; set; }
         private List<ApplicationUser> users { get; set; }
         private ApplicationUser[] projectParticipants { get; set; }
 
@@ -134,7 +133,6 @@ namespace Task_management_system.Pages.Issues
             _ = GetStatus(this.issue.Status);
          
             
-            projectTypes = keyValueService.GetAllKeyValuesByKeyType("IssueType");
             users = ProjectService.GetProjectById(this.issue.ProjectId).ProjectParticipants.ToList().Select(x => x.User).ToList();
             editContext = new EditContext(issue);
             _isVisible = true;

@@ -1,0 +1,148 @@
+﻿@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.DropDowns
+@using System.ComponentModel.DataAnnotations
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Navigations
+@using Task_management_system.Areas.Identity
+@using Task_management_system.Models
+@using Task_management_system.Services.Common
+@using Syncfusion.Blazor.Popups
+@using Task_management_system.Interfaces
+@inject IProjectService ProjectService
+@inject IUserService UserService
+
+
+<SfDialog Width="85%" Height="auto" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@_isVisible">
+    <DialogTemplates>
+        <Header>
+            <span style="color: #009cfc;">Импортиране на задачи от файл</span>
+        </Header>
+        <Content>
+            <InputFile class="form-control" OnChange="@LoadQuestions" />
+            <SfGrid @ref="sfGrid"DataSource="@issues" AllowPaging="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" })" Height="315">
+                <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true"></GridEditSettings>
+                <GridColumns>
+                    <GridColumn Field=@nameof(Issue.Subject) HeaderText="Име" Width="120"></GridColumn>
+                    <GridColumn Field=@nameof(Issue.Description) HeaderText="Описание" Width="120"></GridColumn>
+                    <GridColumn Field=@nameof(Issue.AssignedТo) HeaderText="Възложена на" Width="120">
+                    <EditTemplate>
+                            <SfDropDownList ID="owner" TValue="string" Enabled="(isLoggedUserAdmin || _isIssueNew) || issue.AssigneeId == loggedUser.Id" TItem="ApplicationUser" @bind-Value="((context as Issue).AssignedТoId)" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете, на кого е възложена" DataSource="@users">
+                            <DropDownListFieldSettings Value="Id" Text="FullName"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </EditTemplate>
+                    </GridColumn>
+                    <GridColumn Field=@nameof(Issue.Status) HeaderText="Статус" Width="120">
+                    <EditTemplate>
+                        <SfDropDownList @ref="statusDropDownList" ID="status" TValue="string" Enabled="true" TItem="KeyValue" @bind-Value="@((context as Issue).Status)" PopupHeight="350px" PopupWidth="350px" DataSource="@statuses">
+                            <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                        </EditTemplate>
+                    </GridColumn>
+                    <GridColumn Field=@nameof(Issue.StartTime) HeaderText="От" EditType="EditType.DatePickerEdit" Format="d" TextAlign="TextAlign.Right" Width="130" Type="ColumnType.Date"></GridColumn>
+                    <GridColumn Field=@nameof(Issue.EndTime) HeaderText="До" EditType="EditType.DatePickerEdit" Format="d" TextAlign="TextAlign.Right" Width="130" Type="ColumnType.Date"></GridColumn>
+                    <GridColumn Field=@nameof(Issue.Priority) HeaderText="Приоритет" Width="120"><EditTemplate>
+                            <SfDropDownList @ref="priorityDropDownList" ID="priority" TValue="string" Enabled="true" TItem="KeyValue" @bind-Value="@((context as Issue).Status)" PopupHeight="350px" PopupWidth="350px" DataSource="@priorities">
+                                <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
+                            </SfDropDownList>
+
+                        </EditTemplate>
+                    </GridColumn>
+                </GridColumns>
+            </SfGrid>
+
+
+
+        </Content>
+            
+        <FooterTemplate>
+            <div class="form-group">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary" @onclick="UploadIssues">Добави</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CloseDialog">Отказ</button>
+                </div>
+            </div>
+        </FooterTemplate>
+    </DialogTemplates>
+</SfDialog>
+<ToastMsg @ref="toast" />
+<div class="@(_showOverlay ? "overlay" : "")">
+    <article class="overlay-inner">
+        <div class="flex flex-col justify-center items-center text-center" style="color: white; @(_showOverlay ? "display:block" : "display:none")">
+
+
+            <svg version="1.1" id="L4" style="width: 200px !important;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+            <circle fill="#fff" stroke="none" cx="28" cy="50" r="6">
+            <animate attributeName="opacity"
+                     dur="1s"
+                     values="0;1;0"
+                     repeatCount="indefinite"
+                     begin="0.1" />    
+                    </circle>
+            <circle fill="#fff" stroke="none" cx="48" cy="50" r="6">
+            <animate attributeName="opacity"
+                     dur="1s"
+                     values="0;1;0"
+                     repeatCount="indefinite"
+                     begin="0.2" />       
+                    </circle>
+            <circle fill="#fff" stroke="none" cx="68" cy="50" r="6">
+            <animate attributeName="opacity"
+                     dur="1s"
+                     values="0;1;0"
+                     repeatCount="indefinite"
+                     begin="0.3" />     
+                    </circle>
+                </svg>
+
+            <div class="mb-4 text-center" style="font-size:20px">Импортиране...</div>
+            <div class="mb-4 text-center" style="font-size:16px">Текуща задача: @currentIssueIndex/@issues.Count()</div>
+            <br />
+            <div class="mb-4 d-flex justify-content-center align-items-center">
+
+
+                <div class="progress" style="width: 220px; border-radius: 20.25rem;">
+                    <div class="progress-bar" role="progressbar" aria-label="Завършени задачи" style="width: @_progressPercentage%" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+
+            </div>
+        </div>
+    </article>
+</div>
+
+
+
+
+<style>
+    .overlay-inner {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        backdrop-filter: blur(10px);
+    }
+
+
+    .progress-bar-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10000;
+    }
+
+    .e-dialog .e-dlg-content {
+        font-family: SegoeUI;
+    }
+</style>

@@ -88,6 +88,11 @@
                                             <div class="vr hide840"></div>
 
                                             <div style="display: flex">
+                                                <SfTooltip Position="Position.BottomCenter" Content="Импортиране на задачи" OpensOn="Hover">
+                                                    <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => ImportIssues(project))">
+                                                        <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                                                    </button>
+                                                </SfTooltip>
                                                 <SfTooltip Position="Position.BottomCenter" Content="Нова задача" OpensOn="Hover">
                                                     <button type="button" class="btn btn-outline-primary waves-effect md-trigger m-1" @onclick="(() => AddIssueToProject(project))">
                                                         <i class="fa-solid fa-plus"></i>
@@ -296,6 +301,7 @@
 <ToastMsg @ref="toast" />
 
 <IssueModal @ref="taskModal" CallbackAfterSubmit="UpdateAfterIssueModalSubmitAsync" />
+<ImportIssuesModal @ref="importIssuesModal" CallbackAfterSubmit="UpdateAfterImportIssuesModalSubmitAsync" />
 
 
 @code {
@@ -306,6 +312,7 @@
     private List<KeyValue> priorityTypes { get; set; }
     private SfKanban<Issue> sfKanban { get; set; }
     private IssueModal taskModal = new IssueModal();
+    private ImportIssuesModal importIssuesModal = new ImportIssuesModal();
     private int tabId;
     private ToastMsg toast = new ToastMsg();
     string[] tabsClasses = new string[3];
@@ -397,7 +404,24 @@
     {
         taskModal.OpenDialog(new Issue { Status = "Нова", Project = project, ProjectId = project.ProjectId, Assignee = userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0, Priority = "Нормален" });
     }
+
+    private async Task ImportIssues(Project project)
+    {
+       importIssuesModal.OpenDialog(project);
+    }
     private async Task UpdateAfterIssueModalSubmitAsync()
+    {
+
+        UpdateData();
+        if (tabId == 2)
+        {
+            await sfKanban.RefreshAsync();
+        }
+
+        this.StateHasChanged();
+    }
+
+    private async Task UpdateAfterImportIssuesModalSubmitAsync()
     {
 
         UpdateData();
