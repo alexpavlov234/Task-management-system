@@ -7,6 +7,7 @@
 @using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.TreeGrid
 @using Syncfusion.PdfExport
+@using Syncfusion.XlsIO;
 @using Task_management_system.Areas.Identity
 @using Task_management_system.Data
 @using Task_management_system.Interfaces
@@ -21,6 +22,7 @@
 @inject IProjectService projectService
 @inject IUserService userService
 @inject IIssueService issueService
+@inject IJSRuntime JSRuntime
 @attribute [Authorize(Roles = "Admin, User")]
 
 <div class="content-wrapper">
@@ -88,6 +90,11 @@
                                             <div class="vr hide840"></div>
 
                                             <div style="display: flex">
+                                                <SfTooltip Position="Position.BottomCenter" Content="Експортиране на задачи" OpensOn="Hover">
+                                                    <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => ExportIssues(project))">
+                                                        <i class="fa-solid fa-download"></i>
+                                                    </button>
+                                                </SfTooltip>
                                                 <SfTooltip Position="Position.BottomCenter" Content="Импортиране на задачи" OpensOn="Hover">
                                                     <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => ImportIssues(project))">
                                                         <i class="fa-solid fa-arrow-up-from-bracket"></i>
@@ -409,6 +416,56 @@
     {
        importIssuesModal.OpenDialog(project);
     }
+
+    public async Task ExportIssues(Project project)
+    {
+        using (ExcelEngine excelEngine = new ExcelEngine())
+        {
+            IApplication application = excelEngine.Excel;
+            application.DefaultVersion = ExcelVersion.Xlsx;
+            // Create a new workbook
+            IWorkbook workbook = application.Workbooks.Create(1);
+            // Get the first worksheet
+            IWorksheet worksheet = workbook.Worksheets[0];
+
+            // Set the column headers
+            worksheet.Range["A1"].Text = "Име";
+            worksheet.Range["B1"].Text = "Описание";
+            worksheet.Range["C1"].Text = "Възложена на";
+            worksheet.Range["D1"].Text = "Статус";
+            worksheet.Range["E1"].Text = "Начална дата";
+            worksheet.Range["F1"].Text = "Крайна дата";
+            worksheet.Range["G1"].Text = "Приоритет";
+
+            // Loop through the project's issues and write them to the worksheet
+            for (int i = 0; i < project.Issues.Count(); i++)
+            {
+                Issue issue = project.Issues.ElementAt(i);
+
+                worksheet.Range["A" + (i + 2)].Text = issue.Subject;
+                worksheet.Range["B" + (i + 2)].Text = issue.Description;
+                worksheet.Range["C" + (i + 2)].Text = issue.AssignedТo.UserName;
+                worksheet.Range["D" + (i + 2)].Text = issue.Status;
+                worksheet.Range["E" + (i + 2)].DateTime = issue.StartTime;
+                worksheet.Range["F" + (i + 2)].DateTime = issue.EndTime;
+                worksheet.Range["G" + (i + 2)].Text = issue.Priority;
+            }
+
+            // Auto-fit the columns
+            worksheet.UsedRange.AutofitColumns();
+
+            // Save the workbook to a memory stream
+            MemoryStream stream = new MemoryStream();
+            workbook.SaveAs(stream);
+                  
+
+            // Download the Excel file
+            await JSRuntime.InvokeAsync<object>("saveAsFile", project.ProjectName.Replace(" ", "_").Replace("-", "_") + "_Задачи.xlsx", Convert.ToBase64String(stream.ToArray()));
+
+            workbook.Close();
+        }
+    }
+
     private async Task UpdateAfterIssueModalSubmitAsync()
     {
 

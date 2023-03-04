@@ -5,19 +5,19 @@
 @{
     Layout = "_Layout";
     var tokens = new TokenProvider
-    {
-        XsrfToken = Xsrf.GetAndStoreTokens(HttpContext).RequestToken
-    };
+            {
+                XsrfToken = Xsrf.GetAndStoreTokens(HttpContext).RequestToken
+            };
 }
 <script>
     var clock1;
     var clock2;
     function startTime1(element1) {
-        let timeString = new Date().toLocaleTimeString('bg-BG', { hour: '2-digit', minute: '2-digit', second: "2-digit"});
+        let timeString = new Date().toLocaleTimeString('bg-BG', { hour: '2-digit', minute: '2-digit', second: "2-digit" });
         element1.innerHTML = timeString;
-        
+
         clock1 = setTimeout(startTime1.bind(null, element1), 1000);
-      
+
     }
     function startTime2(element2) {
         let dateString = new Date().toLocaleDateString('bg-BG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -30,5 +30,29 @@
         clearTimeout(clock1);
         clearTimeout(clock2);
     }
+
+
+    function saveAsFile(filename, bytesBase64) {
+
+        if (navigator.msSaveBlob) {
+            //Download document in Edge browser
+            var data = window.atob(bytesBase64);
+            var bytes = new Uint8Array(data.length);
+            for (var i = 0; i < data.length; i++) {
+                bytes[i] = data.charCodeAt(i);
+            }
+            var blob = new Blob([bytes.buffer], { type: "application/octet-stream" });
+            navigator.msSaveBlob(blob, filename);
+        }
+        else {
+            var link = document.createElement('a');
+            link.download = filename;
+            link.href = "data:application/octet-stream;base64," + bytesBase64;
+            document.body.appendChild(link); // Needed for Firefox
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+
 </script>
 <component type="typeof(App)" param-InitialState="tokens" render-mode="ServerPrerendered" />
