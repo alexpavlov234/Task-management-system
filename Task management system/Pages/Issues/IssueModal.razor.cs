@@ -200,6 +200,8 @@ namespace Task_management_system.Pages.Issues
         private void CloseDialog()
         {
             _isVisible = false;
+
+            this.CallbackAfterSubmit.InvokeAsync();
             StateHasChanged();
         }
 

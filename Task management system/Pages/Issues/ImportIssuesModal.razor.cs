@@ -96,13 +96,13 @@ namespace Task_management_system.Pages.Issues
                         // Loop through the rows and map the data to Issue objects
                         for (int i = 2; i <= dataRange.Rows.Count()+1; i++)
                         {
-                            string subject = dataRange[i, 1].Value;
-                            string description = dataRange[i, 2].Value;
-                            string assignedTo = dataRange[i, 3].Value;
-                            string status = dataRange[i, 4].Value;
+                            string subject = dataRange[i, 1].Value.Trim();
+                            string description = dataRange[i, 2].Value.Trim();
+                            string assignedTo = dataRange[i, 3].Value.Trim();
+                            string status = dataRange[i, 4].Value.Trim();
                             DateTime startTime = dataRange[i, 5].DateTime;
                             DateTime endTime = dataRange[i, 6].DateTime;
-                            string priority = dataRange[i, 7].Value;
+                            string priority = dataRange[i, 7].Value.Trim();
 
                             if (string.IsNullOrEmpty(subject) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(assignedTo) || string.IsNullOrEmpty(status) || string.IsNullOrEmpty(priority))
                             {

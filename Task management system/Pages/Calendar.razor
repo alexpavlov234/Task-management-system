@@ -47,11 +47,6 @@
 
         <div class="m-3">
             <SfSchedule TValue="Issue" Height="650px" @bind-SelectedDate="@CurrentDate" CurrentView="View.Month">
-                <ScheduleTemplates>
-                    <EditorTemplate>
-                        <IssueModal CallbackAfterSubmit="UpdateAfterIssueModalSubmitAsync" />
-                    </EditorTemplate>
-                </ScheduleTemplates>
                 <ScheduleEventSettings DataSource="@issues"></ScheduleEventSettings>
                 <ScheduleViews>
                     <ScheduleView Option="View.Day"></ScheduleView>
