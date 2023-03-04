@@ -18,11 +18,14 @@ namespace Task_management_system.Pages.Projects
         private readonly DateTime MinDate = new DateTime(1900, 1, 1);
         private ToastMsg toast = new ToastMsg();
         private readonly SfDialog sfDialog = new SfDialog();
-
+        private bool updateParticipants = false;
         bool isLoggedUserAdmin = false;
         private ApplicationUser loggedUser { get; set; }
         private SfMultiSelect<ApplicationUser[], ApplicationUser> projectParticipantsSfMultiSelect { get; set; } =
             new SfMultiSelect<ApplicationUser[], ApplicationUser>();
+
+        private Project originalProject;
+
         private List<KeyValue> projectTypes { get; set; }
         private List<ApplicationUser> users { get; set; }
         [System.Text.Json.Serialization.JsonIgnore]
@@ -40,15 +43,13 @@ namespace Task_management_system.Pages.Projects
         [Inject]
         private IUserService UserService { get; set; }
 
+        [Inject]
+        private IIssueService IssueService { get; set; }
 
-        protected async override Task OnInitializedAsync()
-        {
-            projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
-            users = UserService.GetAllUsers();
-        }
         public async void OpenDialog(Project project)
 
         {
+            originalProject = ProjectService.GetProjectById(this.project.ProjectId);
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
             users = UserService.GetAllUsers();
             projectParticipants = null;
@@ -137,23 +138,29 @@ namespace Task_management_system.Pages.Projects
 
                 if (!(project.ProjectId == 0))
                 {
-                    string result = ProjectService.UpdateProject(project);
-                    await CallbackAfterSubmit.InvokeAsync();
-                    if (result.StartsWith("Успешно"))
+                    if (updateParticipants)
                     {
-                        toast.sfSuccessToast.Title = result;
-                        _ = toast.sfSuccessToast.ShowAsync();
+                        string result = ProjectService.UpdateProject(project);
+                        await CallbackAfterSubmit.InvokeAsync();
+                        if (result.StartsWith("Успешно"))
+                        {
+                            toast.sfSuccessToast.Title = result;
+                            _ = toast.sfSuccessToast.ShowAsync();
+
+                            UpdateDialog();
+                        }
+                        else
+                        {
+                            toast.sfErrorToast.Title = result;
+                            _ = toast.sfErrorToast.ShowAsync();
+                        }
 
                         UpdateDialog();
-                    }
-                    else
+                    } else
                     {
-                        toast.sfErrorToast.Title = result;
-                        _ = toast.sfErrorToast.ShowAsync();
+                        this.project.ProjectParticipants = originalProject.ProjectParticipants;
+                        UpdateDialog();
                     }
-
-                    UpdateDialog();
-
                 }
                 else
                 {
@@ -195,6 +202,20 @@ namespace Task_management_system.Pages.Projects
             {
                 this.toast.sfErrorToast.Title = "Моля въведете участници в проекта!";
                 _ = this.toast.sfErrorToast.ShowAsync();
+            } else
+            {
+                
+                foreach (var participant in  this.originalProject.ProjectParticipants)
+                {
+                    if (IssueService.GetAllIssuesByProjectAndApplicationUser(project.ProjectId, participant.UserId).Any())
+                    {
+                        this.toast.sfErrorToast.Title = "Опитвате се да премахнете потребители, които имат възложени задачи! Моля, първо изтрийте задачите!";
+                        updateParticipants = false;
+                        _ = this.toast.sfErrorToast.ShowAsync();
+                        return;
+                    }
+                }
+                updateParticipants = true;
             }
         }
     }
