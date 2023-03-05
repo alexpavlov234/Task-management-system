@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Server.IIS.Core;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Popups;
 using Task_management_system.Areas.Identity;
@@ -157,7 +156,8 @@ namespace Task_management_system.Pages.Projects
                         }
 
                         UpdateDialog();
-                    } else
+                    }
+                    else
                     {
                         this.project.ProjectParticipants = originalProject.ProjectParticipants;
                         UpdateDialog();
@@ -203,10 +203,11 @@ namespace Task_management_system.Pages.Projects
             {
                 this.toast.sfErrorToast.Title = "Моля въведете участници в проекта!";
                 _ = this.toast.sfErrorToast.ShowAsync();
-            } else
+            }
+            else
             {
-                
-                foreach (var participant in  this.originalProject.ProjectParticipants)
+
+                foreach (var participant in this.originalProject.ProjectParticipants)
                 {
                     if (IssueService.GetAllIssuesByProjectAndApplicationUser(project.ProjectId, participant.UserId).Any() && !project.ProjectParticipants.Where(x => x.UserId == participant.UserId).Any())
                     {

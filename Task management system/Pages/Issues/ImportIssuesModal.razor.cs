@@ -1,19 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Newtonsoft.Json.Linq;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Grids;
-using Syncfusion.Blazor.Kanban;
-using Syncfusion.Blazor.Notifications;
-using Syncfusion.ExcelExport;
 using Syncfusion.XlsIO;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
-using Task_management_system.Pages.Projects;
-using Task_management_system.Services;
 using Task_management_system.Services.Common;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Task_management_system.Pages.Issues
 {
@@ -96,7 +89,7 @@ namespace Task_management_system.Pages.Issues
                         IRange dataRange = worksheet.UsedRange;
 
                         // Loop through the rows and map the data to Issue objects
-                        for (int i = 2; i <= dataRange.Rows.Count()+1; i++)
+                        for (int i = 2; i <= dataRange.Rows.Count() + 1; i++)
                         {
                             string subject = dataRange[i, 1].Value.Trim();
                             string description = dataRange[i, 2].Value.Trim();
@@ -106,14 +99,15 @@ namespace Task_management_system.Pages.Issues
                             DateTime endTime = dataRange[i, 6].DateTime;
                             string priority = dataRange[i, 7].Value.Trim();
 
-                           
-                       
+
+
                             if (string.IsNullOrEmpty(subject) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(assignedTo) || string.IsNullOrEmpty(status) || string.IsNullOrEmpty(priority))
                             {
                                 message = "Съществуват задачи/задача с празни данни! Невалидните данни са премахнати!";
                                 hasErrors = true;
                                 continue;
-                            } else
+                            }
+                            else
                             {
                                 bool isUserValid = false;
                                 foreach (var participant in this.project.ProjectParticipants)

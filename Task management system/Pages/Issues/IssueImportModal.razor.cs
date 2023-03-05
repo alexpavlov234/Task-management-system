@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Grids;
 using Task_management_system.Areas.Identity;
@@ -68,7 +68,7 @@ namespace Task_management_system.Pages.Issues
             statuses = new List<KeyValue>();
             priorities = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
             this.issue = issue;
-           
+
 
             _ = GetStatus(this.issue.Status);
 

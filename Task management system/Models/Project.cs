@@ -33,7 +33,7 @@ namespace Task_management_system.Models
         [Required(ErrorMessage = "Полето 'Собственик на проект' е задължително!")]
         [System.Text.Json.Serialization.JsonIgnore]
         public ApplicationUser ProjectOwner { get; set; }
-        [Required(ErrorMessage = "Моля изберете поне един участник в проекта!"), ]
+        [Required(ErrorMessage = "Моля изберете поне един участник в проекта!"),]
         [System.Text.Json.Serialization.JsonIgnore]
         public ICollection<ApplicationUserProject>? ProjectParticipants { get; set; }
 
@@ -47,5 +47,5 @@ namespace Task_management_system.Models
 
     }
 
-   
+
 }
