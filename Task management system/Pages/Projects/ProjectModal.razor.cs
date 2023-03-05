@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Server.IIS.Core;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Popups;
 using Task_management_system.Areas.Identity;
@@ -207,7 +208,7 @@ namespace Task_management_system.Pages.Projects
                 
                 foreach (var participant in  this.originalProject.ProjectParticipants)
                 {
-                    if (IssueService.GetAllIssuesByProjectAndApplicationUser(project.ProjectId, participant.UserId).Any())
+                    if (IssueService.GetAllIssuesByProjectAndApplicationUser(project.ProjectId, participant.UserId).Any() && !project.ProjectParticipants.Where(x => x.UserId == participant.UserId).Any())
                     {
                         this.toast.sfErrorToast.Title = "Опитвате се да премахнете потребители, които имат възложени задачи! Моля, първо изтрийте задачите!";
                         updateParticipants = false;

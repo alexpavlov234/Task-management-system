@@ -1,0 +1,41 @@
+﻿@using Task_management_system.Data
+@using Task_management_system.Interfaces
+@inherits LayoutComponentBase
+
+<PageTitle>Система за управление на задачи</PageTitle>
+
+<div class="page">
+    <AuthorizeView>
+        <Authorized>
+            
+        </Authorized>
+        <NotAuthorized>
+            
+        </NotAuthorized>
+    </AuthorizeView>
+    <main>
+        <AuthorizeView>
+            <Authorized>
+                
+                <article class="content px-4" style="background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 60%); height: 100vh;     display: flex;
+                                                 justify-content: center;
+                                                 align-items: center;">
+                    @Body
+                </article>
+            </Authorized>
+            <NotAuthorized>
+                <div class="content px-4" style="background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 60%); height: 100vh;     display: flex;
+                                                 justify-content: center;
+                                                 align-items: center;">
+                    @Body
+                </div>
+
+            </NotAuthorized>
+        </AuthorizeView>
+    </main>
+</div>
+
+
+@code {
+
+}

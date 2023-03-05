@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Kanban;
+using Syncfusion.Blazor.Notifications;
 using Syncfusion.ExcelExport;
 using Syncfusion.XlsIO;
 using Task_management_system.Areas.Identity;
@@ -73,6 +74,7 @@ namespace Task_management_system.Pages.Issues
 
             var file = e.File;
             bool hasErrors = false;
+            string message = "";
             if (file != null)
             {
                 using (var stream = new MemoryStream())
@@ -104,10 +106,29 @@ namespace Task_management_system.Pages.Issues
                             DateTime endTime = dataRange[i, 6].DateTime;
                             string priority = dataRange[i, 7].Value.Trim();
 
+                           
+                       
                             if (string.IsNullOrEmpty(subject) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(assignedTo) || string.IsNullOrEmpty(status) || string.IsNullOrEmpty(priority))
                             {
+                                message = "Съществуват задачи/задача с празни данни! Невалидните данни са премахнати!";
                                 hasErrors = true;
                                 continue;
+                            } else
+                            {
+                                bool isUserValid = false;
+                                foreach (var participant in this.project.ProjectParticipants)
+                                {
+                                    if (participant.User.UserName == assignedTo)
+                                    {
+                                        isUserValid = true;
+                                    }
+                                }
+                                if (!isUserValid)
+                                {
+                                    message = "Съществуват задачи/задача с невалидни потребители! Невалидните данни са премахнати!";
+                                    hasErrors = true;
+                                    continue;
+                                }
                             }
 
                             Issue issue = new Issue
@@ -139,7 +160,7 @@ namespace Task_management_system.Pages.Issues
 
             if (hasErrors)
             {
-                this.toast.sfErrorToast.Title = "Изключени са задачите с невалидни данни!";
+                this.toast.sfErrorToast.Title = message;
                 this.toast.sfErrorToast.ShowAsync();
             }
             this.sfGrid.Refresh();
