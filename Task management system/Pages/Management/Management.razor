@@ -183,7 +183,7 @@
 
     protected async Task ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
-        if (args.Item.Id == "documentsGrid_pdfexport")
+        if (args.Item.Id == "usersGrid_pdfexport")
         {
             int temp = usersGrid.PageSettings.PageSize;
             usersGrid.PageSettings.PageSize = users.Count();
@@ -219,7 +219,7 @@
             ExportProperties.Theme = Theme;
             ExportProperties.FileName = $"Потребители.pdf";
             usersGrid.PageSettings.PageSize = temp;
-            //await usersGrid.Refresh();
+            await usersGrid.Refresh();
             await this.usersGrid.ExportToPdfAsync(ExportProperties);
 
         }

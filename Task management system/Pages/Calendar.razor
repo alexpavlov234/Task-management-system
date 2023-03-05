@@ -46,8 +46,8 @@
         </div>
 
         <div class="m-3">
-            <SfSchedule TValue="Issue" Height="650px" @bind-SelectedDate="@CurrentDate" CurrentView="View.Month">
-                <ScheduleEventSettings DataSource="@issues"></ScheduleEventSettings>
+            <SfSchedule TValue="Issue" Height="650px" @bind-SelectedDate="@CurrentDate" CurrentView="View.Month" >
+                <ScheduleEventSettings DataSource="@issues" AllowAdding="false" AllowDeleting="false" AllowEditing="false"></ScheduleEventSettings>
                 <ScheduleViews>
                     <ScheduleView Option="View.Day"></ScheduleView>
                     <ScheduleView Option="View.Week"></ScheduleView>
