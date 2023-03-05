@@ -59,6 +59,7 @@
     left: 0;
     right: 0;
 }
+
 @media (min-width: 641px) {
     .navbar-toggler {
         display: none;
@@ -72,11 +73,14 @@
     .container-fluid {
         justify-content: center;
     }
+    .logged-user-bar{
+        display: none;
+    }
 }
 
 @media (max-width: 641px) {
     .button-collapse {
         display: none;
     }
-
+    
 }

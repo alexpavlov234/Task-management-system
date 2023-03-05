@@ -1,4 +1,10 @@
-﻿@if (!CollapseNavMenu)
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Task_management_system.Areas.Identity
+@using Task_management_system.Interfaces;
+@inject IUserService UserService
+@inject NavigationManager Navigation
+@inject TokenProvider TokenProvider
+@if (!CollapseNavMenu)
 {
     <div class="top-row navbar navbar-dark">
         <div class="container-fluid">
@@ -42,7 +48,15 @@
             </div>
         </nav>
     </div>
+    <nav class="flex-column logged-user-bar @NavMenuCssClass justify-content-center">
+        <div class="nav-item px-3 mt-2">
 
+            <a class="nav-link active" href="Identity/Account/Manage/Index">
+                Здравейте, @user.UserName!
+            </a>
+
+        </div>
+    </nav>
 }
 else
 {
@@ -97,8 +111,17 @@ else
             </div>
         </nav>
     </div>
+    <nav class="flex-column logged-user-bar @NavMenuCssClass justify-content-center">
+        <div class="nav-item px-3 mt-2">
 
+            <a class="nav-link active" href="Identity/Account/Manage/Index">
+                Здравейте, @user.UserName!
+            </a>
+
+        </div>
+    </nav>
 }
+
 <nav class="flex-column button-collapse">
     <div class="nav-item nav-toggle px-3">
         <a class="nav-link active " style="justify-content: center" @onclick="ToggleCollapseNavMenu">
@@ -110,9 +133,13 @@ else
 @code {
     bool CollapseNavMenu = true;
     private bool collapseNavMenu = true;
-
+    private ApplicationUser user = new ApplicationUser();
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    protected async override Task OnInitializedAsync()
+    {
+        user = UserService.GetLoggedUser();
 
+    }
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;

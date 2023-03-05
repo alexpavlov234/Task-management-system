@@ -80,16 +80,11 @@
     <None Include="Pages\_Layout.cshtml" />
     <None Include="Pages\_ViewImports.cshtml" />
     <None Include="Services\Common\ToastMsg.razor" />
-    <None Include="Shared\AdminLayout.razor" />
     <None Include="Shared\AdminNavMenu.razor" />
     <None Include="Shared\LoginDisplay.razor" />
     <None Include="Shared\MainLayout.razor" />
     <None Include="Shared\NavMenu.razor" />
-    <None Include="Shared\NavMenuLogin.razor" />
     <None Include="Shared\RedirectToLogin.razor" />
-    <None Include="Shared\SurveyPrompt.razor" />
-    <None Include="Shared\UserLayout.razor" />
-    <None Include="Shared\UserNavMenu.razor" />
     <None Include="wwwroot\css\fonts\Exo2-Black.ttf" />
     <None Include="wwwroot\css\fonts\Exo2-BlackItalic.ttf" />
     <None Include="wwwroot\css\fonts\Exo2-Bold.ttf" />

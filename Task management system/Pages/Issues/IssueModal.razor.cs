@@ -101,38 +101,42 @@ namespace Task_management_system.Pages.Issues
         public async void OpenDialog(Issue issue)
 
         {
-            _isIssueNew = IssueService.GetIssueById(issue.IssueId) == null;   
+            _isIssueNew = IssueService.GetIssueById(issue.IssueId) == null;
             isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
             loggedUser = UserService.GetLoggedUser();
             UpdateData();
             statuses = new List<KeyValue>();
             priorities = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
             this.issue = issue;
-            if (issue.Project != null)
+            if (_isIssueNew)
             {
-                //issueProjectName = issue.Project.ProjectName;
-                this.issue.EndTime = this.issue.Project.EndDate;
-
-                if (DateTime.Now < issue.EndTime)
+                if (issue.Project != null)
                 {
-                    this.issue.StartTime = this.issue.Project.EndDate.AddMonths(-1);
+                    //issueProjectName = issue.Project.ProjectName;
+                    this.issue.EndTime = this.issue.Project.EndDate;
+
+                    if (DateTime.Now < issue.EndTime)
+                    {
+                        this.issue.StartTime = this.issue.Project.EndDate.AddMonths(-1);
+                    }
+                    else
+                    {
+
+                        this.issue.StartTime = DateTime.Now;
+                        this.issue.EndTime = DateTime.Now.AddMonths(1);
+                    }
                 }
+
                 else
                 {
-
+                    this.issue.ProjectId = projects.First().ProjectId;
                     this.issue.StartTime = DateTime.Now;
                     this.issue.EndTime = DateTime.Now.AddMonths(1);
                 }
             }
-            else
-            {
-                this.issue.ProjectId = projects.First().ProjectId;
-                this.issue.StartTime = DateTime.Now;
-                this.issue.EndTime = DateTime.Now.AddMonths(1);
-            }
             _ = GetStatus(this.issue.Status);
-         
-            
+
+
             users = ProjectService.GetProjectById(this.issue.ProjectId).ProjectParticipants.ToList().Select(x => x.User).ToList();
             editContext = new EditContext(issue);
             _isVisible = true;
