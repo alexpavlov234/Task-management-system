@@ -130,7 +130,7 @@ public class ProjectService : Controller, IProjectService
 
     public Project GetProjectById(int projectId)
     {
-        return _context.Projects.AsNoTracking().Include(x => x.ProjectParticipants)!
+        return _context.Projects.AsNoTracking().Where(x => x.ProjectId == projectId).Include(x => x.ProjectParticipants)!
             .ThenInclude(pp => pp.User).Include(p => p.ProjectType).Include(p => p.ProjectOwner).Include(p => p.Issues).ThenInclude(i => i.AssignedТo).Include(p => p.Issues).ThenInclude(i => i.Assignee).Include(i => i.Issues).ThenInclude(y => y.Subtasks).FirstOrDefault()!;
     }
 

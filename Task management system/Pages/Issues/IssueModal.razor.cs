@@ -136,7 +136,6 @@ namespace Task_management_system.Pages.Issues
             }
             _ = GetStatus(this.issue.Status);
 
-
             users = ProjectService.GetProjectById(this.issue.ProjectId).ProjectParticipants.ToList().Select(x => x.User).ToList();
             editContext = new EditContext(issue);
             _isVisible = true;
