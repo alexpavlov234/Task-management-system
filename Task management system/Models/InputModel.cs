@@ -38,6 +38,7 @@ namespace Task_management_system.Models
         [Compare("Password", ErrorMessage = "Паролите не съвпадат!")]
         public string ConfirmPassword { get; set; }
         [DataType(DataType.PhoneNumber)]
+        [RegularExpression(@"^(\+?\d{1,3})?[-.\s]?\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})$")]
         [Display(Name = "Телефон")]
         public virtual string PhoneNumber { get; set; }
         public string Role { get; set; }

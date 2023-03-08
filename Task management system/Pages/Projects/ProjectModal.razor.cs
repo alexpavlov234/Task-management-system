@@ -206,15 +206,18 @@ namespace Task_management_system.Pages.Projects
             }
             else
             {
-
-                foreach (var participant in this.originalProject.ProjectParticipants)
+                if (originalProject != null)
                 {
-                    if (IssueService.GetAllIssuesByProjectAndApplicationUser(project.ProjectId, participant.UserId).Any() && !project.ProjectParticipants.Where(x => x.UserId == participant.UserId).Any())
+
+                    foreach (var participant in this.originalProject.ProjectParticipants)
                     {
-                        this.toast.sfErrorToast.Title = "Опитвате се да премахнете потребители, които имат възложени задачи! Моля, първо изтрийте задачите!";
-                        updateParticipants = false;
-                        _ = this.toast.sfErrorToast.ShowAsync();
-                        return;
+                        if (IssueService.GetAllIssuesByProjectAndApplicationUser(project.ProjectId, participant.UserId).Any() && !project.ProjectParticipants.Where(x => x.UserId == participant.UserId).Any())
+                        {
+                            this.toast.sfErrorToast.Title = "Опитвате се да премахнете потребители, които имат възложени задачи! Моля, първо изтрийте задачите!";
+                            updateParticipants = false;
+                            _ = this.toast.sfErrorToast.ShowAsync();
+                            return;
+                        }
                     }
                 }
                 updateParticipants = true;

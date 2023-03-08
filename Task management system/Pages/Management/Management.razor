@@ -43,17 +43,17 @@
 
 
 
-                    <GridColumn Field=@nameof(ApplicationUser.UserName) HeaderText="Потребителско име" IsPrimaryKey="true" Width="300px"></GridColumn>
-                    <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" Width="300px"></GridColumn>
-                    <GridColumn Field=@nameof(ApplicationUser.LastName) HeaderText="Фамилия" Width="300px"></GridColumn>
+                    <GridColumn Field=@nameof(ApplicationUser.UserName) HeaderText="Потребителско име" IsPrimaryKey="true" Width="200px"></GridColumn>
+                    <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" Width="200px"></GridColumn>
+                    <GridColumn Field=@nameof(ApplicationUser.LastName) HeaderText="Фамилия" Width="200px"></GridColumn>
                     <GridColumn Field=@nameof(ApplicationUser.Email) HeaderText="Имейл" Width="300px"></GridColumn>
-                    <GridColumn Field=@nameof(ApplicationUser.PhoneNumber) HeaderText="Телефон" Width="200px"></GridColumn>
-                    <GridColumn HeaderText="Роля" Width="200px">
+                    <GridColumn Field=@nameof(ApplicationUser.PhoneNumber) HeaderText="Телефон" Width="100px"></GridColumn>
+                    <GridColumn HeaderText="Роля" Width="180px">
                         <Template>
                             @{
                                 var user = (context as ApplicationUser);
 
-                                if (userRoles.Any())
+                                if (userRoles.Any() && userRoles.ContainsKey(user.UserName))
                                 {
                                     string role = userRoles[user.UserName];
                                     @role
@@ -63,7 +63,7 @@
                             }
                         </Template>
                     </GridColumn>
-                    <GridColumn Width="150px">
+                    <GridColumn Width="100px">
                         <Template>
                             <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
                                 <button type="button" class="btn btn-outline-warning waves-effect md-trigger" @onclick="(() => EditUser(context as ApplicationUser))">
@@ -72,7 +72,7 @@
                             </SfTooltip>
                         </Template>
                     </GridColumn>
-                    <GridColumn Width="150px">
+                    <GridColumn Width="100px">
                         <Template>
                             <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
                                 <button type="button" class="btn btn-outline-danger waves-effect md-trigger" @onclick="(() => DeleteUser(context as ApplicationUser))">
@@ -112,8 +112,6 @@
         {
             userRoles.Add(user.UserName, (await UserService.GetRoleAsync(user)).Contains("Admin") ? "Администратор" : "Потребител");
         }
-
-        await this.usersGrid.Refresh();
 
     }
     private async Task UpdateAfterManagementModalSubmitAsync()
