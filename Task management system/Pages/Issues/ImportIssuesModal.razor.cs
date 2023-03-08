@@ -57,7 +57,7 @@ namespace Task_management_system.Pages.Issues
             loggedUser = UserService.GetLoggedUser();
             statuses = keyValueService.GetAllKeyValuesByKeyType("IssueStatus");
             priorities = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
-            users = ProjectService.GetProjectById(this.issue.ProjectId).ProjectParticipants.ToList().Select(x => x.User).ToList();
+            users = ProjectService.GetProjectById(this.project.ProjectId).ProjectParticipants.ToList().Select(x => x.User).ToList();
             editContext = new EditContext(issue);
             _isVisible = true;
             StateHasChanged();

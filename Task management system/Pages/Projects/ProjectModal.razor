@@ -13,7 +13,8 @@
 <SfDialog Width="700px" Height="400px" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@IsVisible">
     <DialogTemplates>
         <Header>
-           <span style="color: #009cfc;">@this.project.ProjectName</span></Header>
+            <span style="color: #009cfc;">@this.project.ProjectName</span>
+        </Header>
         <Content>
 
             <EditForm id="projectForm" EditContext="editContext" OnValidSubmit="@SaveProject">
@@ -27,18 +28,18 @@
                     </div>
                     <div class="col-md-4">
                         <label for="datepicker">Диапазон на проект</label>
-                        <SfDateRangePicker Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" ID="datepicker"  TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@project.StartDate" @bind-EndDate="@project.EndDate" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
+                        <SfDateRangePicker Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" ID="datepicker" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@project.StartDate" @bind-EndDate="@project.EndDate" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
                     </div>
                     <div class="col-md-4">
                         <label for="type">Тип проект</label>
-                        <SfDropDownList Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" ID="type"  TValue="int" TItem="KeyValue" @bind-Value="project.ProjectTypeId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете тип" DataSource="@projectTypes">
+                        <SfDropDownList Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" ID="type" TValue="int" TItem="KeyValue" @bind-Value="project.ProjectTypeId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете тип" DataSource="@projectTypes">
                             <DropDownListFieldSettings Value="IdKeyValue" Text="Name"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
                 </div>
                 <label for="description">Описание на проект</label>
                 <div class="multiline">
-                    <SfTextBox Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" id="description"  Multiline=true Placeholder="Въведете описание" @bind-Value="@project.ProjectDescription"></SfTextBox>
+                    <SfTextBox Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" id="description" Multiline=true Placeholder="Въведете описание" @bind-Value="@project.ProjectDescription"></SfTextBox>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -53,7 +54,7 @@
                             <MultiSelectFieldSettings Text="FullName" Value="UserName"></MultiSelectFieldSettings>
                             <MultiSelectEvents TItem="ApplicationUser" TValue="ApplicationUser[]" ValueChange="@OnValueSelectHandlerParticipants"></MultiSelectEvents>
                         </SfMultiSelect>
-                        
+
                     </div>
                 </div>
 
@@ -61,8 +62,14 @@
             </EditForm>
         </Content>
         <FooterTemplate>
-            <div class="form-group">
-                <div class="text-right">
+            <div class="row gy-3">
+                @if (project != null && project.ProjectOwner != null)
+                {
+                    <div class="col-sm-6 d-flex align-items-center">
+                        <i class="fa-solid fa-user-pen" style="color: gray;"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Създаден от: </b> @project.ProjectOwner.FullName</span>
+                    </div>
+                }
+                <div class="col-sm-6">
 
                     <button type="submit" class="btn btn-primary" form="projectForm" @onclick="@ValidateParticipants">Запиши</button>
                     <button type="button" class="btn btn-secondary" @onclick="CloseDialog">Отказ</button>

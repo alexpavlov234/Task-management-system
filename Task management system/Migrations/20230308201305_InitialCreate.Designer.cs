@@ -12,7 +12,7 @@ using Task_management_system.Data;
 namespace Task_management_system.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230221175430_InitialCreate")]
+    [Migration("20230308201305_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -437,7 +437,7 @@ namespace Task_management_system.Migrations
 
                     b.Property<string>("ProjectName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProjectOwnerId")
                         .IsRequired()
@@ -450,9 +450,6 @@ namespace Task_management_system.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("ProjectId");
-
-                    b.HasIndex("ProjectName")
-                        .IsUnique();
 
                     b.HasIndex("ProjectOwnerId");
 

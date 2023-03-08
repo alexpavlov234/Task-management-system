@@ -186,8 +186,15 @@
             </EditForm>
         </Content>
         <FooterTemplate>
-            <div class="form-group">
-                <div class="text-right">
+            <div class="row gy-3">
+                @if (issue != null && issue.Assignee != null)
+                {
+                    <div class="col-sm-6 d-flex align-items-center">
+                        <i class="fa-solid fa-user-pen" style="color: gray;"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Създадена от: </b> @issue.Assignee.FullName</span>
+                    </div>
+                }
+
+                <div class="col-sm-6">
                     <button type="submit" class="btn btn-primary" form="issueForm">Запиши</button>
                     <button type="button" class="btn btn-secondary" @onclick="CloseDialog">Отказ</button>
                 </div>

@@ -26,10 +26,7 @@ public class ProjectService : Controller, IProjectService
             _context.DetachAllEntities();
             project.ProjectName = project.ProjectName.Trim();
             project.ProjectType = _keyValueService.GetKeyValueById(project.ProjectTypeId);
-            if (_context.Projects.Any(p => p.ProjectName == project.ProjectName))
-            {
-                return "Вече съществува такъв проект!";
-            }
+
 
             List<ApplicationUserProject> projectParticipants = new List<ApplicationUserProject>();
             if (project.ProjectParticipants != null)

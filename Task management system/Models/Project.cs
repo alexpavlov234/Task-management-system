@@ -7,7 +7,6 @@ namespace Task_management_system.Models
 {
     [Table("Project")]
     [Display(Name = "Проект")]
-    [Index(nameof(ProjectName), IsUnique = true)]
     public class Project
     {
         public Project()

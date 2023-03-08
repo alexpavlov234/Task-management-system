@@ -16,8 +16,6 @@ namespace Task_management_system.Data
         //Създаване на таблици в реална база данни
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            _ = modelBuilder.Entity<Project>().HasIndex(b => b.ProjectName)
-            .IsUnique();
             _ = modelBuilder.Entity<Issue>()
                .HasOne(i => i.Project)
                .WithMany(p => p.Issues)

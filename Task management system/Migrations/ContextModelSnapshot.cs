@@ -435,7 +435,7 @@ namespace Task_management_system.Migrations
 
                     b.Property<string>("ProjectName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProjectOwnerId")
                         .IsRequired()
@@ -448,9 +448,6 @@ namespace Task_management_system.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("ProjectId");
-
-                    b.HasIndex("ProjectName")
-                        .IsUnique();
 
                     b.HasIndex("ProjectOwnerId");
 

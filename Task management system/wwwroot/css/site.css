@@ -286,8 +286,20 @@ button.nav-link.btn.btn-link {
     overflow: hidden;
 }
 
+.show350 {
+    display: none !important;
+}
 
-@media screen and (max-width: 840px) {
+@media screen and (max-width: 350px) {
+    .hide350 {
+        display: none !important;
+    }
+    .show350 {
+        display: flex !important;
+    }
+}
+
+@media  screen and (max-width: 840px) {
     .hide840 {
         display: none;
     }
