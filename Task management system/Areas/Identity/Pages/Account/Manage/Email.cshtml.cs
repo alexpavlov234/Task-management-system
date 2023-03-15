@@ -65,9 +65,9 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
-            [Display(Name = "New email")]
+            [Required(ErrorMessage = "Полето 'Нов имейл' е задължително")]
+            [EmailAddress(ErrorMessage = "Полето 'Нов имейл' не е валиден имейл адрес.")]
+            [Display(Name = "Нов имейл")]
             public string NewEmail { get; set; }
         }
 
@@ -123,14 +123,14 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
                     protocol: Request.Scheme);
                 await _emailSender.SendEmailAsync(
                     Input.NewEmail,
-                    "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "Потвърждение на имейл",
+                    $"Моля, потвърдете профила си, <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>като кликнете тук</a>.");
 
-                StatusMessage = "Confirmation link to change email sent. Please check your email.";
+                StatusMessage = "Изпратен е линк за потвърждение на промяната на имейла. Моля, проверете пощата си.";
                 return RedirectToPage();
             }
 
-            StatusMessage = "Your email is unchanged.";
+            StatusMessage = "Имейлът Ви не е променен.";
             return RedirectToPage();
         }
 
@@ -159,10 +159,10 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
                 protocol: Request.Scheme);
             await _emailSender.SendEmailAsync(
                 email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                "Потвърждение на имейл",
+                    $"Моля, потвърдете профила си, <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>като кликнете тук</a>.");
 
-            StatusMessage = "Verification email sent. Please check your email.";
+            StatusMessage = "Изпратен е линк за потвърждение на имейла. Моля, проверете пощата си.";
             return RedirectToPage();
         }
     }

@@ -54,7 +54,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Полето 'Код на удостоверителя' е задължително")]
             [StringLength(7, ErrorMessage = "Кодът на удостоверителя трябва да бъде дълъг най-малко {2} и най-много {1} символа.", MinimumLength = 6)]
             [DataType(DataType.Text)]
             [Display(Name = "Код на удостоверителя")]

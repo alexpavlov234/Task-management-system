@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Syncfusion.Blazor;
+using System.Configuration;
 using Task_management_system.Areas;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Data;
@@ -36,6 +39,7 @@ namespace Task_management_system
             _ = builder.Services.AddScoped<IUserService, UserService>();
             _ = builder.Services.AddScoped<IIssueService, IssueService>();
             _ = builder.Services.AddScoped<IProjectService, ProjectService>();
+            _ = builder.Services.AddTransient<IEmailSender, EmailSender>(i => new EmailSender(builder.Configuration["EmailSender:Host"], builder.Configuration.GetValue<int>("EmailSender:Port"), builder.Configuration.GetValue<bool>("EmailSender:EnableSSL"), builder.Configuration["EmailSender:UserName"], builder.Configuration["EmailSender:Password"]));
 
             _ = builder.Services.AddScoped<IKeyValueService, KeyValueService>();
             _ = builder.Services.AddScoped<BaseHelper>();

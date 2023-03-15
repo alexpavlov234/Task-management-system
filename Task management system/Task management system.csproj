@@ -186,7 +186,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
     <PackageReference Include="Syncfusion.Blazor" Version="20.4.0.52" />
     <PackageReference Include="Syncfusion.Licensing" Version="20.4.0.52" />
     <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="20.4.0.52" />

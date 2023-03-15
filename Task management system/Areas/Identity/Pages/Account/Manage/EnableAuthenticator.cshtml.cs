@@ -73,10 +73,10 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [StringLength(7, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Полето 'Код за потвърждение' е задължително")]
+            [StringLength(7, ErrorMessage = "Дължината на {0} трябва да бъде най-малко {2} и най-много {1} символа.", MinimumLength = 6)]
             [DataType(DataType.Text)]
-            [Display(Name = "Verification Code")]
+            [Display(Name = "Код за потвърждение")]
             public string Code { get; set; }
         }
 
