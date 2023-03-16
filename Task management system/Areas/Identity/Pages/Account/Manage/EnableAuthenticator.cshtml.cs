@@ -74,7 +74,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required(ErrorMessage = "Полето 'Код за потвърждение' е задължително")]
-            [StringLength(7, ErrorMessage = "Дължината на {0} трябва да бъде най-малко {2} и най-много {1} символа.", MinimumLength = 6)]
+            [StringLength(7, ErrorMessage = "Дължината на кода трябва да бъде най-малко {2} и най-много {1} символа.", MinimumLength = 6)]
             [DataType(DataType.Text)]
             [Display(Name = "Код за потвърждение")]
             public string Code { get; set; }

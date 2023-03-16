@@ -16,17 +16,16 @@
         
     </div>
 </div>
-<div class="row">
-    <div class="col-md-2">
+<div class="d-flex gap-2">
+  
         <form id="download-data" asp-page="DownloadPersonalData" method="post">
             <button class="btn btn-primary" type="submit">Изтегляне</button>
         </form>
-    </div>
-    <div class="col-md-2">
+
         <p>
             <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger">Изтриване</a>
         </p>
-    </div>
+
 </div>
 
 @section Scripts {
