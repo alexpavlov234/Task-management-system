@@ -24,20 +24,20 @@ public class IssueService : Controller, IIssueService
         {
             _context.DetachAllEntities();
             issue.Subject = issue.Subject.Trim();
-            ApplicationUser? assignedTo = _context.Users.FirstOrDefault(u => u.Id == issue.AssignedТoId);
+            ApplicationUser? assignedTo = _context.Users.Find(issue.AssignedТoId);
             if (assignedTo != null)
             {
                 issue.AssignedТo = assignedTo;
             }
 
-            ApplicationUser? assignee = _context.Users.FirstOrDefault(u => u.Id == issue.Assignee.Id);
+            ApplicationUser? assignee = _context.Users.Find(issue.AssigneeId);
             if (assignee != null)
             {
                 issue.Assignee = assignee;
             }
 
             issue.Subject = issue.Subject.Trim();
-            Project? project = _context.Projects.FirstOrDefault(p => p.ProjectId == issue.ProjectId);
+            Project? project = _context.Projects.Find(issue.ProjectId);
             if (project == null)
             {
                 return "Проект с това ID не съществува. Моля, опитайте отново.";

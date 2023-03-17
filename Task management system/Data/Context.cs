@@ -59,12 +59,12 @@ namespace Task_management_system.Data
         {
             _ = optionsBuilder.EnableSensitiveDataLogging();
         }
-        public DbSet<Project> Projects { get; set; }
-        public DbSet<ApplicationUserProject> ApplicationUserProjects { get; set; }
-        public DbSet<KeyType> KeyType { get; set; }
-        public DbSet<KeyValue> KeyValue { get; set; }
-        public DbSet<Issue> Issues { get; set; }
-        public DbSet<Subtask> Subtasks { get; set; }
+        public virtual DbSet<Project> Projects { get; set; }
+        public virtual DbSet<ApplicationUserProject> ApplicationUserProjects { get; set; }
+        public virtual DbSet<KeyType> KeyType { get; set; }
+        public virtual DbSet<KeyValue> KeyValue { get; set; }
+        public virtual DbSet<Issue> Issues { get; set; }
+        public virtual DbSet<Subtask> Subtasks { get; set; }
 
         public Context Clone()
         {
@@ -72,14 +72,20 @@ namespace Task_management_system.Data
         }
         public void DetachAllEntities()
         {
-            var changedEntries = this.ChangeTracker
-                .Entries()
-                .ToList();
-
-            foreach (var entry in changedEntries)
+            try
+            {
+                var changedEntries = this.ChangeTracker
+                    .Entries()
+                    .ToList();
+                foreach (var entry in changedEntries)
             {
                 entry.State = EntityState.Detached;
             }
+            } catch
+            {
+                
+            }
+            
         }
 
     }
