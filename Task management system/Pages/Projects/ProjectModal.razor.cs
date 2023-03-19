@@ -49,7 +49,7 @@ namespace Task_management_system.Pages.Projects
         public async void OpenDialog(Project project)
 
         {
-            originalProject = ProjectService.GetProjectById(this.project.ProjectId);
+            originalProject = ProjectService.GetProjectById(project.ProjectId);
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
             users = UserService.GetAllUsers();
             projectParticipants = null;
