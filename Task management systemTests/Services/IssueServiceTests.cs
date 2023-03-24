@@ -52,8 +52,7 @@ namespace Task_management_system.Services.Tests
                 Issues = new List<Issue>(),
                 ProjectOwner = new ApplicationUser(),
                 ProjectParticipants = new List<ApplicationUserProject>(),
-                ProjectTypeId = 1,
-                ProjectType = new KeyValue()
+                ProjectType = ""
             };
 
             // Set up the mock context with the mock objects and options for in-memory database

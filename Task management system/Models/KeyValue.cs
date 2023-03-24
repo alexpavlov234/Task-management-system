@@ -52,7 +52,7 @@ namespace Task_management_system.Models
         public string? FormattedTextEN { get; set; }
 
 
-        [Comment("Определя дали стойността е активна")]
+        [Comment("Determines whether the value is active")]
         public bool IsActive { get; set; }
 
     }

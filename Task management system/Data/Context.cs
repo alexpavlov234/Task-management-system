@@ -48,8 +48,9 @@ namespace Task_management_system.Data
                 .HasForeignKey(aup => aup.ProjectId).OnDelete(DeleteBehavior.NoAction);
 
             _ = modelBuilder.Entity<Subtask>().HasOne(x => x.Issue).WithMany(i => i.Subtasks).HasForeignKey(x => x.IssueId).OnDelete(DeleteBehavior.Cascade);
-            _ = modelBuilder.Entity<KeyType>();
             _ = modelBuilder.Entity<KeyValue>().HasIndex(b => b.KeyValueIntCode)
+            .IsUnique();
+            _ = modelBuilder.Entity<KeyType>().HasIndex(b => b.KeyTypeIntCode)
             .IsUnique();
 
             // modelBuilder.Seed();

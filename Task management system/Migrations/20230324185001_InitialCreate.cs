@@ -173,6 +173,30 @@ namespace Task_management_system.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Project",
+                columns: table => new
+                {
+                    ProjectId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProjectName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProjectDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ProjectOwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProjectType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Project", x => x.ProjectId);
+                    table.ForeignKey(
+                        name: "FK_Project_AspNetUsers_ProjectOwnerId",
+                        column: x => x.ProjectOwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "KeyValue",
                 columns: table => new
                 {
@@ -190,7 +214,7 @@ namespace Task_management_system.Migrations
                     DefaultValue3 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     FormattedText = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
                     FormattedTextEN = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, comment: "Определя дали стойността е активна")
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, comment: "Determines whether the value is active")
                 },
                 constraints: table =>
                 {
@@ -200,36 +224,6 @@ namespace Task_management_system.Migrations
                         column: x => x.IdKeyType,
                         principalTable: "KeyType",
                         principalColumn: "IdKeyType",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Project",
-                columns: table => new
-                {
-                    ProjectId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProjectName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProjectDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProjectOwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProjectTypeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Project", x => x.ProjectId);
-                    table.ForeignKey(
-                        name: "FK_Project_AspNetUsers_ProjectOwnerId",
-                        column: x => x.ProjectOwnerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Project_KeyValue_ProjectTypeId",
-                        column: x => x.ProjectTypeId,
-                        principalTable: "KeyValue",
-                        principalColumn: "IdKeyValue",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -385,6 +379,12 @@ namespace Task_management_system.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_KeyType_KeyTypeIntCode",
+                table: "KeyType",
+                column: "KeyTypeIntCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_KeyValue_IdKeyType",
                 table: "KeyValue",
                 column: "IdKeyType");
@@ -399,11 +399,6 @@ namespace Task_management_system.Migrations
                 name: "IX_Project_ProjectOwnerId",
                 table: "Project",
                 column: "ProjectOwnerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Project_ProjectTypeId",
-                table: "Project",
-                column: "ProjectTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Subtask_IssueId",
@@ -432,10 +427,16 @@ namespace Task_management_system.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "KeyValue");
+
+            migrationBuilder.DropTable(
                 name: "Subtask");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "KeyType");
 
             migrationBuilder.DropTable(
                 name: "Issue");
@@ -445,12 +446,6 @@ namespace Task_management_system.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "KeyValue");
-
-            migrationBuilder.DropTable(
-                name: "KeyType");
         }
     }
 }

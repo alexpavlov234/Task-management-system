@@ -57,7 +57,7 @@ namespace Task_management_system.Pages.Projects
             isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
             if (project.ProjectId == 0)
             {
-                project.ProjectTypeId = projectTypes.First().IdKeyValue;
+                project.ProjectType = projectTypes.First().Name;
                 if (!isLoggedUserAdmin)
                 {
                     project.ProjectOwner = loggedUser;
@@ -66,7 +66,7 @@ namespace Task_management_system.Pages.Projects
             }
 
 
-            this.project = new Project() { ProjectId = project.ProjectId, ProjectParticipants = project.ProjectParticipants, Issues = project.Issues, ProjectOwner = project.ProjectOwner, ProjectTypeId = project.ProjectTypeId, EndDate = project.EndDate, ProjectDescription = project.ProjectDescription, ProjectName = project.ProjectName, ProjectType = project.ProjectType, StartDate = project.StartDate };
+            this.project = new Project() { ProjectId = project.ProjectId, ProjectParticipants = project.ProjectParticipants, Issues = project.Issues, ProjectOwner = project.ProjectOwner, ProjectType = project.ProjectType, EndDate = project.EndDate, ProjectDescription = project.ProjectDescription, ProjectName = project.ProjectName, StartDate = project.StartDate };
 
             projectParticipantsSfMultiSelect.DataSource = users;
             if (this.project.ProjectParticipants != null)

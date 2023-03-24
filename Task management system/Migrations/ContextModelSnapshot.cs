@@ -345,6 +345,9 @@ namespace Task_management_system.Migrations
 
                     b.HasKey("IdKeyType");
 
+                    b.HasIndex("KeyTypeIntCode")
+                        .IsUnique();
+
                     b.ToTable("KeyType");
                 });
 
@@ -389,7 +392,7 @@ namespace Task_management_system.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit")
-                        .HasComment("Определя дали стойността е активна");
+                        .HasComment("Determines whether the value is active");
 
                     b.Property<string>("KeyValueIntCode")
                         .IsRequired()
@@ -441,8 +444,9 @@ namespace Task_management_system.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ProjectTypeId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProjectType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -450,8 +454,6 @@ namespace Task_management_system.Migrations
                     b.HasKey("ProjectId");
 
                     b.HasIndex("ProjectOwnerId");
-
-                    b.HasIndex("ProjectTypeId");
 
                     b.ToTable("Project");
                 });
@@ -626,15 +628,7 @@ namespace Task_management_system.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Task_management_system.Models.KeyValue", "ProjectType")
-                        .WithMany()
-                        .HasForeignKey("ProjectTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("ProjectOwner");
-
-                    b.Navigation("ProjectType");
                 });
 
             modelBuilder.Entity("Task_management_system.Models.Subtask", b =>

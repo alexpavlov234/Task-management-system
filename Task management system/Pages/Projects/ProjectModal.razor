@@ -32,8 +32,8 @@
                     </div>
                     <div class="col-md-4">
                         <label for="type">Тип проект</label>
-                        <SfDropDownList Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" ID="type" TValue="int" TItem="KeyValue" @bind-Value="project.ProjectTypeId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете тип" DataSource="@projectTypes">
-                            <DropDownListFieldSettings Value="IdKeyValue" Text="Name"></DropDownListFieldSettings>
+                        <SfDropDownList Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" ID="type" TValue="string" TItem="KeyValue" @bind-Value="project.ProjectType" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете тип" DataSource="@projectTypes">
+                            <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
                 </div>

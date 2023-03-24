@@ -25,7 +25,6 @@ public class ProjectService : Controller, IProjectService
         {
             _context.DetachAllEntities();
             project.ProjectName = project.ProjectName.Trim();
-            project.ProjectType = _keyValueService.GetKeyValueById(project.ProjectTypeId);
 
 
             List<ApplicationUserProject> projectParticipants = new List<ApplicationUserProject>();
@@ -119,7 +118,7 @@ public class ProjectService : Controller, IProjectService
     {
         // return _context.Projects.Include(x => x.ProjectParticipants).ThenInclude(pp => pp.User).ToList();
         List<Project> projects = _context.Projects.AsNoTracking().Include(x => x.ProjectParticipants)!
-            .ThenInclude(pp => pp.User).Include(p => p.ProjectType).Include(p => p.ProjectOwner).Include(p => p.Issues).ThenInclude(i => i.AssignedТo).Include(p => p.Issues).ThenInclude(i => i.Assignee).Include(i => i.Issues).ThenInclude(y => y.Subtasks).ToList();
+            .ThenInclude(pp => pp.User).Include(p => p.ProjectOwner).Include(p => p.Issues).ThenInclude(i => i.AssignedТo).Include(p => p.Issues).ThenInclude(i => i.Assignee).Include(i => i.Issues).ThenInclude(y => y.Subtasks).ToList();
 
 
         return projects;
@@ -128,7 +127,7 @@ public class ProjectService : Controller, IProjectService
     public Project GetProjectById(int projectId)
     {
         return _context.Projects.AsNoTracking().Where(x => x.ProjectId == projectId).Include(x => x.ProjectParticipants)!
-            .ThenInclude(pp => pp.User).Include(p => p.ProjectType).Include(p => p.ProjectOwner).Include(p => p.Issues).ThenInclude(i => i.AssignedТo).Include(p => p.Issues).ThenInclude(i => i.Assignee).Include(i => i.Issues).ThenInclude(y => y.Subtasks).FirstOrDefault()!;
+            .ThenInclude(pp => pp.User).Include(p => p.ProjectOwner).Include(p => p.Issues).ThenInclude(i => i.AssignedТo).Include(p => p.Issues).ThenInclude(i => i.Assignee).Include(i => i.Issues).ThenInclude(y => y.Subtasks).FirstOrDefault()!;
     }
 
     public string UpdateProject(Project project)
@@ -137,7 +136,6 @@ public class ProjectService : Controller, IProjectService
         {
             _context.DetachAllEntities();
             project.ProjectName = project.ProjectName.Trim();
-            project.ProjectType = _keyValueService.GetKeyValueById(project.ProjectTypeId);
 
             List<ApplicationUserProject> projectParticipants = new List<ApplicationUserProject>();
             if (project.ProjectParticipants != null)

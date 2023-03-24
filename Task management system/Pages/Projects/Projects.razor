@@ -76,7 +76,7 @@
                                             }
                                             @foreach (var project in projects)
                                             {
-                                                @if (project.ProjectType.KeyValueIntCode == projectType.KeyValueIntCode)
+                                                @if (project.ProjectType == projectType.Name)
                                                 {
                                                     hasItems = true;
                                                     <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
@@ -180,7 +180,7 @@
                                             }
                                             @foreach (var project in projects)
                                             {
-                                                @if (project.ProjectType.KeyValueIntCode == projectType.KeyValueIntCode)
+                                                @if (project.ProjectType == projectType.Name)
                                                 {
                                                     hasItems = true;
                                                     <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">

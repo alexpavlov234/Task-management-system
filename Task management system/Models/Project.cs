@@ -36,13 +36,8 @@ namespace Task_management_system.Models
         [System.Text.Json.Serialization.JsonIgnore]
         public ICollection<ApplicationUserProject>? ProjectParticipants { get; set; }
 
-
-
         [Required(ErrorMessage = "Полето 'Тип на проект' е задължително!")]
-        [ForeignKey(nameof(KeyValue))]
-        [System.Text.Json.Serialization.JsonIgnore]
-        public int ProjectTypeId { get; set; }
-        public KeyValue ProjectType { get; set; }
+        public string ProjectType { get; set; }
 
     }
 
