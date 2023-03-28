@@ -9,6 +9,7 @@ internal interface IIssueService
     string DeleteSubtask(Subtask subtask);
     string DeleteIssue(Issue issue);
     List<Issue> GetAllIssues();
+    List<Issue> GetAllIssues(string userId);
     List<Issue> GetAllIssuesByProjectAndApplicationUser(int projectId, string userId);
     Subtask GetSubtaskById(int SubtaskId);
     Issue GetIssueById(int IssueId);

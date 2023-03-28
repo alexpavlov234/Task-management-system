@@ -84,6 +84,13 @@ public class IssueService : Controller, IIssueService
         return issues;
     }
 
+    public List<Issue> GetAllIssues(string userId)
+    {
+        List<Issue> issues = _context.Issues.AsNoTracking().Include(x => x.Subtasks).Include(t => t.Project).Include(t => t.Assignee).Include(t => t.AssignedТo).Where(t => t.AssignedТoId == userId).ToList();
+
+        return issues;
+    }
+
     public Issue GetIssueById(int taskId)
     {
         Issue issue1 = _context.Issues.AsNoTracking().Where(x => x.IssueId == taskId).Include(x => x.Subtasks).Include(t => t.Project).Include(t => t.Assignee).Include(t => t.AssignedТo).FirstOrDefault()!;

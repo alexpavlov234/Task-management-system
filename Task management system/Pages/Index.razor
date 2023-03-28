@@ -4,6 +4,7 @@
 @using Syncfusion.Blazor.Schedule
 @using Task_management_system.Interfaces
 @using Task_management_system.Models
+@using Task_management_system.Pages.Issues;
 @using Task_management_system.Pages.Projects
 @using Task_management_system.Services
 @inject IIssueService IssueService
@@ -77,6 +78,7 @@ else
                     <h5 class="card-title">Задачи за деня</h5>
                     <SfSchedule TValue="Issue" Height="300px" Width="auto" SelectedDate="@DateTime.Now" CurrentView="View.Agenda" ShowHeaderBar="false">
                         <ScheduleEventSettings DataSource="@issues" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
+                        <ScheduleEvents TValue="Issue" OnPopupOpen="OnPopupOpen"></ScheduleEvents>
                         <ScheduleViews>
                             <ScheduleView Option="View.Day"></ScheduleView>
                             <ScheduleView Option="View.Week"></ScheduleView>
@@ -176,7 +178,7 @@ else
     }
 
 </style>
-
+<IssueModal @ref="issueModal" CallbackAfterSubmit="UpdateAfterIssueModalSubmitAsync" />
 @code {
 
     String userFullName = null;
@@ -186,9 +188,13 @@ else
     CurrentCondition response;
     String image = "";
     String result = "";
+    private IssueModal issueModal = new IssueModal();
     protected override async Task OnInitializedAsync()
     {
-        issues = IssueService.GetAllIssues();
+        if (userService.GetLoggedUser() != null)
+        {
+            issues = IssueService.GetAllIssues(userService.GetLoggedUser().Id);
+        }
         if (userService.GetLoggedUser() != null)
         {
             var user = userService.GetLoggedUser();
@@ -202,15 +208,15 @@ else
         //}
         //catch
         //{
-            response = new CurrentCondition();
-            response.Temperature = new Temperature();
-            response.Temperature.Metric = new Metric();
+        response = new CurrentCondition();
+        response.Temperature = new Temperature();
+        response.Temperature.Metric = new Metric();
 
-            response.Temperature.Metric.Value = 12;
-            response.Temperature.Metric.Unit = "C";
-            response.WeatherText = "Гръмотевични бури";
-            response.WeatherIcon = 17;
-            response.Link = "https://www.accuweather.com/bg/bg/sofia/51097/weather-forecast/51097";
+        response.Temperature.Metric.Value = 12;
+        response.Temperature.Metric.Unit = "C";
+        response.WeatherText = "Гръмотевични бури";
+        response.WeatherIcon = 17;
+        response.Link = "https://www.accuweather.com/bg/bg/sofia/51097/weather-forecast/51097";
         //}
         image = "img/icons/" + response.WeatherIcon + ".svg";
 
@@ -237,9 +243,26 @@ else
         }
     }
 
+    private async Task UpdateAfterIssueModalSubmitAsync()
+    {
+        if (userService.GetLoggedUser() != null)
+        {
+            issues = IssueService.GetAllIssues(userService.GetLoggedUser().Id);
+        }
+        this.StateHasChanged();
+    }
     public void Dispose()
     {
         JSRuntime.InvokeVoidAsync("stopTime");
     }
+
+
+    public void OnPopupOpen(PopupOpenEventArgs<Issue> args)
+    {
+
+        args.Cancel = true;
+        issueModal.OpenDialog(args.Data);
+    }
+
 }
 

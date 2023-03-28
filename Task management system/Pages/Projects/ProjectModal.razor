@@ -10,56 +10,73 @@
 @inject IProjectService ProjectService
 
 
-<SfDialog Width="700px" Height="400px" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@IsVisible">
+<SfDialog Width="60%" Height="600px" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@IsVisible">
     <DialogTemplates>
         <Header>
             <span style="color: #009cfc;">@this.project.ProjectName</span>
         </Header>
         <Content>
-
-            <EditForm id="projectForm" EditContext="editContext" OnValidSubmit="@SaveProject">
-
-                <DataAnnotationsValidator />
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <label for="projectName">Име на проект</label>
-                        <InputText disabled="@(!(project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)))" id="projectName" @bind-Value="project.ProjectName" placeholder="Въведете име" class="form-control"></InputText>
+            @if (project.ProjectId != 0)
+            {
+                <div class="mb-3 p-3 card-modal">
+                    <div class="d-flex justify-content-between align-items-end">
+                        <label class="mb-1" style="font-family: SegoeUI; font-size: 16px; color: gray; font-weight: bold;">Завършеност на проекта</label>
+                        <label style="font-size: 45px; font-family: SegoeUI;">@((project.Issues == null ? 0 : Math.Ceiling(Convert.ToDouble(project.Issues.Where(x => x.Status == "Затворена").Count()) / (project.Issues.Count()) * 100)))% </label>
                     </div>
-                    <div class="col-md-4">
-                        <label for="datepicker">Диапазон на проект</label>
-                        <SfDateRangePicker Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" ID="datepicker" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@project.StartDate" @bind-EndDate="@project.EndDate" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="type">Тип проект</label>
-                        <SfDropDownList Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" ID="type" TValue="string" TItem="KeyValue" @bind-Value="project.ProjectType" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете тип" DataSource="@projectTypes">
-                            <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
-                        </SfDropDownList>
+                    <div class="progress" style="height: 10px">
+                        <div class="progress-bar" role="progressbar" aria-label="Завършени задачи" style="width: @((project.Issues == null ? 0 : Convert.ToDouble(project.Issues.Where(x => x.Status == "Затворена").Count()) / (project.Issues.Count()) * 100).ToString().Replace(',', '.'))%; height: 10px" aria-valuenow="@(project.Issues == null ? 0 : (project.Issues.Where(x => x.Status == "Затворена").Count() / project.Issues.Count()) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
-                <label for="description">Описание на проект</label>
-                <div class="multiline">
-                    <SfTextBox Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" id="description" Multiline=true Placeholder="Въведете описание" @bind-Value="@project.ProjectDescription"></SfTextBox>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <label for="owner">Собственик на проекта</label>
-                        <SfDropDownList ID="owner" TValue="ApplicationUser" Enabled="project.ProjectOwner != null ? isLoggedUserAdmin : true " TItem="ApplicationUser" @bind-Value="project.ProjectOwner" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете собственик" DataSource="@users">
-                            <DropDownListFieldSettings Value="UserName" Text="FullName"></DropDownListFieldSettings>
-                        </SfDropDownList>
+            }
+            <div class="p-3 card-modal">
+                <EditForm id="projectForm" EditContext="editContext" OnValidSubmit="@SaveProject">
+
+                    <DataAnnotationsValidator />
+
+                    <div class="row my-1">
+                        <div class="col-md-4">
+                            <label for="projectName">Име на проект</label>
+                            <SfTextBox Enabled="@((project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)))" id="projectName" @bind-Value="project.ProjectName" Placeholder="Въведете име"></SfTextBox>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="datepicker">Диапазон на проект</label>
+                            <SfDateRangePicker Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" ID="datepicker" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@project.StartDate" @bind-EndDate="@project.EndDate" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="type">Тип проект</label>
+                            <SfDropDownList Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" ID="type" TValue="string" TItem="KeyValue" @bind-Value="project.ProjectType" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете тип" DataSource="@projectTypes">
+                                <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </div>
                     </div>
-                    <div class="col-md-12">
-                        <label for="participants">Участници в проекта</label>
-                        <SfMultiSelect @ref="projectParticipantsSfMultiSelect" Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" TValue="ApplicationUser[]" TItem="ApplicationUser" Placeholder="Изберете участници" DataSource="@users" @bind-Value="projectParticipants">
-                            <MultiSelectFieldSettings Text="FullName" Value="UserName"></MultiSelectFieldSettings>
-                            <MultiSelectEvents TItem="ApplicationUser" TValue="ApplicationUser[]" ValueChange="@OnValueSelectHandlerParticipants"></MultiSelectEvents>
-                        </SfMultiSelect>
-
+                    <div class="row my-1">
+                        <label for="description">Описание на проект</label>
+                        <div class="multiline">
+                            <SfTextBox Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" id="description" Multiline="true" Placeholder="Въведете описание" @bind-Value="@project.ProjectDescription"></SfTextBox>
+                        </div>
                     </div>
-                </div>
+                    <div class="row my-1">
+                        <div class="col-md-12">
+                            <label for="owner">Собственик на проекта</label>
+                            <SfDropDownList ID="owner" TValue="ApplicationUser" Enabled="project.ProjectOwner != null ? isLoggedUserAdmin : true " TItem="ApplicationUser" @bind-Value="project.ProjectOwner" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете собственик" DataSource="@users">
+                                <DropDownListFieldSettings Value="UserName" Text="FullName"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </div>
+                    </div>
+                    <div class="row my-1">
+                        <div class="col-md-12">
+                            <label for="participants">Участници в проекта</label>
+                            <SfMultiSelect @ref="projectParticipantsSfMultiSelect" Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" TValue="ApplicationUser[]" TItem="ApplicationUser" Placeholder="Изберете участници" DataSource="@users" @bind-Value="projectParticipants">
+                                <MultiSelectFieldSettings Text="FullName" Value="UserName"></MultiSelectFieldSettings>
+                                <MultiSelectEvents TItem="ApplicationUser" TValue="ApplicationUser[]" ValueChange="@OnValueSelectHandlerParticipants"></MultiSelectEvents>
+                            </SfMultiSelect>
+
+                        </div>
+                    </div>
 
 
-            </EditForm>
+                </EditForm>
+            </div>
         </Content>
         <FooterTemplate>
             <div class="row gy-3">
@@ -79,4 +96,37 @@
     </DialogTemplates>
 </SfDialog>
 <ToastMsg @ref="toast" />
+<style>
+    .progress-wrapper {
+        position: relative;
+    }
 
+    .start-label,
+    .end-label {
+        position: absolute;
+        top: 0;
+    }
+
+    .start-label {
+        left: 0;
+    }
+
+    .end-label {
+        right: 0;
+    }
+
+    .end-label {
+        color: gray;
+        font-size: 32px;
+        text-align: center;
+    }
+
+    .progress {
+        width: auto;
+        border-radius: 20.25rem;
+    }
+
+    .progress-bar {
+        background-color: #4f9b00;
+    }
+</style>
