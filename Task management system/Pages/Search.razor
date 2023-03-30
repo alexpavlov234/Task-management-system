@@ -83,7 +83,7 @@
                                                     <div style=" overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                                                         @project.ProjectName
                                                     </div>
-                                                    
+
                                                 </div>
 
                                                 <div class="vr hide840 mx-1"></div>
@@ -302,7 +302,9 @@
         {
             projects = projectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
                                                                   || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
-            issues = issueService.GetAllIssues().Where(p => p.AssignedТo.Id == loggedUser.Id || p.Assignee.Id == loggedUser.Id).ToList();
+            issues = issueService.GetAllIssues()
+     .Where(i => projects.Any(p => p.ProjectId == i.ProjectId) && (i.AssignedТo.Id == loggedUser.Id || i.Assignee.Id == loggedUser.Id))
+     .ToList();
         }
     }
 

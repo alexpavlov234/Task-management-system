@@ -94,7 +94,7 @@
                                     <i class="fa-solid fa-clock fa-lg" style="color: dimgray"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Срок</b></span> &nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
                                 <div class="col-8 col-md-9 col-sm-8 col-xs-8 d-flex align-items-center">
-                                    <SfDateRangePicker ID="datepicker" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@issue.StartTime" @bind-EndDate="@issue.EndTime" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate" ></SfDateRangePicker>
+                                    <SfDateRangePicker ID="datepicker" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@issue.StartTime" @bind-EndDate="@issue.EndTime" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
                                     <ValidationMessage For="@(() => issue.EndTime)" />
                                     <ValidationMessage For="@(() => issue.StartTime)" />
                                 </div>
@@ -128,9 +128,11 @@
                                             <!-- Left navbar links -->
                                             <ul class="navbar-nav float">
                                                 <li class="nav-item d-sm-inline-block">
-                                                    <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddSubtask">Новa подзадача</button>
+                                                    @if ((isLoggedUserAdmin || _isIssueNew) || issue.AssigneeId == loggedUser.Id)
+                                                    {
+                                                        <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddSubtask">Новa подзадача</button>
 
-
+                                                    }
                                                 </li>
                                             </ul>
                                         </nav>
@@ -141,41 +143,44 @@
                                             <GridPageSettings PageCount="5" PageSize=20 PageSizes="true"></GridPageSettings>
 
                                             <GridColumns>
-                                                <GridColumn Width="40px">
-                                                    <Template Context="context2">
-                                                        <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
-                                                            <button type="button" class="btn btn-outline-warning waves-effect md-trigger" @onclick="(() => EditSubtask(context2 as Subtask))">
-                                                                <i class="fa-solid fa-pen-to-square"></i>
-                                                            </button>
-                                                        </SfTooltip>
-                                                    </Template>
-                                                </GridColumn>
-                                                <GridColumn Width="40px">
-                                                    <Template Context="context2">
-                                                        <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                                                            <button type="button" class="btn btn-outline-danger waves-effect md-trigger" @onclick="(() => DeleteSubtask(context2 as Subtask))">
-                                                                <i class="fa-solid fa-trash"></i>
-                                                            </button>
-                                                        </SfTooltip>
-                                                    </Template>
-                                                </GridColumn>
 
-
-                                                <GridColumn Field=@nameof(Subtask.Subject) HeaderText="Име" IsPrimaryKey="true" TextAlign="TextAlign.Right" Width="120"></GridColumn>
+                                                <GridColumn Field=@nameof(Subtask.Subject) HeaderText="Име" TextAlign="TextAlign.Left" Width="120"></GridColumn>
                                                 <GridColumn Field=@nameof(Subtask.Status) HeaderText="Статус" Width="120"></GridColumn>
                                                 <GridColumn Field=@nameof(Subtask.StartTime) HeaderText="Начална дата" Width="120"></GridColumn>
                                                 <GridColumn Field=@nameof(Subtask.EndTime) HeaderText="Крайна дата" Width="120"></GridColumn>
+                                                @if ((isLoggedUserAdmin || _isIssueNew) || issue.AssigneeId == loggedUser.Id)
+                                                {
+                                                    <GridColumn Width="40px">
+                                                        <Template Context="context2">
+                                                            <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
+                                                                <button type="button" class="btn btn-outline-warning waves-effect md-trigger" @onclick="(() => EditSubtask(context2 as Subtask))">
+                                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                                </button>
+                                                            </SfTooltip>
+                                                        </Template>
+                                                    </GridColumn>
+                                                    <GridColumn Width="40px">
+                                                        <Template Context="context2">
+                                                            <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                                                <button type="button" class="btn btn-outline-danger waves-effect md-trigger" @onclick="(() => DeleteSubtask(context2 as Subtask))">
+                                                                    <i class="fa-solid fa-trash"></i>
+                                                                </button>
+                                                            </SfTooltip>
+                                                        </Template>
+                                                    </GridColumn>
+
+                                                }
                                             </GridColumns>
                                         </SfGrid>
                                     </ContentTemplate>
                                 </TabItem>
                                 @*<TabItem>
-                                    <ChildContent>
-                                        <TabHeader Text="Прикачени файлове"></TabHeader>
-                                    </ChildContent>
-                                    <ContentTemplate>
-                                        <h1 class="m-3">В процес на разработка! 😊 </h1>
-                                    </ContentTemplate>
+                            <ChildContent>
+                            <TabHeader Text="Прикачени файлове"></TabHeader>
+                            </ChildContent>
+                            <ContentTemplate>
+                            <h1 class="m-3">В процес на разработка! 😊 </h1>
+                            </ContentTemplate>
                             </TabItem>*@
                             </TabItems>
                         </SfTab>
@@ -199,7 +204,10 @@
 
 
                 <div class="col-sm-6">
-                    <button type="submit" class="btn btn-primary" form="issueForm">Запиши</button>
+                    @if ((isLoggedUserAdmin || _isIssueNew) || issue.AssigneeId == loggedUser.Id)
+                    {
+                        <button type="submit" class="btn btn-primary" form="issueForm">Запиши</button>
+                    }
                     <button type="button" class="btn btn-secondary" @onclick="CloseDialog">Отказ</button>
                 </div>
             </div>

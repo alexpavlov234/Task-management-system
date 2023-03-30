@@ -375,7 +375,9 @@
         {
             projects = projectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
                                                                   || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
-            issues = issueService.GetAllIssues();
+            issues = issueService.GetAllIssues()
+      .Where(i => projects.Any(p => p.ProjectId == i.ProjectId) && (i.AssignedТo.Id == loggedUser.Id || i.Assignee.Id == loggedUser.Id))
+      .ToList();
         }
     }
 
