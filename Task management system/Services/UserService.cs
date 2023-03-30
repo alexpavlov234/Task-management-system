@@ -120,40 +120,39 @@ public class UserService : Controller, IUserService
         return user;
     }
 
-    public async Task UpdateApplicationUser(ApplicationUser applicationUser)
+    public async Task UpdateApplicationUser(ApplicationUser updatedUser)
     {
-        _context.DetachAllEntities();
-        applicationUser.FirstName.Trim();
-        applicationUser.LastName.Trim();
-        ApplicationUser? local = _context.Set<ApplicationUser>().Local.FirstOrDefault(entry => entry.Id.Equals(applicationUser.Id));
-        // check if local is not null
-        if (local != null)
-        {
-            // detach
-            _context.Entry(local).State = EntityState.Detached;
-        }
-        _context.Entry(applicationUser).State = EntityState.Modified;
+        // Retrieve the user from the database using its key value
+        var user = await _userManager.FindByIdAsync(updatedUser.Id);
 
-        _ = _context.SaveChanges();
+        // Update the user's properties
+        user.FirstName = updatedUser.FirstName?.Trim();
+        user.LastName = updatedUser.LastName?.Trim();
+        user.Role = updatedUser.Role;
+        user.Email = updatedUser.Email;
+        user.EmailConfirmed = updatedUser.EmailConfirmed;
+        user.PhoneNumber = updatedUser.PhoneNumber?.Trim();
 
-        if (applicationUser.Role == "Admin" && !await IsInRoleAsync(applicationUser, "Admin"))
+        // Update the user in the database
+        await _userManager.UpdateAsync(user);
+
+        if (user.Role == "Admin" && !await IsInRoleAsync(user, "Admin"))
         {
-            if (await IsInRoleAsync(applicationUser, "User"))
+            if (await IsInRoleAsync(user, "User"))
             {
-                await RemoveRoleAsync(applicationUser, "User");
+                await RemoveRoleAsync(user, "User");
             }
-            await AddRoleAsync(applicationUser, "Admin");
+            await AddRoleAsync(user, "Admin");
         }
-        else if (applicationUser.Role == "User" && (await IsInRoleAsync(applicationUser, "Admin")))
+        else if (user.Role == "User" && (await IsInRoleAsync(user, "Admin")))
         {
-            if (await IsInRoleAsync(applicationUser, "Admin"))
+            if (await IsInRoleAsync(user, "Admin"))
             {
-                await RemoveRoleAsync(applicationUser, "Admin");
+                await RemoveRoleAsync(user, "Admin");
             }
-            await AddRoleAsync(applicationUser, "User");
+            await AddRoleAsync(user, "User");
         }
     }
-
 
     public ApplicationUser GetLoggedUser()
     {
