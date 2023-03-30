@@ -42,12 +42,81 @@
                 <GridColumns>
 
 
-
-                    <GridColumn Field=@nameof(ApplicationUser.UserName) HeaderText="Потребителско име" IsPrimaryKey="true" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(ApplicationUser.LastName) HeaderText="Фамилия" Width="200px"></GridColumn>
-                    <GridColumn Field=@nameof(ApplicationUser.Email) HeaderText="Имейл" Width="300px"></GridColumn>
-                    <GridColumn Field=@nameof(ApplicationUser.PhoneNumber) HeaderText="Телефон" Width="100px"></GridColumn>
+                    <GridColumn Field=@nameof(ApplicationUser.UserName) HeaderText="Потребителско име" IsPrimaryKey="true" Width="200px">
+                        <Template>
+                            @{
+                                var user = (context as ApplicationUser);
+                                if (string.IsNullOrEmpty(user.UserName))
+                                {
+                                    @("-")
+                                }
+                                else
+                                {
+                                    @user.UserName
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" Width="200px">
+                        <Template>
+                            @{
+                                var user = (context as ApplicationUser);
+                                if (string.IsNullOrEmpty(user.FirstName))
+                                {
+                                    @("-")
+                                }
+                                else
+                                {
+                                    @user.FirstName
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field=@nameof(ApplicationUser.LastName) HeaderText="Фамилия" Width="200px">
+                        <Template>
+                            @{
+                                var user = (context as ApplicationUser);
+                                if (string.IsNullOrEmpty(user.LastName))
+                                {
+                                    @("-")
+                                }
+                                else
+                                {
+                                    @user.LastName
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field=@nameof(ApplicationUser.Email) HeaderText="Имейл" Width="200px">
+                        <Template>
+                            @{
+                                var user = (context as ApplicationUser);
+                                if (string.IsNullOrEmpty(user.Email))
+                                {
+                                    @("-")
+                                }
+                                else
+                                {
+                                    @user.Email
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field=@nameof(ApplicationUser.PhoneNumber) HeaderText="Телефон" Width="150px">
+                        <Template>
+                            @{
+                                var user = (context as ApplicationUser);
+                                if (string.IsNullOrEmpty(user.PhoneNumber))
+                                {
+                                    @("-")
+                                }
+                                else
+                                {
+                                    @user.PhoneNumber
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
                     <GridColumn HeaderText="Роля" Width="180px">
                         <Template>
                             @{
@@ -116,7 +185,7 @@
     }
     private async Task UpdateAfterManagementModalSubmitAsync()
     {
-       await UpdateData();
+        await UpdateData();
 
         await this.usersGrid.Refresh();
         this.StateHasChanged();
@@ -240,8 +309,8 @@
     }
     protected async override Task OnInitializedAsync()
     {
-        UpdateData();
-     
+        await UpdateData();
+
     }
 
     public async Task<int> GetRowCounter(IdentityRole val)

@@ -35,8 +35,9 @@
         </div>
 
         <div class="m-3">
-            <SfSchedule TValue="Issue" Height="650px" @bind-SelectedDate="@CurrentDate" CurrentView="View.Month" >
-                <ScheduleEventSettings DataSource="@issues" AllowAdding="false" AllowDeleting="false" AllowEditing="false"></ScheduleEventSettings>
+            <SfSchedule TValue="Issue" Height="auto" Width="auto" SelectedDate="@DateTime.Now" CurrentView="View.Month">
+                <ScheduleEventSettings DataSource="@issues" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
+                <ScheduleEvents TValue="Issue" OnPopupOpen="OnPopupOpen"></ScheduleEvents>
                 <ScheduleViews>
                     <ScheduleView Option="View.Day"></ScheduleView>
                     <ScheduleView Option="View.Week"></ScheduleView>
@@ -64,22 +65,29 @@
         display: none !important;
     }
 </style>
-
+<IssueModal @ref="issueModal" CallbackAfterSubmit="UpdateAfterIssueModalSubmitAsync" />
 @code {
     DateTime CurrentDate = DateTime.Now;
     //https://learn.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-7.0
 
     private List<Issue> issues { get; set; }
+    private IssueModal issueModal = new IssueModal();
 
-    private IssueModal taskModal = new IssueModal();
 
 
 
     protected async override Task OnInitializedAsync()
     {
-        issues = IssueService.GetAllIssues();
+        issues = IssueService.GetAllIssues(userService.GetLoggedUser().Id);
 
 
+    }
+    public void OnPopupOpen(PopupOpenEventArgs<Issue> args)
+    {
+
+        args.Cancel = true;
+        issueModal.OpenDialog(args.Data);
+        
     }
     //private async Task AddNewTaskClickHandler()
     //{
@@ -92,7 +100,7 @@
     //}
     private async Task UpdateAfterIssueModalSubmitAsync()
     {
-        issues = IssueService.GetAllIssues();
+        issues = IssueService.GetAllIssues(userService.GetLoggedUser().Id);
         this.StateHasChanged();
     }
     //private async Task DeleteIssue(Issue issue)

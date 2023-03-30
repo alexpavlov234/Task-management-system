@@ -290,6 +290,11 @@ button.nav-link.btn.btn-link {
     display: none !important;
 }
 
+.card-modal {
+    border: 1px solid lightgray;
+    border-radius: 5px
+}
+
 @media screen and (max-width: 350px) {
     .hide350 {
         display: none !important;

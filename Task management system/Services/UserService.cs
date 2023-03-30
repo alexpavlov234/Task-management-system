@@ -217,12 +217,30 @@ public class UserService : Controller, IUserService
     public async Task<ApplicationUser> ToExistingApplicationUser(InputModel inputModel)
     {
         ApplicationUser applicationUser = await GetApplicationUserByIdAsync(inputModel.Id);
-        applicationUser.PhoneNumber = inputModel.PhoneNumber.Trim();
-        applicationUser.FirstName = inputModel.FirstName.Trim();
-        applicationUser.LastName = inputModel.LastName.Trim();
-        applicationUser.UserName = inputModel.Username.Trim();
-        applicationUser.Email = inputModel.Email.Trim();
-        applicationUser.Role = inputModel.Role.Trim();
+        if (inputModel.PhoneNumber != null)
+        {
+            applicationUser.PhoneNumber = inputModel.PhoneNumber.Trim();
+        }
+        if (inputModel.FirstName != null)
+        {
+            applicationUser.FirstName = inputModel.FirstName.Trim();
+        }
+        if (inputModel.LastName != null)
+        {
+            applicationUser.LastName = inputModel.LastName.Trim();
+        }
+        if (inputModel.Username != null)
+        {
+            applicationUser.UserName = inputModel.Username.Trim();
+        }
+        if (inputModel.Email != null)
+        {
+            applicationUser.Email = inputModel.Email.Trim();
+        }
+        if (inputModel.Role != null)
+        {
+            applicationUser.Role = inputModel.Role.Trim();
+        }
         return applicationUser;
     }
 
