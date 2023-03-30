@@ -206,7 +206,7 @@
                 <div class="col-sm-6">
                     @if ((isLoggedUserAdmin || _isIssueNew) || issue.AssigneeId == loggedUser.Id)
                     {
-                        <button type="submit" class="btn btn-primary" form="issueForm">Запиши</button>
+                        <button type="submit" class="btn btn-primary" form="issueForm" style="margin-right: 5px">Запиши</button>
                     }
                     <button type="button" class="btn btn-secondary" @onclick="CloseDialog">Отказ</button>
                 </div>
