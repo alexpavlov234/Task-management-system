@@ -39,7 +39,6 @@
 
 
                 <InputText id="issueName" @bind-Value="subtask.Subject" class="form-control my-4" placeholder="Име" style="font-size: 36px"></InputText>
-                <ValidationMessage For="@(() => subtask.Subject)" />
                 <div class="row">
                     <div class="col-md-6">
                         <div class="p-3 col-md-12 my-1 card-modal">
@@ -63,7 +62,7 @@
                             </div>
 
                         </div>
-                        <ValidationMessage For="@(() => subtask.Status)" />
+
                     </div>
                     <div class="col-md-6">
                         <div class="p-3 col-md-12 my-1 card-modal">
@@ -74,8 +73,6 @@
                                 </div>
                                 <div class="col-md-9 d-flex align-items-center">
                                     <SfDateRangePicker ID="datepickerSubtask" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@subtask.StartTime" @bind-EndDate="@subtask.EndTime" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
-                                    <ValidationMessage For="@(() => subtask.EndTime)" />
-                                    <ValidationMessage For="@(() => subtask.StartTime)" />
                                 </div>
                             </div>
                         </div>
@@ -85,7 +82,6 @@
                 <label for="description">Описание на задача</label>
                 <div class="multiline">
                     <SfTextBox id="descriptionSubtask" Multiline=true Placeholder="Въведете описание на задача" @bind-Value="@subtask.Description"></SfTextBox>
-                    <ValidationMessage For="@(() => subtask.Description)" />
                 </div>
 
 

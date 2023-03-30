@@ -105,6 +105,7 @@ public class IssueService : Controller, IIssueService
         {
             _context.DetachAllEntities();
             issue.Subject = issue.Subject.Trim();
+            issue.EndTime = new DateTime(issue.EndTime.Year, issue.EndTime.Month, issue.EndTime.Day, 23, 59, 59);
             ApplicationUser? assignedTo = _context.Users.FirstOrDefault(u => u.Id == issue.AssignedТoId);
             if (assignedTo != null)
             {

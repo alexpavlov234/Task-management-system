@@ -101,45 +101,48 @@ namespace Task_management_system.Pages.Issues
         public async void OpenDialog(Issue issue)
 
         {
-            _isIssueNew = IssueService.GetIssueById(issue.IssueId) == null;
-            isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
-            loggedUser = UserService.GetLoggedUser();
-            UpdateData();
-            statuses = new List<KeyValue>();
-            priorities = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
-            this.issue = issue;
-            if (_isIssueNew)
+            if (issue != null)
             {
-                if (issue.Project != null)
+                _isIssueNew = IssueService.GetIssueById(issue.IssueId) == null;
+                isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
+                loggedUser = UserService.GetLoggedUser();
+                UpdateData();
+                statuses = new List<KeyValue>();
+                priorities = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
+                this.issue = issue;
+                if (_isIssueNew)
                 {
-                    //issueProjectName = issue.Project.ProjectName;
-                    this.issue.EndTime = this.issue.Project.EndDate;
-
-                    if (DateTime.Now < issue.EndTime)
+                    if (issue.Project != null)
                     {
-                        this.issue.StartTime = this.issue.Project.EndDate.AddMonths(-1);
+                        //issueProjectName = issue.Project.ProjectName;
+                        this.issue.EndTime = this.issue.Project.EndDate;
+
+                        if (DateTime.Now < issue.EndTime)
+                        {
+                            this.issue.StartTime = this.issue.Project.EndDate.AddMonths(-1);
+                        }
+                        else
+                        {
+
+                            this.issue.StartTime = DateTime.Now;
+                            this.issue.EndTime = DateTime.Now.AddMonths(1);
+                        }
                     }
+
                     else
                     {
-
+                        this.issue.ProjectId = projects.First().ProjectId;
                         this.issue.StartTime = DateTime.Now;
                         this.issue.EndTime = DateTime.Now.AddMonths(1);
                     }
                 }
+                _ = GetStatus(this.issue.Status);
 
-                else
-                {
-                    this.issue.ProjectId = projects.First().ProjectId;
-                    this.issue.StartTime = DateTime.Now;
-                    this.issue.EndTime = DateTime.Now.AddMonths(1);
-                }
+                users = ProjectService.GetProjectById(this.issue.ProjectId).ProjectParticipants.ToList().Select(x => x.User).ToList();
+                editContext = new EditContext(issue);
+                _isVisible = true;
+                StateHasChanged();
             }
-            _ = GetStatus(this.issue.Status);
-
-            users = ProjectService.GetProjectById(this.issue.ProjectId).ProjectParticipants.ToList().Select(x => x.User).ToList();
-            editContext = new EditContext(issue);
-            _isVisible = true;
-            StateHasChanged();
         }
         private async Task GetStatus(string status)
         {
@@ -211,23 +214,34 @@ namespace Task_management_system.Pages.Issues
         private async void SaveIssue()
         {
 
-
+            
             if (editContext.Validate())
 
             {
 
-
+                
                 if (IssueService.GetIssueById(issue.IssueId) != null)
                 {
 
 
                     //issue.Project = projects.Where(x => x.ProjectName == issueProjectName).First();
                     //issue.ProjectId = issue.Project.ProjectId;
-                    _ = IssueService.UpdateIssue(issue);
+                    var result = IssueService.UpdateIssue(issue);
 
                     await CallbackAfterSubmit.InvokeAsync();
-                    toast.sfSuccessToast.Title = "Успешно приложени промени!";
-                    _ = toast.sfSuccessToast.ShowAsync();
+                    if (result.StartsWith("Успешно"))
+                    {
+                        toast.sfSuccessToast.Title = result;
+                        _ = toast.sfSuccessToast.ShowAsync();
+                        _isIssueNew = false;
+
+                    }
+                    else
+                    {
+                        toast.sfErrorToast.Title = result;
+                        _ = toast.sfErrorToast.ShowAsync();
+                    }
+
                     issue = IssueService.GetIssueById(issue.IssueId);
                     await subtasksGrid.Refresh();
 

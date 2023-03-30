@@ -72,7 +72,7 @@
                                 <CollapsibleCard>
                                     <CardHeader>
                                         <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; background-color: #f8f8ff">
-                                            <div style="width: auto; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                            <div style="max-width: 270px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                                                 @project.ProjectName
                                             </div>
                                             <div class="vr hide840 mx-1"></div>
@@ -166,11 +166,14 @@
                                                                     <i class="fa-solid fa-pen-to-square"></i>
                                                                 </button>
                                                             </SfTooltip>
-                                                            <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                                                                <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteIssue(issue))">
-                                                                    <i class="fa-solid fa-trash"></i>
-                                                                </button>
-                                                            </SfTooltip>
+                                                            @if (issue.AssigneeId == loggedUser.Id)
+                                                            {
+                                                                <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                                                    <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteIssue(issue))">
+                                                                        <i class="fa-solid fa-trash"></i>
+                                                                    </button>
+                                                                </SfTooltip>
+                                                            }
                                                         </div>
 
                                                     </li>
@@ -206,18 +209,19 @@
                 </div>
                 break;
             case 2:
+                <SfKanban @ref="sfKanban" KeyField="Status" DataSource="issues">
 
-                <SfKanban @ref="sfKanban" TValue="Issue" KeyField="Status" DataSource="@issues" AllowDragAndDrop="true">
+
                     <KanbanColumns>
-                        <KanbanColumn HeaderText="Нова" KeyField="@(new List<string>() {"Нова"})"></KanbanColumn>
-                        <KanbanColumn HeaderText="В изпълнение" KeyField="@(new List<string>() {"В изпълнение"})"></KanbanColumn>
-                        <KanbanColumn HeaderText="За тестване" KeyField="@(new List<string>() {"За тестване"})"></KanbanColumn>
-                        <KanbanColumn HeaderText="Върната за корекция" KeyField="@(new List<string>() {"Върната за корекция"})"></KanbanColumn>
-                        <KanbanColumn HeaderText="Затворена" KeyField="@(new List<string>() {"Затворена"})"></KanbanColumn>
+                        @foreach (Syncfusion.Blazor.Kanban.ColumnModel item in columnData)
+                        {
+                            <KanbanColumn HeaderText="@item.HeaderText" KeyField="@item.KeyField"></KanbanColumn>
+                        }
                     </KanbanColumns>
-                    <KanbanEvents TValue="Issue" ActionComplete="@ActionCompleteHandler"></KanbanEvents>
+                    <KanbanEvents TValue="Issue" ActionComplete="@ActionCompleteHandler" DialogOpen="@OnDialogOpen"></KanbanEvents>
                     <KanbanCardSettings HeaderField="Subject" ContentField="Description"></KanbanCardSettings>
                 </SfKanban>
+
                 break;
             case 3:
                 <div class="m-3">
@@ -287,11 +291,14 @@
                                                                         <i class="fa-solid fa-pen-to-square"></i>
                                                                     </button>
                                                                 </SfTooltip>
-                                                                <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                                                                    <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteIssue(issue))">
-                                                                        <i class="fa-solid fa-trash"></i>
-                                                                    </button>
-                                                                </SfTooltip>
+                                                                @if (issue.AssigneeId == loggedUser.Id)
+                                                                {
+                                                                    <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteIssue(issue))">
+                                                                            <i class="fa-solid fa-trash"></i>
+                                                                        </button>
+                                                                    </SfTooltip>
+                                                                }
                                                             </div>
 
                                                         </li>
@@ -344,6 +351,19 @@
     bool isLoggedUserAdmin = false;
     private ApplicationUser loggedUser { get; set; }
 
+
+
+    public bool isLoadingData { get; set; } = false;
+
+    private List<Syncfusion.Blazor.Kanban.ColumnModel> columnData = new List<Syncfusion.Blazor.Kanban.ColumnModel>() {
+        new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Нова", KeyField= new List<string>() { "Нова" } },
+        new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "В изпълнение", KeyField= new List<string>() { "В изпълнение" } },
+        new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "За преглед", KeyField= new List<string>() { "За преглед" } },
+        new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Върната за корекция", KeyField=new List<string>() { "Върната за корекция" } },
+        new Syncfusion.Blazor.Kanban.ColumnModel(){ HeaderText= "Затворена", KeyField=new List<string>() { "Затворена" } }
+    };
+
+
     private void UpdateData()
     {
         if (isLoggedUserAdmin)
@@ -355,7 +375,7 @@
         {
             projects = projectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
                                                                   || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
-            issues = issueService.GetAllIssues().Where(p => p.AssignedТo.Id == loggedUser.Id || p.Assignee.Id == loggedUser.Id).ToList();
+            issues = issueService.GetAllIssues();
         }
     }
 
@@ -482,7 +502,10 @@
             workbook.Close();
         }
     }
-
+    private void OnDialogOpen(DialogOpenEventArgs<Issue> args)
+    {
+        args.Cancel = true;
+    }
     private async Task UpdateAfterIssueModalSubmitAsync()
     {
 

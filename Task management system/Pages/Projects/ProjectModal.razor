@@ -16,7 +16,7 @@
             <span style="color: #009cfc;">@this.project.ProjectName</span>
         </Header>
         <Content>
-            @if (project.ProjectId != 0)
+            @if (project.ProjectId != 0 && project.Issues != null ? project.Issues.Count() != 0 : false)
             {
                 <div class="mb-3 p-3 card-modal">
                     <div class="d-flex justify-content-between align-items-end">
@@ -59,7 +59,7 @@
                         <div class="col-md-12">
                             <label for="owner">Собственик на проекта</label>
                             <SfDropDownList ID="owner" TValue="ApplicationUser" Enabled="project.ProjectOwner != null ? isLoggedUserAdmin : true " TItem="ApplicationUser" @bind-Value="project.ProjectOwner" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете собственик" DataSource="@users">
-                                <DropDownListFieldSettings Value="UserName" Text="FullName"></DropDownListFieldSettings>
+                                <DropDownListFieldSettings Value="UserName" Text="Identifier"></DropDownListFieldSettings>
                             </SfDropDownList>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                         <div class="col-md-12">
                             <label for="participants">Участници в проекта</label>
                             <SfMultiSelect @ref="projectParticipantsSfMultiSelect" Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" TValue="ApplicationUser[]" TItem="ApplicationUser" Placeholder="Изберете участници" DataSource="@users" @bind-Value="projectParticipants">
-                                <MultiSelectFieldSettings Text="FullName" Value="UserName"></MultiSelectFieldSettings>
+                                <MultiSelectFieldSettings Text="Identifier" Value="UserName"></MultiSelectFieldSettings>
                                 <MultiSelectEvents TItem="ApplicationUser" TValue="ApplicationUser[]" ValueChange="@OnValueSelectHandlerParticipants"></MultiSelectEvents>
                             </SfMultiSelect>
 
@@ -80,15 +80,20 @@
         </Content>
         <FooterTemplate>
             <div class="row gy-3">
-                @if (project != null && project.ProjectOwner != null)
-                {
-                    <div class="col-sm-6 d-flex align-items-center">
-                        <i class="fa-solid fa-user-pen" style="color: gray;"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Създаден от: </b> @project.ProjectOwner.FullName</span>
-                    </div>
-                }
-                <div class="col-sm-6">
 
-                    <button type="submit" class="btn btn-primary" form="projectForm" @onclick="@ValidateParticipants">Запиши</button>
+                <div class="col-sm-6 d-flex align-items-center">
+                    @if (project != null && project.ProjectOwner != null)
+                    {
+                        <i class="fa-solid fa-user-pen" style="color: gray;"></i>
+                        <p>&nbsp; &nbsp;</p>
+                        <span style="color: dimgray;"><b>Създаден от: </b> @project.ProjectOwner.FullName</span>
+                    }
+                </div>
+                <div class="col-sm-6">
+                    @if (project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id))
+                    {
+                        <button type="submit" class="btn btn-primary" form="projectForm" @onclick="@ValidateParticipants">Запиши</button>
+                    }
                     <button type="button" class="btn btn-secondary" @onclick="CloseDialog">Отказ</button>
                 </div>
             </div>

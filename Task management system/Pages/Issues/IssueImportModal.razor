@@ -110,7 +110,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="owner">Възложена на</label>
                         <SfDropDownList ID="owner" TValue="string" Enabled="(isLoggedUserAdmin || _isIssueNew) || issue.AssigneeId == loggedUser.Id" TItem="ApplicationUser" @bind-Value="issue.AssignedТoId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете, на кого е възложена" DataSource="@users" ValueChange="@OnValueSelectHandlerAssignedTo">
-                            <DropDownListFieldSettings Value="Id" Text="FullName"></DropDownListFieldSettings>
+                            <DropDownListFieldSettings Value="Id" Text="Identifier"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
 

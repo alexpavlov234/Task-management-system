@@ -295,6 +295,7 @@ button.nav-link.btn.btn-link {
     border-radius: 5px
 }
 
+
 @media screen and (max-width: 350px) {
     .hide350 {
         display: none !important;

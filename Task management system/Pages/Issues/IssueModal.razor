@@ -94,7 +94,7 @@
                                     <i class="fa-solid fa-clock fa-lg" style="color: dimgray"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Срок</b></span> &nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
                                 <div class="col-8 col-md-9 col-sm-8 col-xs-8 d-flex align-items-center">
-                                    <SfDateRangePicker ID="datepicker" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@issue.StartTime" @bind-EndDate="@issue.EndTime" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate"></SfDateRangePicker>
+                                    <SfDateRangePicker ID="datepicker" TValue="DateTime" Format="dd.MM.yyyy" @bind-StartDate="@issue.StartTime" @bind-EndDate="@issue.EndTime" ShowTodayButton="true" ShowClearButton="true" Min="@MinDate" ></SfDateRangePicker>
                                     <ValidationMessage For="@(() => issue.EndTime)" />
                                     <ValidationMessage For="@(() => issue.StartTime)" />
                                 </div>
@@ -110,7 +110,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="owner">Възложена на</label>
                         <SfDropDownList ID="owner" TValue="string" Enabled="(isLoggedUserAdmin || _isIssueNew) || issue.AssigneeId == loggedUser.Id" TItem="ApplicationUser" @bind-Value="issue.AssignedТoId" PopupHeight="350px" PopupWidth="350px" Placeholder="Изберете, на кого е възложена" DataSource="@users" ValueChange="@OnValueSelectHandlerAssignedTo">
-                            <DropDownListFieldSettings Value="Id" Text="FullName"></DropDownListFieldSettings>
+                            <DropDownListFieldSettings Value="Id" Text="Identifier"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
                     @if (!this._isIssueNew)
@@ -169,14 +169,14 @@
                                         </SfGrid>
                                     </ContentTemplate>
                                 </TabItem>
-                                <TabItem>
+                                @*<TabItem>
                                     <ChildContent>
                                         <TabHeader Text="Прикачени файлове"></TabHeader>
                                     </ChildContent>
                                     <ContentTemplate>
                                         <h1 class="m-3">В процес на разработка! 😊 </h1>
                                     </ContentTemplate>
-                                </TabItem>
+                            </TabItem>*@
                             </TabItems>
                         </SfTab>
                     }
@@ -187,12 +187,16 @@
         </Content>
         <FooterTemplate>
             <div class="row gy-3">
-                @if (issue != null && issue.Assignee != null)
-                {
-                    <div class="col-sm-6 d-flex align-items-center">
-                        <i class="fa-solid fa-user-pen" style="color: gray;"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Създадена от: </b> @issue.Assignee.FullName</span>
-                    </div>
-                }
+
+                <div class="col-sm-6 d-flex align-items-center">
+                    @if (issue != null && issue.Assignee != null)
+                    {
+                        <i class="fa-solid fa-user-pen" style="color: gray;"></i>
+                        <p>&nbsp; &nbsp;</p>
+                        <span style="color: dimgray;"><b>Създадена от: </b> @issue.Assignee.FullName</span>
+                    }
+                </div>
+
 
                 <div class="col-sm-6">
                     <button type="submit" class="btn btn-primary" form="issueForm">Запиши</button>

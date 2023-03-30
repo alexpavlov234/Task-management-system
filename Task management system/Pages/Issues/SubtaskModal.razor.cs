@@ -179,12 +179,7 @@ namespace Task_management_system.Pages.Issues
 
                 }
             }
-            else
-            {
-                toast.sfErrorToast.Title = editContext.GetValidationMessages().FirstOrDefault();
-                _ = toast.sfErrorToast.ShowAsync();
 
-            }
         }
 
 

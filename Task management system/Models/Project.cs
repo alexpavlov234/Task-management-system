@@ -17,8 +17,12 @@ namespace Task_management_system.Models
         public int ProjectId { get; set; }
 
         [Required(ErrorMessage = "Полето 'Име на проект' е задължително!")]
+        [StringLength(int.MaxValue, MinimumLength = 1, ErrorMessage = "Полето 'Име на проект' не може да бъде празно!")]
+
         public string ProjectName { get; set; }
         [Required(ErrorMessage = "Полето 'Описание на проект' е задължително!")]
+        [StringLength(int.MaxValue, MinimumLength = 1, ErrorMessage = "Полето 'Описание на проекта' не може да бъде празно!")]
+
         public string ProjectDescription { get; set; }
 
         [Required(ErrorMessage = "Моля изберете начална дата!")]
@@ -37,6 +41,8 @@ namespace Task_management_system.Models
         public ICollection<ApplicationUserProject>? ProjectParticipants { get; set; }
 
         [Required(ErrorMessage = "Полето 'Тип на проект' е задължително!")]
+        [StringLength(int.MaxValue, MinimumLength = 1, ErrorMessage = "Полето 'Тип на проект' не може да бъде празно!")]
+
         public string ProjectType { get; set; }
 
     }

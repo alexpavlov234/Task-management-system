@@ -10,11 +10,9 @@ namespace Task_management_system.Models
         [Key]
         public int SubtaskId { get; set; }
 
-
-
-        [Required]
+        [Required(ErrorMessage = "Полето 'Име' е задължително!")]
+        [StringLength(int.MaxValue, MinimumLength = 1, ErrorMessage = "Полето 'Име' не може да бъде празно!")]
         public string Subject { get; set; }
-
 
         public string Location { get; set; }
 
@@ -23,17 +21,27 @@ namespace Task_management_system.Models
 
         [Required]
         public DateTime EndTime { get; set; }
+
         [Required]
+        [StringLength(int.MaxValue, MinimumLength = 1, ErrorMessage = "Полето 'Статус' не може да бъде празно!")]
         public string Status { get; set; }
 
+        [Required(ErrorMessage = "Полето 'Описание' е задължително!")]
+        [StringLength(int.MaxValue, MinimumLength = 1, ErrorMessage = "Полето 'Описание' не може да бъде празно!")]
         public string Description { get; set; }
-        public bool IsAllDay { get; set; }
-        public string RecurrenceRule { get; set; }
-        public string RecurrenceException { get; set; }
-        public Nullable<int> RecurrenceID { get; set; }
-        [ForeignKey("Issue")]
-        public int IssueId { get; set; }
-        public Issue Issue { get; set; }
 
+        public bool IsAllDay { get; set; }
+
+        public string RecurrenceRule { get; set; }
+
+        public string RecurrenceException { get; set; }
+
+        public Nullable<int> RecurrenceID { get; set; }
+
+        [ForeignKey("Issue")]
+
+        public int IssueId { get; set; }
+
+        public Issue Issue { get; set; }
     }
 }

@@ -42,5 +42,14 @@ namespace Task_management_system.Areas.Identity
                 return string.Format("{0} {1}", FirstName, LastName);
             }
         }
+
+        [NotMapped]
+        public string Identifier
+        {
+            get
+            {
+                return string.Format("{0} {1} ({2})", FirstName, LastName, UserName);
+            }
+        }
     }
 }

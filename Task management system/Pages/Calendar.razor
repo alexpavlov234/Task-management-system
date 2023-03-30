@@ -36,8 +36,8 @@
 
         <div class="m-3">
             <SfSchedule TValue="Issue" Height="auto" Width="auto" SelectedDate="@DateTime.Now" CurrentView="View.Month">
-                <ScheduleEventSettings DataSource="@issues" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
-                <ScheduleEvents TValue="Issue" OnPopupOpen="OnPopupOpen"></ScheduleEvents>
+                <ScheduleEventSettings  DataSource="@issues" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
+                <ScheduleEvents TValue="Issue" OnPopupOpen="OnPopupOpen" Dragged="OnDragged" Resized="OnResized"></ScheduleEvents>
                 <ScheduleViews>
                     <ScheduleView Option="View.Day"></ScheduleView>
                     <ScheduleView Option="View.Week"></ScheduleView>
@@ -55,7 +55,7 @@
 
 
 <style>
-   
+
 
     .e-popup-footer {
         display: none !important;
@@ -65,15 +65,37 @@
         display: none !important;
     }
 </style>
+<ToastMsg @ref="toast" />
 <IssueModal @ref="issueModal" CallbackAfterSubmit="UpdateAfterIssueModalSubmitAsync" />
 @code {
     DateTime CurrentDate = DateTime.Now;
     //https://learn.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-7.0
-
+    private ToastMsg toast = new ToastMsg();
     private List<Issue> issues { get; set; }
     private IssueModal issueModal = new IssueModal();
 
+    public void OnResized(ResizeEventArgs<Issue> args)
+    {
+        args.Cancel = true;
 
+
+    }
+    public async Task OnDragged(DragEventArgs<Issue> args)
+    {
+        args.Cancel = true;
+        //var result = IssueService.UpdateIssue(args.Data);
+        //if (result.StartsWith("Успешно"))
+        //{
+        //    toast.sfSuccessToast.Title = result;
+        //    _ = toast.sfSuccessToast.ShowAsync();
+        //}
+        //else
+        //{
+        //    toast.sfErrorToast.Title = result;
+        //    _ = toast.sfErrorToast.ShowAsync();
+        //}
+
+    }
 
 
     protected async override Task OnInitializedAsync()
@@ -87,36 +109,13 @@
 
         args.Cancel = true;
         issueModal.OpenDialog(args.Data);
-        
-    }
-    //private async Task AddNewTaskClickHandler()
-    //{
 
-    //    taskModal.OpenDialog(new Issue { Status = "Нова", Assignee = await userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0 });
-    //}
-    //private async Task AddIssueToProject(Project project)
-    //{
-    //    taskModal.OpenDialog(new Issue { Status = "Нова", Project = project, Assignee = await userService.GetLoggedUser(), Subtasks = new List<Subtask>(), Location = "", RecurrenceException = "", RecurrenceRule = "", RecurrenceID = 0 });
-    //}
+    }
+   
     private async Task UpdateAfterIssueModalSubmitAsync()
     {
         issues = IssueService.GetAllIssues(userService.GetLoggedUser().Id);
         this.StateHasChanged();
     }
-    //private async Task DeleteIssue(Issue issue)
-    //{
-
-    //    IssueService.DeleteIssue(issue);
-
-    //    projects = projectService.GetAllProjects();
-    //    this.StateHasChanged();
-
-    //}
-
-    //private async Task EditIssue(Issue issue)
-    //{
-    //    taskModal.OpenDialog(issue);
-    //      managementModal.OpenDialog(applicationUser);
-    //}
-
+    
 }
