@@ -85,7 +85,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
             ApplicationUser user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Неуспешно зареждане на потребител с ID '{_userManager.GetUserId(User)}'.");
             }
 
             await LoadSharedKeyAndQrCodeUriAsync(user);
@@ -98,7 +98,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
             ApplicationUser user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Неуспешно зареждане на потребител с ID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)
@@ -115,16 +115,16 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
 
             if (!is2faTokenValid)
             {
-                ModelState.AddModelError("Input.Code", "Verification code is invalid.");
+                ModelState.AddModelError("Input.Code", "Кодът за удостоверяване е невалиден.");
                 await LoadSharedKeyAndQrCodeUriAsync(user);
                 return Page();
             }
 
             _ = await _userManager.SetTwoFactorEnabledAsync(user, true);
             string userId = await _userManager.GetUserIdAsync(user);
-            _logger.LogInformation("User with ID '{UserId}' has enabled 2FA with an authenticator app.", userId);
+            _logger.LogInformation("Потребител с ID '{UserId}' е активирал 2FA с приложение за удостоверяване.", userId);
 
-            StatusMessage = "Your authenticator app has been verified.";
+            StatusMessage = "Приложението Ви за двуфакторно удостоверяване е потвърдено.";
 
             if (await _userManager.CountRecoveryCodesAsync(user) == 0)
             {

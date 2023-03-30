@@ -70,7 +70,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
             IEnumerable<string> recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
             RecoveryCodes = recoveryCodes.ToArray();
 
-            _logger.LogInformation("User with ID '{UserId}' has generated new 2FA recovery codes.", userId);
+            _logger.LogInformation("Потребител с ID '{UserId}' е генерирал нови кодове за възстановяване на 2FA.", userId);
             StatusMessage = "Генерирани са нови кодове за възстановяване.";
             return RedirectToPage("./ShowRecoveryCodes");
         }

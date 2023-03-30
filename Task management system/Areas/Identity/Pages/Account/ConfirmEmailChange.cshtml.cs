@@ -48,15 +48,14 @@ namespace Task_management_system.Areas.Identity.Pages.Account
                 StatusMessage = "Грешка при промяна на имейла.";
                 return Page();
             }
-
-            // In our UI email and user name are one and the same, so when we update the email
-            // we need to update the user name.
-            IdentityResult setUserNameResult = await _userManager.SetUserNameAsync(user, email);
-            if (!setUserNameResult.Succeeded)
-            {
-                StatusMessage = "Грешка при промяната на потребителското име.";
-                return Page();
-            }
+            //// In our UI email and user name are one and the same, so when we update the email
+            //// we need to update the user name.
+            //IdentityResult setUserNameResult = await _userManager.SetUserNameAsync(user, email);
+            //if (!setUserNameResult.Succeeded)
+            //{
+            //    StatusMessage = "Грешка при промяната на потребителското име.";
+            //    return Page();
+            //}
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Благодарим Ви, че потвърдихте промяната на имейла си.";
