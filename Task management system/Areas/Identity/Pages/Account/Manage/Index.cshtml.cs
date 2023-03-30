@@ -59,6 +59,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
             /// </summary>
             [Phone]
             [Display(Name = "Телефонен номер")]
+            [RegularExpression(@"^(\+?\d{1,3})?[-.\s]?\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})$", ErrorMessage = "Невалиден формат на телефонния номер.")]
             public string PhoneNumber { get; set; }
         }
 
