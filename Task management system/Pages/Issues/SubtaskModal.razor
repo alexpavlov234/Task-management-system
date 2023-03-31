@@ -37,7 +37,7 @@
                                     <i class="fa-solid fa-arrows-spin" style="color: dimgray"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Статус</b></span> &nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
                                 <div class="col-md-9 d-flex align-items-center">
-                                    <SfDropDownList @ref="statusDropDownList" ID="statusSubtask" TValue="string" Enabled="true" TItem="KeyValue" @bind-Value="subtask.Status" PopupHeight="350px" PopupWidth="350px" DataSource="@statuses">
+                                    <SfDropDownList @ref="statusDropDownList" ID="statusSubtask" TValue="string" Enabled="true" TItem="KeyValue" @bind-Value="subtask.Status" PopupHeight="150px" PopupWidth="350px" DataSource="@statuses">
                                         <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
                                         <DropDownListEvents TItem="KeyValue" TValue="string" ValueChange="@OnValueSelectHandlerStatus"></DropDownListEvents>
                                     </SfDropDownList>

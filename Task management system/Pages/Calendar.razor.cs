@@ -24,7 +24,6 @@ namespace Task_management_system.Pages
         private IUserService UserService { get; set; }
         [Inject]
         private IIssueService IssueService { get; set; }
-
         readonly DateTime CurrentDate = DateTime.Now;
         private List<Issue> issues { get; set; }
         private ToastMsg toast = new ToastMsg();

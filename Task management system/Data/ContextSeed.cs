@@ -13,9 +13,9 @@ namespace Task_management_system.Data
         public static async Task SeedUsersAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             string[] firstNames = { "Петър", "Иван", "Георги", "Мария", "Елена", "Николай", "Валерия", "Димитър", "Александра", "Стефан", "Александър" };
-            string[] lastNames = { "Иванов", "Петров", "Георгиев", "Николова", "Петрова", "Иванова", "Костов", "Ангелов", "Попова", "Димитров", "Павлов" };
-            string[] usernames = { "ivanov123", "petrov456", "georgiev789", "nikolova234", "petrova567", "ivanova890", "kostov123", "angelov456", "popova789", "dimitrov234", "alexpavlov234" };
-            string[] emails = { "ivanov123@gmail.com", "petrov456@gmail.com", "georgiev789@gmail.com", "nikolova234@gmail.com", "petrova567@gmail.com", "ivanova890@gmail.com", "kostov123@gmail.com", "angelov456@gmail.com", "popova789@gmail.com", "dimitrov234@gmail.com", "alexpavlov234@gmail.com" };
+            string[] lastNames = { "Иванов", "Петров", "Георгиев", "Николова", "Петрова", "Иванов", "Костова", "Ангелов", "Попова", "Димитров", "Павлов" };
+            string[] usernames = { "ivanov123", "petrov456", "georgiev789", "nikolova234", "petrova567", "ivanov890", "kostova123", "angelov456", "popova789", "dimitrov234", "alexpavlov234" };
+            string[] emails = { "ivanov123@gmail.com", "petrov456@gmail.com", "georgiev789@gmail.com", "nikolova234@gmail.com", "petrova567@gmail.com", "ivanov890@gmail.com", "kostova123@gmail.com", "angelov456@gmail.com", "popova789@gmail.com", "dimitrov234@gmail.com", "alexpavlov234@gmail.com" };
             // Validate that the arrays are the same length
             if (firstNames.Length != lastNames.Length || firstNames.Length != usernames.Length || firstNames.Length != emails.Length)
             {

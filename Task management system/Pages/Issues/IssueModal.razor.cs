@@ -40,6 +40,8 @@ namespace Task_management_system.Pages.Issues
         private ApplicationUser loggedUser { get; set; }
         private void UpdateData()
         {
+            isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
+            loggedUser = UserService.GetLoggedUser();
             if (isLoggedUserAdmin)
             {
                 projects = ProjectService.GetAllProjects().OrderBy(x => x.ProjectName).ToList();
@@ -87,12 +89,10 @@ namespace Task_management_system.Pages.Issues
             if (issue != null)
             {
                 _isIssueNew = IssueService.GetIssueById(issue.IssueId) == null;
-                isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
-                loggedUser = UserService.GetLoggedUser();
-                UpdateData();
+                this.issue = issue;
                 statuses = new List<KeyValue>();
                 priorities = KeyValueService.GetAllKeyValuesByKeyType("IssuePriority");
-                this.issue = issue;
+                UpdateData();
                 if (_isIssueNew)
                 {
                     if (issue.Project != null)
@@ -116,8 +116,8 @@ namespace Task_management_system.Pages.Issues
                         this.issue.EndTime = DateTime.Now.AddMonths(1);
                     }
                 }
-                _ = GetStatus(this.issue.Status);
                 users = ProjectService.GetProjectById(this.issue.ProjectId).ProjectParticipants.ToList().Select(x => x.User).ToList();
+                _ = GetStatus(this.issue.Status);
                 editContext = new EditContext(issue);
                 _isVisible = true;
                 StateHasChanged();
@@ -168,6 +168,7 @@ namespace Task_management_system.Pages.Issues
                 issue.StartTime = DateTime.Now;
                 issue.EndTime = DateTime.Now.AddMonths(1);
             }
+            users = ProjectService.GetProjectById(this.issue.ProjectId).ProjectParticipants.ToList().Select(x => x.User).ToList();
         }
         private void OnValueSelectHandlerAssignedTo(ChangeEventArgs<string, KeyValue> args)
         {
@@ -205,6 +206,7 @@ namespace Task_management_system.Pages.Issues
                         _ = toast.sfErrorToast.ShowAsync();
                     }
                     issue = IssueService.GetIssueById(issue.IssueId);
+                    UpdateData();
                     await subtasksGrid.Refresh();
                 }
                 else
@@ -221,6 +223,7 @@ namespace Task_management_system.Pages.Issues
                         toast.sfErrorToast.Title = result;
                         _ = toast.sfErrorToast.ShowAsync();
                     }
+                    UpdateData();
                     await CallbackAfterSubmit.InvokeAsync();
                 }
             }

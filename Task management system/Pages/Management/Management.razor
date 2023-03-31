@@ -31,7 +31,7 @@
                 <GridPageSettings PageCount="5" PageSize=20 PageSizes="true"></GridPageSettings>
                 <GridEvents OnToolbarClick="ToolbarClick" TValue="ApplicationUser"></GridEvents>
                 <GridColumns>
-                    <GridColumn Field=@nameof(ApplicationUser.UserName) HeaderText="Потребителско име" IsPrimaryKey="true" Width="200px">
+                    <GridColumn Field=@nameof(ApplicationUser.UserName) HeaderText="Потребителско име" IsPrimaryKey="true" Width="160px">
                         <Template>
                             @{
                                 var user = (context as ApplicationUser);
@@ -46,7 +46,7 @@
                             }
                         </Template>
                     </GridColumn>
-                    <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" Width="200px">
+                    <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" Width="120px">
                         <Template>
                             @{
                                 var user = (context as ApplicationUser);
@@ -61,7 +61,7 @@
                             }
                         </Template>
                     </GridColumn>
-                    <GridColumn Field=@nameof(ApplicationUser.LastName) HeaderText="Фамилия" Width="200px">
+                    <GridColumn Field=@nameof(ApplicationUser.LastName) HeaderText="Фамилия" Width="120px">
                         <Template>
                             @{
                                 var user = (context as ApplicationUser);

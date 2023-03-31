@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="m-3">
-            <SfSchedule TValue="Issue" Height="auto" Width="auto" SelectedDate="@DateTime.Now" CurrentView="View.Month">
+            <SfSchedule TValue="Issue" Width="auto" SelectedDate="@DateTime.Now" CurrentView="View.Month">
                 <ScheduleEventSettings DataSource="@issues" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
                 <ScheduleEvents TValue="Issue" OnPopupOpen="OnPopupOpen" Dragged="OnDragged" Resized="OnResized"></ScheduleEvents>
                 <ScheduleViews>
@@ -43,6 +43,9 @@
     }
     .e-add {
         display: none !important;
+    }
+    .e-schedule .e-agenda-view .e-empty-event {
+        height: 20rem;
     }
 </style>
 <ToastMsg @ref="toast" />

@@ -8,56 +8,56 @@
 @using Task_management_system.Services.Common
 @using Syncfusion.Blazor.Popups
 @using Task_management_system.Interfaces
-<SfDialog Width="85%" Height="auto" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@_isVisible">
+<SfDialog Width="85%" Height="auto" IsModal="true" ShowCloseIcon="true" EnableResize="false" AllowDragging="true" @bind-Visible="@_isVisible">
     <DialogTemplates>
         <Header>
             <span style="color: #009cfc;">Импортиране на задачи от файл</span>
         </Header>
         <Content>
             <InputFile class="form-control mb-2" OnChange="@LoadQuestions" />
-                @foreach (var issue in issues)
-                {
-                <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
-                    <div style="width:  450px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                            @issue.Subject
-                    </div>
-                    <div class="vr hide840 mx-1"></div>
-                    <div class="hide840" style="width: 220px; border-radius: 20.25rem;">
-                        <i style="color: gray" class="fa-solid fa-arrows-spin"></i>
-                        &nbsp;
-                        <span>@issue.Status</span>
-                    </div> 
-                    <div class="hide840" style="width: 220px; border-radius: 20.25rem;">
-                        <i style="color: gray" class="fa-solid fa-circle-exclamation"></i>
-                        &nbsp;
-                        <span>@issue.Priority</span>
-                    </div>
-                    <div class="hide840" style="width: 220px; border-radius: 20.25rem;">
-                        <i style="color: gray" class="fa-regular fa-calendar"></i>
-                        &nbsp;
-                        <span>@issue.StartTime.ToString("dd.MM.yyyy") - @issue.EndTime.ToString("dd.MM.yyyy")</span>
-                    </div>
-                    <div class="vr hide840 mx-1"></div>
-                    <div style="display: flex">
-                        <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
-                            <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditIssue(issue))">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </button>
-                        </SfTooltip>
-                        <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                            <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteIssue(issue))">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </SfTooltip>
-                    </div>
-                </li>
-                }
-                @if (!issues.Any())
-                {
-                <div class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
-                    <label style="color: gray">Няма качени задачи!</label>
+            @foreach (var issue in issues)
+            {
+            <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
+                <div style="width:  450px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                        @issue.Subject
                 </div>
-                }
+                <div class="vr hide840 mx-1"></div>
+                <div class="hide840 mx-2" style="max-width: 100px; text-align: center; border-radius: 20.25rem;">
+                    <i style="color: gray" class="fa-solid fa-arrows-spin"></i>
+                    &nbsp;
+                    <span>@issue.Status</span>
+                </div>
+                <div class="hide840 mx-2" style="max-width: 100px; text-align: center; border-radius: 20.25rem;">
+                    <i style="color: gray" class="fa-solid fa-circle-exclamation"></i>
+                    &nbsp;
+                    <span>@issue.Priority</span>
+                </div>
+                <div class="hide840 mx-2" style="max-width: 100px; text-align: center; border-radius: 20.25rem;">
+                    <i style="color: gray" class="fa-regular fa-calendar"></i>
+                    &nbsp;
+                    <span>@issue.StartTime.ToString("dd.MM.yyyy") - @issue.EndTime.ToString("dd.MM.yyyy")</span>
+                </div>
+                <div class="vr hide840 mx-1"></div>
+                <div style="display: flex">
+                    <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
+                        <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditIssue(issue))">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                    </SfTooltip>
+                    <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteIssue(issue))">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </SfTooltip>
+                </div>
+            </li>
+            }
+            @if (!issues.Any())
+            {
+            <div class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
+                <label style="color: gray">Няма качени задачи!</label>
+            </div>
+            }
         </Content>
         <FooterTemplate>
             <div class="form-group">
