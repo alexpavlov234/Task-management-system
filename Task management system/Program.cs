@@ -60,8 +60,8 @@ namespace Task_management_system
                     UserManager<ApplicationUser> userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     RoleManager<IdentityRole> roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     ContextSeed.SeedRolesAsync(userManager, roleManager).Wait();
-                    ContextSeed.SeedAdminAsync(userManager, roleManager).Wait();
-                    ContextSeed.SeedKeyValuesAsync(context);
+                    ContextSeed.SeedUsersAsync(userManager, roleManager).Wait();
+                    ContextSeed.SeedKeyValues(context);
 
                 }
                 catch (Exception ex)
