@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Task_management_system.Models
 {
     [Table("KeyValue")]
@@ -11,49 +10,33 @@ namespace Task_management_system.Models
     {
         [Key]
         public int IdKeyValue { get; set; }
-
         [Required]
         [ForeignKey(nameof(KeyType))]
         public int IdKeyType { get; set; }
         public KeyType KeyType { get; set; }
-
         [Required]
         [StringLength(255)]
         public string Name { get; set; }
-
         [StringLength(255)]
         public string? NameEN { get; set; }
-
         [StringLength(255)]
         public string KeyValueIntCode { get; set; }
-
-
         [StringLength(1024)]
         public string? Description { get; set; }
-
         [StringLength(1024)]
         public string? DescriptionEN { get; set; }
-
         public int Order { get; set; }
-
         [StringLength(255)]
         public string? DefaultValue1 { get; set; }
-
         [StringLength(255)]
         public string? DefaultValue2 { get; set; }
-
         [StringLength(255)]
         public string? DefaultValue3 { get; set; }
-
         [StringLength(4000)]
         public string? FormattedText { get; set; }
-
         [StringLength(4000)]
         public string? FormattedTextEN { get; set; }
-
-
         [Comment("Determines whether the value is active")]
         public bool IsActive { get; set; }
-
     }
 }

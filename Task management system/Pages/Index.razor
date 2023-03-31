@@ -7,10 +7,7 @@
 @using Task_management_system.Pages.Issues;
 @using Task_management_system.Pages.Projects
 @using Task_management_system.Services
-
 @page "/"
-
-
 <AuthorizeView>
     <Authorized>
         <PageTitle>Моят ден</PageTitle>
@@ -18,18 +15,12 @@
             <img class="banner" src="img/13186366_5125963-ai.svg" alt="Banner">
             <div class="bottom-left">Здравейте, @userFullName</div>
         </div>
-
         <div class="card-columns" style="margin-right: 1.2em;">
             @if (response != null)
             {
-
-
-
                 <div class="custom-card">
                     <div class="card-body">
-
                         <h5 class="card-title">Времето</h5>
-
                         <div class="row">
                             <div class="col-6 middle-align">
                                 <div class="row">
@@ -45,7 +36,6 @@
                                 <img class="weather-icon" src="@image" alt="Banner">
                             </div>
                         </div>
-
                     </div>
                     <div class="card-footer">
                         <div class="form-group">
@@ -55,9 +45,7 @@
                         </div>
                     </div>
                 </div>
-
             }
-
             <div class="custom-card">
                 <div class="card-body">
                     <h5 class="card-title">Задачи за деня</h5>
@@ -81,12 +69,9 @@
                     </div>
                 </div>
             </div>
-
             <div class="custom-card">
                 <div class="card-body">
-
                     <h5 class="card-title">Час и дата</h5>
-
                     <div class="row">
                         <div class="col-sm-12 middle-align">
                             <div>
@@ -95,18 +80,14 @@
                                 <p @ref="dateDiv" class="weather-info"></p>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
             <div class="custom-card">
                 <div class="card-body">
                     <h5 class="card-title">Търсене</h5>
                     <Search ShowHeader="false"></Search>
                 </div>
-
             </div>
             <div class="custom-card">
                 <div class="card-body">
@@ -121,14 +102,11 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
         <style>
             .card-columns {
                 column-count: 2;
             }
-
             @@media (max-width: 852px) {
                 .card-columns {
                     column-count: 1;
@@ -136,33 +114,24 @@
             }
         </style>
     </Authorized>
-
     <NotAuthorized>
         <PageTitle>Система за управление на задачи</PageTitle>
         <div>
-
             <div class="flex flex-col justify-center items-center text-center" style="color: white;">
-
                 <div class="mb-2 text-center" style="font-size: 100px">СУЗ</div>
                 <div class="mb-2 text-center"><b>Система за управление на задачи</b></div>
                 <div class="mb-4 text-center">Влезте в профила си, за да продължите</div>
                 <div class="flex flex-row gap-5">
                     <a class="btn flex justify-center gap-2 btn-primary" href="Identity/Account/Login">Вход</a>
-
                     <a class="btn flex justify-center gap-2 btn-primary" href="Identity/Account/Register">Регистрация</a>
                 </div>
             </div>
         </div>
     </NotAuthorized>
 </AuthorizeView>
-
-
 <style>
     .e-quick-popup-wrapper .e-popup-footer .e-event-edit, .e-quick-popup-wrapper .e-popup-footer .e-event-delete {
         display: none;
     }
-
 </style>
 <IssueModal @ref="issueModal" CallbackAfterSubmit="UpdateAfterIssueModalSubmitAsync" />
-
-

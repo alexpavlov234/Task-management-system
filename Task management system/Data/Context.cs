@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Models;
-
 namespace Task_management_system.Data
 {
     public class Context : IdentityDbContext<ApplicationUser>
@@ -11,7 +10,6 @@ namespace Task_management_system.Data
         public Context(DbContextOptions<Context> options) : base(options)
         {
             _options = options;
-
         }
         //Създаване на таблици в реална база данни
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -46,13 +44,11 @@ namespace Task_management_system.Data
                 .HasOne(aup => aup.Project)
                 .WithMany(p => p.ProjectParticipants)
                 .HasForeignKey(aup => aup.ProjectId).OnDelete(DeleteBehavior.NoAction);
-
             _ = modelBuilder.Entity<Subtask>().HasOne(x => x.Issue).WithMany(i => i.Subtasks).HasForeignKey(x => x.IssueId).OnDelete(DeleteBehavior.Cascade);
             _ = modelBuilder.Entity<KeyValue>().HasIndex(b => b.KeyValueIntCode)
             .IsUnique();
             _ = modelBuilder.Entity<KeyType>().HasIndex(b => b.KeyTypeIntCode)
             .IsUnique();
-
             // modelBuilder.Seed();
             base.OnModelCreating(modelBuilder);
         }
@@ -66,7 +62,6 @@ namespace Task_management_system.Data
         public virtual DbSet<KeyValue> KeyValue { get; set; }
         public virtual DbSet<Issue> Issues { get; set; }
         public virtual DbSet<Subtask> Subtasks { get; set; }
-
         public Context Clone()
         {
             return new Context(_options);
@@ -75,19 +70,17 @@ namespace Task_management_system.Data
         {
             try
             {
-                var changedEntries = this.ChangeTracker
+                List<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry> changedEntries = ChangeTracker
                     .Entries()
                     .ToList();
-                foreach (var entry in changedEntries)
-            {
-                entry.State = EntityState.Detached;
+                foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry? entry in changedEntries)
+                {
+                    entry.State = EntityState.Detached;
+                }
             }
-            } catch
+            catch
             {
-                
             }
-            
         }
-
     }
 }

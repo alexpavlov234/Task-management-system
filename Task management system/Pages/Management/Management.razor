@@ -6,10 +6,7 @@
 @using Task_management_system.Areas.Identity
 @using Task_management_system.Data
 @using Task_management_system.Interfaces
-
 @attribute [Authorize(Roles = "Admin")]
-
-
 <div class="frame container">
     <img class="banner" src="img/Users-01.svg" alt="Banner">
     <div class="bottom-left">
@@ -18,15 +15,12 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav float">
                 <li class="nav-item d-sm-inline-block">
-
                     <button type="button" class="btn btn-primary btn-outline-primary waves-effect md-trigger" @onclick="AddApplicationUser" disabled="@(this.DisableAllFields)">Нов потребител</button>
-
                 </li>
             </ul>
         </nav>
     </div>
 </div>
-
 <div class="card-body">
     <div class="row">
         <div class="col-sm-12">
@@ -37,8 +31,6 @@
                 <GridPageSettings PageCount="5" PageSize=20 PageSizes="true"></GridPageSettings>
                 <GridEvents OnToolbarClick="ToolbarClick" TValue="ApplicationUser"></GridEvents>
                 <GridColumns>
-
-
                     <GridColumn Field=@nameof(ApplicationUser.UserName) HeaderText="Потребителско име" IsPrimaryKey="true" Width="200px">
                         <Template>
                             @{
@@ -118,14 +110,11 @@
                         <Template>
                             @{
                                 var user = (context as ApplicationUser);
-
                                 if (userRoles.Any() && userRoles.ContainsKey(user.UserName))
                                 {
                                     string role = userRoles[user.UserName];
                                     @role
                                 }
-
-
                             }
                         </Template>
                     </GridColumn>

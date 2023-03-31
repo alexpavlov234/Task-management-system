@@ -43,7 +43,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account
             /// </summary>
             [Required(ErrorMessage = "Полето 'Имейл' е задължително")]
             [Display(Name = "Имейл")]
-            [EmailAddress(ErrorMessage= "Полето 'Имейл' не е валиден имейл адрес.")]
+            [EmailAddress(ErrorMessage = "Полето 'Имейл' не е валиден имейл адрес.")]
             public string Email { get; set; }
         }
 

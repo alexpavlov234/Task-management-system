@@ -8,7 +8,6 @@
 @using Task_management_system.Services.Common
 @using Syncfusion.Blazor.Popups
 @using Task_management_system.Interfaces
-
 <SfDialog Width="85%" Height="auto" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@_isVisible">
     <DialogTemplates>
         <Header>
@@ -24,18 +23,11 @@
                     <span style="color: #009cfc;">@this.issue.Subject</span>
                 }
             }
-
         </Header>
         <Content>
-
-
-
             <hr class="@statusLineColor" />
             <EditForm id="issueForm" EditContext="editContext" OnValidSubmit="SaveIssue">
-
                 <DataAnnotationsValidator />
-
-
                 <InputText id="issueName" @bind-Value="issue.Subject" class="form-control my-4" placeholder="Име" style="font-size: 36px"></InputText>
                 <div class="row">
                     <!-- Column 1 -->
@@ -46,27 +38,21 @@
                                     <i class="fa-solid fa-arrows-spin" style="color: dimgray"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Статус</b></span> &nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
                                 <div class="col-8 col-md-9 col-sm-8 col-xs-8 d-flex align-items-center">
-
                                     <SfDropDownList @ref="statusDropDownList" ID="status" TValue="string" Enabled="true" TItem="KeyValue" @bind-Value="issue.Status" PopupHeight="350px" PopupWidth="350px" DataSource="@statuses">
                                         <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
                                         <DropDownListEvents TItem="KeyValue" TValue="string" ValueChange="@OnValueSelectHandlerStatus"></DropDownListEvents>
                                     </SfDropDownList>
-
                                 </div>
-
                             </div>
                             <div class="row py-1">
                                 <div class="col-4 col-md-3 col-sm-4 col-xs-4 d-flex align-items-center">
                                     <i class="fa-solid fa-circle-exclamation" style="color: dimgray"></i>&nbsp;&nbsp;<span style="color: dimgray;"><b>Приоритет</b></span> &nbsp;&nbsp;&nbsp;&nbsp;
                                 </div>
                                 <div class="col-8 col-md-9 col-sm-8 col-xs-8 d-flex align-items-center">
-
                                     <SfDropDownList @ref="priorityDropDownList" ID="priority" TValue="string" Enabled="true" TItem="KeyValue" @bind-Value="issue.Priority" PopupHeight="350px" PopupWidth="350px" DataSource="@priorities">
                                         <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
                                     </SfDropDownList>
-
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -83,9 +69,6 @@
                                         <DropDownListEvents TItem="Project" TValue="int" ValueChange="@OnValueSelectHandlerProject"></DropDownListEvents>
                                     </SfDropDownList>
                                 </div>
-
-
-
                             </div>
                             <div class="row py-1">
                                 <div class="col-4 col-md-3 col-sm-4 col-xs-4 d-flex align-items-center">
@@ -111,10 +94,7 @@
                             <DropDownListFieldSettings Value="Id" Text="Identifier"></DropDownListFieldSettings>
                         </SfDropDownList>
                     </div>
-
                 </div>
-
-
             </EditForm>
         </Content>
         <FooterTemplate>
@@ -128,11 +108,8 @@
     </DialogTemplates>
 </SfDialog>
 <ToastMsg @ref="toast" />
-
 <style>
     .e-dialog .e-dlg-content {
         font-family: SegoeUI;
     }
 </style>
-
-

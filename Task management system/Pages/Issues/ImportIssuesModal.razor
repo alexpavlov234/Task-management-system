@@ -8,7 +8,6 @@
 @using Task_management_system.Services.Common
 @using Syncfusion.Blazor.Popups
 @using Task_management_system.Interfaces
-
 <SfDialog Width="85%" Height="auto" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@_isVisible">
     <DialogTemplates>
         <Header>
@@ -16,38 +15,29 @@
         </Header>
         <Content>
             <InputFile class="form-control mb-2" OnChange="@LoadQuestions" />
-          
                 @foreach (var issue in issues)
                 {
-
-
                 <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
                     <div style="width:  450px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                             @issue.Subject
                     </div>
                     <div class="vr hide840 mx-1"></div>
-
                     <div class="hide840" style="width: 220px; border-radius: 20.25rem;">
                         <i style="color: gray" class="fa-solid fa-arrows-spin"></i>
                         &nbsp;
                         <span>@issue.Status</span>
-
                     </div> 
                     <div class="hide840" style="width: 220px; border-radius: 20.25rem;">
                         <i style="color: gray" class="fa-solid fa-circle-exclamation"></i>
                         &nbsp;
                         <span>@issue.Priority</span>
-
                     </div>
                     <div class="hide840" style="width: 220px; border-radius: 20.25rem;">
                         <i style="color: gray" class="fa-regular fa-calendar"></i>
                         &nbsp;
                         <span>@issue.StartTime.ToString("dd.MM.yyyy") - @issue.EndTime.ToString("dd.MM.yyyy")</span>
-
                     </div>
-
                     <div class="vr hide840 mx-1"></div>
-
                     <div style="display: flex">
                         <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
                             <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditIssue(issue))">
@@ -60,22 +50,15 @@
                             </button>
                         </SfTooltip>
                     </div>
-
                 </li>
                 }
-
                 @if (!issues.Any())
                 {
                 <div class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
                     <label style="color: gray">Няма качени задачи!</label>
                 </div>
                 }
-            
-
-
-
         </Content>
-
         <FooterTemplate>
             <div class="form-group">
                 <div class="text-right">
@@ -88,9 +71,6 @@
 </SfDialog>
 <ToastMsg @ref="toast" />
 <IssueImportModal @ref="importIssueModal" CallbackAfterSubmit="UpdateData"></IssueImportModal>
-
-
-
 <style>
     .overlay-inner {
         position: fixed;
@@ -98,8 +78,6 @@
         left: 50%;
         transform: translate(-50%, -50%);
     }
-
-
     .overlay {
         position: fixed;
         top: 0;
@@ -110,8 +88,6 @@
         z-index: 9999;
         backdrop-filter: blur(10px);
     }
-
-
     .progress-bar-container {
         position: fixed;
         top: 50%;
@@ -119,7 +95,6 @@
         transform: translate(-50%, -50%);
         z-index: 10000;
     }
-
     .e-dialog .e-dlg-content {
         font-family: SegoeUI;
     }

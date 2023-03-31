@@ -1,12 +1,7 @@
 ﻿namespace Task_management_system.Models
 {
-
-
-
     public class CurrentCondition
     {
-
-
         public DateTime LocalObservationDateTime { get; set; }
         public int EpochTime { get; set; }
         public string WeatherText { get; set; }
@@ -18,8 +13,4 @@
         public string MobileLink { get; set; }
         public string Link { get; set; }
     }
-
-
-
-
 }

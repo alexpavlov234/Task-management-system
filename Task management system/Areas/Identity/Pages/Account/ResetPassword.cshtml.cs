@@ -2,16 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Task_management_system.Areas.Identity;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace Task_management_system.Areas.Identity.Pages.Account
 {
@@ -43,7 +39,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account
             /// </summary>
             [Required(ErrorMessage = "Полето 'Имейл' е задължително")]
             [Display(Name = "Имейл")]
-            [EmailAddress(ErrorMessage= "Полето 'Имейл' не е валиден имейл адрес.")]
+            [EmailAddress(ErrorMessage = "Полето 'Имейл' не е валиден имейл адрес.")]
             public string Email { get; set; }
 
             /// <summary>
@@ -98,20 +94,20 @@ namespace Task_management_system.Areas.Identity.Pages.Account
                 return Page();
             }
 
-            var user = await _userManager.FindByEmailAsync(Input.Email);
+            ApplicationUser user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null)
             {
                 // Don't reveal that the user does not exist
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
 
-            foreach (var error in result.Errors)
+            foreach (IdentityError error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }

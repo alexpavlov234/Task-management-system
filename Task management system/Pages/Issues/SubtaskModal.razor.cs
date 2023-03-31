@@ -5,14 +5,12 @@ using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
 using Task_management_system.Services.Common;
-
 namespace Task_management_system.Pages.Issues
 {
     public partial class SubtaskModal
     {
         [Parameter]
         public EventCallback CallbackAfterSubmit { get; set; }
-
         [Inject]
         private IProjectService ProjectService { get; set; }
         [Inject]
@@ -35,19 +33,15 @@ namespace Task_management_system.Pages.Issues
         private List<KeyValue> projectTypes { get; set; }
         private List<ApplicationUser> users { get; set; }
         private ApplicationUser[] projectParticipants { get; set; }
-
         protected async override Task OnInitializedAsync()
         {
             projectTypes = KeyValueService.GetAllKeyValuesByKeyType("IssueType");
             users = UserService.GetAllUsers();
         }
-
         public async void OpenDialog(Subtask subtask)
-
         {
             statuses = new List<KeyValue>();
             this.subtask = subtask;
-
             if (subtask.Issue != null)
             {
                 //issueProjectName = subtask.Project.ProjectName;
@@ -70,7 +64,6 @@ namespace Task_management_system.Pages.Issues
             }
             _ = GetStatus(this.subtask.Status);
             projects = ProjectService.GetAllProjects();
-
             editContext = new EditContext(subtask);
             IsVisible = true;
             StateHasChanged();
@@ -78,7 +71,6 @@ namespace Task_management_system.Pages.Issues
         private async Task GetStatus(string status)
         {
             statuses.Clear();
-
             List<KeyValue> keyValues = KeyValueService.GetAllKeyValuesByKeyType("IssueStatus");
             if (status == keyValues.Where(x => x.KeyValueIntCode == "New").First().Name)
             {
@@ -105,12 +97,9 @@ namespace Task_management_system.Pages.Issues
                 statuses.AddRange(keyValues.Where(x => x.KeyValueIntCode == "New" || x.KeyValueIntCode == "InExecution" || x.KeyValueIntCode == "Closed").ToList());
                 statusLineColor = "task-line-gray";
             }
-
             await statusDropDownList.RefreshDataAsync();
-
             StateHasChanged();
         }
-
         private void OnValueSelectHandlerStatus(ChangeEventArgs<string, KeyValue> args)
         {
             _ = GetStatus(args.Value);

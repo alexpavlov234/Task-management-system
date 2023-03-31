@@ -7,9 +7,6 @@
 @using Task_management_system.Services.Common
 @using Syncfusion.Blazor.Popups
 @using Task_management_system.Interfaces
-
-
-
 <SfDialog Width="60%" Height="600px" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@IsVisible">
     <DialogTemplates>
         <Header>
@@ -30,9 +27,7 @@
             }
             <div class="p-3 card-modal">
                 <EditForm id="projectForm" EditContext="editContext" OnValidSubmit="@SaveProject">
-
                     <DataAnnotationsValidator />
-
                     <div class="row my-1">
                         <div class="col-md-4">
                             <label for="projectName">Име на проект</label>
@@ -70,17 +65,13 @@
                                 <MultiSelectFieldSettings Text="Identifier" Value="UserName"></MultiSelectFieldSettings>
                                 <MultiSelectEvents TItem="ApplicationUser" TValue="ApplicationUser[]" ValueChange="@OnValueSelectHandlerParticipants"></MultiSelectEvents>
                             </SfMultiSelect>
-
                         </div>
                     </div>
-
-
                 </EditForm>
             </div>
         </Content>
         <FooterTemplate>
             <div class="row gy-3">
-
                 <div class="col-sm-6 d-flex align-items-center">
                     @if (project != null && project.ProjectOwner != null)
                     {
@@ -105,32 +96,26 @@
     .progress-wrapper {
         position: relative;
     }
-
     .start-label,
     .end-label {
         position: absolute;
         top: 0;
     }
-
     .start-label {
         left: 0;
     }
-
     .end-label {
         right: 0;
     }
-
     .end-label {
         color: gray;
         font-size: 32px;
         text-align: center;
     }
-
     .progress {
         width: auto;
         border-radius: 20.25rem;
     }
-
     .progress-bar {
         background-color: #4f9b00;
     }

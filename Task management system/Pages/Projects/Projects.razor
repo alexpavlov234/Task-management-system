@@ -12,9 +12,7 @@
 @using Task_management_system.Pages
 @using Task_management_system.Pages.Shared
 @using System.Globalization
-
 @attribute [Authorize(Roles = "Admin,User")]
-
 <div class="content-wrapper">
     <div>
         @if (ShowHeader)
@@ -22,7 +20,6 @@
             <div class="frame container">
                 <img class="banner" src="img/Projects-01.svg" alt="Banner">
                 <div class="bottom-left">
-
                     <h3>Проекти</h3>
                     <nav class="navbar navbar-expand">
                         <!-- Left navbar links -->
@@ -32,16 +29,12 @@
                             </li>
                         </ul>
                     </nav>
-
                 </div>
             </div>
-
             <div class="m-3">
                 <div class="row m-0">
                     <div class="col-sm-12">
-
                         <div class="project-issue-list">
-
                             @foreach (var projectType in projectTypes)
                             {
                                 <CollapsibleCard @key="projectType.IdKeyValue">
@@ -49,17 +42,14 @@
                                         @if (projectType.Name == "Учебен")
                                         {
                                             <div class="e-message e-success p-2" style="font-size: 20px">@projectType.Name</div>
-
                                         }
                                         else if (projectType.Name == "Работен")
                                         {
                                             <div class="e-message e-warning p-2" style="font-size: 20px">@projectType.Name</div>
-
                                         }
                                         else
                                         {
                                             <div class="e-message e-error p-2" style="font-size: 20px">@projectType.Name</div>
-
                                         }
                                     </CardHeader>
                                     <CardBody>
@@ -76,7 +66,6 @@
                                                         <div style="max-width: 360px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                                                             @project.ProjectName
                                                         </div>
-
                                                         <div class="vr hide840 mx-1"></div>
                                                         @if (project.Issues.Count() != 0)
                                                         {
@@ -92,7 +81,6 @@
                                                         <div class="vr hide840 mx-1"></div>
                                                         <div>
                                                             <div @key="project.ProjectId" style="display: flex">
-
                                                                 @if (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)
                                                                 {
                                                                     <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
@@ -100,8 +88,6 @@
                                                                             <i class="fa-solid fa-pen-to-square"></i>
                                                                         </button>
                                                                     </SfTooltip>
-
-
                                                                     <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
                                                                         <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
                                                                             <i class="fa-solid fa-trash"></i>
@@ -130,9 +116,7 @@
                                         </ul>
                                     </CardBody>
                                 </CollapsibleCard>
-
                             }
-
                         </div>
                     </div>
                 </div>
@@ -143,9 +127,7 @@
             <div class="m-3">
                 <div class="row m-0">
                     <div class="col-sm-12">
-
                         <div class="project-issue-list">
-
                             @foreach (var projectType in projectTypes)
                             {
                                 <CollapsibleCard>
@@ -153,17 +135,14 @@
                                         @if (projectType.Name == "Учебен")
                                         {
                                             <div class="e-message e-success p-2" style="font-size: 20px">@projectType.Name</div>
-
                                         }
                                         else if (projectType.Name == "Работен")
                                         {
                                             <div class="e-message e-warning p-2" style="font-size: 20px">@projectType.Name</div>
-
                                         }
                                         else
                                         {
                                             <div class="e-message e-error p-2" style="font-size: 20px">@projectType.Name</div>
-
                                         }
                                     </CardHeader>
                                     <CardBody>
@@ -180,11 +159,8 @@
                                                         <div style="width:  450px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                                                             @project.ProjectName
                                                         </div>
-
-
                                                         <div>
                                                             <div style="display: flex">
-
                                                                 @if (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)
                                                                 {
                                                                     <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
@@ -192,8 +168,6 @@
                                                                             <i class="fa-solid fa-pen-to-square"></i>
                                                                         </button>
                                                                     </SfTooltip>
-
-
                                                                     <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
                                                                         <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
                                                                             <i class="fa-solid fa-trash"></i>
@@ -208,7 +182,6 @@
                                                                         </button>
                                                                     </SfTooltip>
                                                                 }
-
                                                             </div>
                                                         </div>
                                                     </li>
@@ -223,9 +196,7 @@
                                         </ul>
                                     </CardBody>
                                 </CollapsibleCard>
-
                             }
-
                         </div>
                     </div>
                 </div>
@@ -233,8 +204,5 @@
         }
     </div>
 </div>
-
 <ToastMsg @ref="toast" />
 <ProjectModal @ref="projectModal" CallbackAfterSubmit="UpdateAfterProjectModalSubmitAsync" />
-
-

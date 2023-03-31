@@ -4,18 +4,12 @@
 @using Task_management_system.Services.Common
 @using Syncfusion.Blazor.Popups
 @using Task_management_system.Interfaces
-
-
-
 <SfDialog Width="700px" Height="400px" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@IsVisible">
     <DialogTemplates>
         <Header>Данни за потребител <span style="color: #009cfc;">@this.inputModel.FirstName @this.inputModel.LastName</span></Header>
         <Content>
-
             <EditForm id="userForm" EditContext="editContext" OnValidSubmit="@SaveUser">
-
                 <DataAnnotationsValidator />
-
                 <div class="row">
                     <div class="col-md-4">
                         <label for="userName">Потребителско име</label>
@@ -51,10 +45,8 @@
                                         </button>
                                     </div>
                                     <InputText id="password" @bind-Value="inputModel.Password" class="form-control" readonly="true"></InputText>
-
                                 </div>
                             </div>
-
                         </div>
                     }
                     else
@@ -74,10 +66,7 @@
                             </SfDropDownList>
                         </div>
                     }
-
                 </div>
-
-
             </EditForm>
         </Content>
         <FooterTemplate>
@@ -91,4 +80,3 @@
     </DialogTemplates>
 </SfDialog>
 <ToastMsg @ref="toast" />
-

@@ -1,5 +1,4 @@
 ﻿using Task_management_system.Areas.Identity;
-
 namespace Task_management_system.Models
 {
     public class ApplicationUserProject

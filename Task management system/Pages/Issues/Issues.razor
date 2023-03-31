@@ -15,14 +15,11 @@
 @using Task_management_system.Pages
 @using Task_management_system.Pages.Shared
 @using System.Globalization
-
 @attribute [Authorize(Roles = "Admin, User")]
-
 <div class="content-wrapper">
     <div class="frame container">
         <img class="banner" src="img/Issues-01.svg" alt="Banner">
         <div class="bottom-left">
-
             <h3>Задачи</h3>
             <nav class="navbar navbar-expand">
                 <!-- Left navbar links -->
@@ -34,7 +31,6 @@
             </nav>
         </div>
     </div>
-
     <div class="m-3">
         <ul class="nav nav-tabs">
             <li class="nav-item">
@@ -46,22 +42,15 @@
             <li class="nav-item">
                 <a class="@tabsClasses[2]" @onclick="() => ChangeTab(3)">Изглед по приоритет</a>
             </li>
-
         </ul>
-
         @switch (TabId)
         {
-
             case 1:
-
                 <div class="row m-0">
                     <div class="col-sm-12">
-
                         <div class="project-issue-list">
-
                             @foreach (var project in projects)
                             {
-
                                 <CollapsibleCard>
                                     <CardHeader>
                                         <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; background-color: #f8f8ff">
@@ -81,7 +70,6 @@
                                                 <label class="hide840 mx-2" style="color: gray; text-align: center;">Няма добавени задачи </label>
                                             }
                                             <div class="vr hide840 mx-1"></div>
-
                                             <div style="display: flex" class="hide350">
                                                 <SfTooltip Position="Position.BottomCenter" Content="Експортиране на задачи" OpensOn="Hover">
                                                     <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => ExportIssues(project))">
@@ -99,10 +87,8 @@
                                                     </button>
                                                 </SfTooltip>
                                             </div>
-
                                         </li>
                                     </CardHeader>
-
                                     <CardBody>
                                         <div style="border-top-width: 1px; background-color: #f8f8ff" class="my-2 show350 list-group-item rounded d-flex justify-content-between align-items-center">
                                             <SfTooltip Position="Position.BottomCenter" Content="Експортиране на задачи" OpensOn="Hover">
@@ -127,7 +113,6 @@
                                             {
                                                 @foreach (var issue in project.Issues)
                                                 {
-
                                                     <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
                                                         <div style="width:  450px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                                                             @issue.Subject
@@ -152,7 +137,6 @@
                                                             <label style="color: gray">Няма добавени подзадачи </label>
                                                         }
                                                         <div class="vr hide840 mx-1"></div>
-
                                                         <div style="display: flex">
                                                             <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
                                                                 <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditIssue(issue))">
@@ -168,7 +152,6 @@
                                                                 </SfTooltip>
                                                             }
                                                         </div>
-
                                                     </li>
                                                 }
                                             }
@@ -177,7 +160,6 @@
                                                 <li class="list-group-item rounded d-flex align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px; text-align: center;">
                                                     <label style="color: gray">Няма задачи в този проект!</label>
                                                 </li>
-
                                             }
                                         }
                                         else
@@ -186,10 +168,8 @@
                                                 <label style="color: gray">Няма задачи в този проект!</label>
                                             </li>
                                         }
-
                                     </CardBody>
                                 </CollapsibleCard>
-
                             }
                             @if (this.issues.Count() == 0 && this.projects.Count() == 0)
                             {
@@ -203,8 +183,6 @@
                 break;
             case 2:
                 <SfKanban @ref="sfKanban" KeyField="Status" DataSource="issues">
-
-
                     <KanbanColumns>
                         @foreach (Syncfusion.Blazor.Kanban.ColumnModel item in columnData)
                         {
@@ -214,15 +192,12 @@
                     <KanbanEvents TValue="Issue" ActionComplete="@ActionCompleteHandler" DialogOpen="@OnDialogOpen"></KanbanEvents>
                     <KanbanCardSettings HeaderField="Subject" ContentField="Description"></KanbanCardSettings>
                 </SfKanban>
-
                 break;
             case 3:
                 <div class="m-3">
                     <div class="row m-0">
                         <div class="col-sm-12">
-
                             <div class="project-issue-list">
-
                                 @foreach (var priorityType in priorityTypes)
                                 {
                                     <CollapsibleCard>
@@ -230,17 +205,14 @@
                                             @if (priorityType.Name == "Висок")
                                             {
                                                 <div class="e-message e-error p-2" style="font-size: 20px">@priorityType.Name</div>
-
                                             }
                                             else if (priorityType.Name == "Нормален")
                                             {
                                                 <div class="e-message e-warning p-2" style="font-size: 20px">@priorityType.Name</div>
-
                                             }
                                             else
                                             {
                                                 <div class="e-message e-primary p-2" style="font-size: 20px">@priorityType.Name</div>
-
                                             }
                                         </CardHeader>
                                         <CardBody>
@@ -277,7 +249,6 @@
                                                                 <label style="color: gray">Няма добавени подзадачи </label>
                                                             }
                                                             <div class="vr hide840 mx-1"></div>
-
                                                             <div style="display: flex">
                                                                 <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
                                                                     <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditIssue(issue))">
@@ -293,7 +264,6 @@
                                                                     </SfTooltip>
                                                                 }
                                                             </div>
-
                                                         </li>
                                                     }
                                                 }
@@ -306,9 +276,7 @@
                                             </ul>
                                         </CardBody>
                                     </CollapsibleCard>
-
                                 }
-
                             </div>
                         </div>
                     </div>
@@ -317,11 +285,6 @@
         }
     </div>
 </div>
-
-
-
-
-
 <ToastMsg @ref="toast" />
 <IssueModal @ref="taskModal" CallbackAfterSubmit="UpdateAfterIssueModalSubmitAsync" />
 <ImportIssuesModal @ref="importIssuesModal" CallbackAfterSubmit="UpdateAfterImportIssuesModalSubmitAsync" />

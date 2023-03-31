@@ -1,8 +1,6 @@
 ﻿using Task_management_system.Areas.Identity;
 using Task_management_system.Models;
-
 namespace Task_management_system.Interfaces;
-
 public interface IUserService
 {
     Task<string> CreateApplicationUser(ApplicationUser applicationUser, String Password);
@@ -12,7 +10,6 @@ public interface IUserService
     Task<ApplicationUser> GetApplicationUserByUsernameAsync(string Username);
     Task UpdateApplicationUser(ApplicationUser applicationUser);
     ApplicationUser GetLoggedUser();
-
     bool IsLoggedUserAdmin();
     void Login(string username, string password, bool rememberMe);
     void Logout();

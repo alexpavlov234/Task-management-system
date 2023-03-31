@@ -13,21 +13,15 @@
 @using Task_management_system.Pages
 @using Syncfusion.Blazor.Schedule
 @using Task_management_system.Pages.Issues
-
 @attribute [Authorize(Roles = "Admin, User")]
-
 <div class="content-wrapper">
-
-
     <div>
-
         <div class="frame container">
             <img class="banner" src="img/Calendar-01.svg" alt="Banner">
             <div class="bottom-left">
                 <h3>Календар</h3>
             </div>
         </div>
-
         <div class="m-3">
             <SfSchedule TValue="Issue" Height="auto" Width="auto" SelectedDate="@DateTime.Now" CurrentView="View.Month">
                 <ScheduleEventSettings DataSource="@issues" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
@@ -43,16 +37,10 @@
         </div>
     </div>
 </div>
-
-
-
-
-
 <style>
     .e-popup-footer {
         display: none !important;
     }
-
     .e-add {
         display: none !important;
     }

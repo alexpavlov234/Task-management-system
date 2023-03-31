@@ -1,9 +1,7 @@
 ﻿@page
 @model Task_management_system.Pages.ErrorModel
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -11,20 +9,17 @@
     <link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
 </head>
-
 <body>
     <div class="main">
         <div class="content px-4">
             <h1 class="text-danger">Грешка.</h1>
             <h2 class="text-danger">При обработката на заявката Ви е възникнала грешка.</h2>
-
             @if (Model.ShowRequestId)
             {
                 <p>
                     <strong>ID на заявката:</strong> <code>@Model.RequestId</code>
                 </p>
             }
-
             <h3>Режим на разработка</h3>
             <p>
                 Преминаване към <strong>средата за разработка</strong> показва подробна информация за възникналата грешка.
@@ -38,5 +33,4 @@
         </div>
     </div>
 </body>
-
 </html>

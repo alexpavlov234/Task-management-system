@@ -15,20 +15,14 @@
 @using Task_management_system.Pages.Issues
 @using Task_management_system.Pages.Projects
 @using ChangeEventArgs = Microsoft.AspNetCore.Components.ChangeEventArgs
-
-
 @attribute [Authorize(Roles = "Admin,User")]
-
 <div class="content-wrapper">
-
-
     <div>
         @if (ShowHeader)
         {
             <div class="frame container">
                 <img class="banner" style="transform: scale(3);" src="img/Search-01.svg" alt="Banner">
                 <div class="bottom-left">
-
                     <h3>Търсене</h3>
                     <nav class="navbar navbar-expand">
                         <div class="form-control">
@@ -44,18 +38,15 @@
                                         Търсене
                                     </button>
                                 </div>
-
                             </div>
                         </div>
                     </nav>
                 </div>
             </div>
-
             <div class="m-3">
                 <div class="row m-0">
                     <div class="col-sm-12">
                         <h5>Резултат</h5>
-
                         <div class="project-issue-list">
                             <ul class="search-list">
                                 @if (itemsResult.Any())
@@ -65,8 +56,6 @@
                                         @if (item is Project project)
                                         {
                                             <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
-
-
                                                 <div style="width: 45%; display: flex; align-items: center">
                                                     <div class="p-2">
                                                         <i class="fa-solid fa-clone fa-lg" style="color: darkcyan"></i>
@@ -76,9 +65,7 @@
                                                     <div style=" overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                                                         @project.ProjectName
                                                     </div>
-
                                                 </div>
-
                                                 <div class="vr hide840 mx-1"></div>
                                                 @if (project.Issues.Count() != 0)
                                                 {
@@ -94,7 +81,6 @@
                                                 <div class="vr hide840 mx-1"></div>
                                                 <div>
                                                     <div @key="project.ProjectId" style="display: flex">
-
                                                         @if (IsProjectEditable(project))
                                                         {
                                                             <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
@@ -102,8 +88,6 @@
                                                                     <i class="fa-solid fa-pen-to-square"></i>
                                                                 </button>
                                                             </SfTooltip>
-
-
                                                             <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
                                                                 <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
                                                                     <i class="fa-solid fa-trash"></i>
@@ -125,7 +109,6 @@
                                         else if (item is Issue issue)
                                         {
                                             <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
-
                                                 <div style="width: 45%; display: flex; align-items: center">
                                                     <div class="p-2">
                                                         <i class="fa-solid fa-list-check fa-lg" style="color: darkcyan"></i>
@@ -156,7 +139,6 @@
                                                     <label style="color: gray">Няма добавени подзадачи </label>
                                                 }
                                                 <div class="vr hide840 mx-1"></div>
-
                                                 <div style="display: flex">
                                                     <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
                                                         <button type="button" class="btn btn-outline-warning waves-effect md-trigger m-1" @onclick="(() => EditIssue(issue))">
@@ -169,7 +151,6 @@
                                                         </button>
                                                     </SfTooltip>
                                                 </div>
-
                                             </li>
                                         }
                                     }
@@ -185,9 +166,6 @@
                     </div>
                 </div>
             </div>
-
-
-
         }
         else
         {
@@ -205,12 +183,10 @@
                                 Търсене
                             </button>
                         </div>
-
                     </div>
                 </div>
             </nav>
         }
-
     </div>
 </div>
 <style>
@@ -218,12 +194,10 @@
         opacity: 0;
         animation: fadeIn 0.5s ease-in-out forwards;
     }
-
     @@keyframes fadeIn {
         from {
             opacity: 0;
         }
-
         to {
             opacity: 1;
         }

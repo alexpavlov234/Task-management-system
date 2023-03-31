@@ -2,9 +2,6 @@
 {
     public class BaseHelper
     {
-
-
-
         public static string GeneratePassword()
         {
             // Константи с малките, големите букви, цифрите и специалните знаци
@@ -32,7 +29,6 @@
                 {
                     // Избиране на случаен набор от символи
                     string set = chars[random.Next(0, chars.Length)];
-
                     // Добавяне на случаен символ от избрания набор
                     password[i] = set[random.Next(0, set.Length)];
                 }
@@ -41,5 +37,4 @@
             return new string(password.OrderBy(x => random.Next()).ToArray());
         }
     }
-
 }

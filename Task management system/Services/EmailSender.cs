@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
-using System.Net.Mail;
 using System.Net;
-
+using System.Net.Mail;
 namespace Task_management_system.Services
 {
     public class EmailSender : IEmailSender
@@ -11,7 +10,6 @@ namespace Task_management_system.Services
         private readonly bool _enableSSL;
         private readonly string _userName;
         private readonly string _password;
-
         public EmailSender(string host, int port, bool enableSSL, string userName, string password)
         {
             _host = host;
@@ -20,19 +18,16 @@ namespace Task_management_system.Services
             _userName = userName;
             _password = password;
         }
-
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var client = new SmtpClient(_host, _port)
+            SmtpClient client = new SmtpClient(_host, _port)
             {
                 Credentials = new NetworkCredential(_userName, _password),
                 EnableSsl = _enableSSL
             };
-
             return client.SendMailAsync(
                 new MailMessage(_userName, email, subject, htmlMessage) { IsBodyHtml = true }
             );
         }
     }
-
 }

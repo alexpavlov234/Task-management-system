@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Syncfusion.Blazor;
-using System.Configuration;
 using Task_management_system.Areas;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Data;
@@ -28,7 +26,7 @@ namespace Task_management_system
 
             _ = builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = true;
+                options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = true;
                 options.User.RequireUniqueEmail = true;
             }).AddErrorDescriber<LocalizedIdentityErrorDescriber>().AddRoles<IdentityRole>()
@@ -62,7 +60,6 @@ namespace Task_management_system
                     ContextSeed.SeedRolesAsync(userManager, roleManager).Wait();
                     ContextSeed.SeedUsersAsync(userManager, roleManager).Wait();
                     ContextSeed.SeedKeyValues(context);
-
                 }
                 catch (Exception ex)
                 {

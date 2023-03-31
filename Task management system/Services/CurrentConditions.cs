@@ -3,9 +3,7 @@ using Accuweather.Core.Helpers;
 using Newtonsoft.Json;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
-
 namespace Task_management_system.Services;
-
 /// <summary>
 ///	Accuweather Current Conditions Api
 ///	This class implements the ICurrentConditions interface and is a wrapper for the Accuweather API for current conditions.
@@ -14,7 +12,6 @@ public class CurrentConditions : AccuweatherApiCore, ICurrentConditions
 {
     // The base URL for the Accuweather current conditions API
     private const string _baseUrl = "http://dataservice.accuweather.com/currentconditions/v1/";
-
     /// <summary>
     /// Constructor for CurrentConditions class
     /// </summary>
@@ -24,7 +21,6 @@ public class CurrentConditions : AccuweatherApiCore, ICurrentConditions
     {
         // Empty constructor as the base constructor is called to initialize the apiKey and language variables.
     }
-
     /// <summary>
     /// Get the current conditions for a specific location
     /// </summary>
@@ -39,14 +35,11 @@ public class CurrentConditions : AccuweatherApiCore, ICurrentConditions
             language = _language,
             details
         };
-
         // Form the URL for the API request by appending the locationKey and API key to the base URL
         string url = $"{_baseUrl}{locationKey}?apikey={_apiKey}&";
-
         // Make the API request, URL encode the parameters, and return the JSON response
         return await SendGetRequest(UrlEncodeHelper.UrlEncode(obj, url));
     }
-
     /// <summary>
     /// Gets the top cities for the specified group number.
     /// </summary>
@@ -59,14 +52,11 @@ public class CurrentConditions : AccuweatherApiCore, ICurrentConditions
         {
             language = _language
         };
-
         // Form the URL for the API request by appending the locationKey and API key to the base URL
         string url = $"{_baseUrl}topcities/{group}?apikey={_apiKey}&";
-
         // Make the API request, URL encode the parameters, and return the JSON response
         return System.Text.RegularExpressions.Regex.Unescape(await SendGetRequest(UrlEncodeHelper.UrlEncode(obj, url)));
     }
-
     /// <summary>
     /// Gets the historical 24-hour weather conditions for the specified location.
     /// </summary>
@@ -81,14 +71,11 @@ public class CurrentConditions : AccuweatherApiCore, ICurrentConditions
             language = _language,
             details
         };
-
         // Form the URL for the API request by appending the locationKey and API key to the base URL
         string url = $"{_baseUrl}{locationKey}/historical/24?apikey={_apiKey}&";
-
         // Make the API request, URL encode the parameters, and return the JSON response
         return System.Text.RegularExpressions.Regex.Unescape(await SendGetRequest(UrlEncodeHelper.UrlEncode(obj, url)));
     }
-
     /// <summary>
     /// Gets the historical 6-hour weather conditions for the specified location.
     /// </summary>
@@ -103,24 +90,19 @@ public class CurrentConditions : AccuweatherApiCore, ICurrentConditions
             language = _language,
             details
         };
-
         // Form the URL for the API request by appending the locationKey and API key to the base URL
         string url = $"{_baseUrl}{locationKey}/historical?apikey={_apiKey}&";
-
         // Make the API request, URL encode the parameters, and return the JSON response
         return System.Text.RegularExpressions.Regex.Unescape(await SendGetRequest(UrlEncodeHelper.UrlEncode(obj, url)));
     }
-
     public Response ConvertToResponseModel(string json)
     {
         return JsonConvert.DeserializeObject<Response>(json);
     }
-
     public IList<CurrentCondition> ConvertToCurrentConditionModel(string json)
     {
         return JsonConvert.DeserializeObject<List<CurrentCondition>>(json);
     }
-
     public CurrentCondition ConvertData(string json)
     {
         Response response = ConvertToResponseModel(json);

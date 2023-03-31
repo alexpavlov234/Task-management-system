@@ -1,25 +1,19 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using System;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
 using Task_management_system.Services.Common;
-
 namespace Task_management_system.Pages.Management
 {
     public partial class ManagementModal
     {
-
-
         [Parameter]
         public EventCallback CallbackAfterSubmit { get; set; }
-
         [Inject]
         private IUserService UserService { get; set; }
         [Inject]
         private BaseHelper BaseHelper { get; set; }
-
         protected EditContext editContext;
         private readonly InputModel inputModel = new InputModel();
         private bool IsUserNew = false;
@@ -29,19 +23,16 @@ namespace Task_management_system.Pages.Management
             new Role() { ID= "User", Text= "Потребител" }
         };
         private ToastMsg toast = new ToastMsg();
-
         public class Role
         {
             public string ID { get; set; }
             public string Text { get; set; }
         }
-
         public void GeneratePassword()
         {
             inputModel.Password = BaseHelper.GeneratePassword();
             inputModel.ConfirmPassword = inputModel.Password;
         }
-
         public async void OpenDialog(ApplicationUser applicationUser)
         {
             inputModel.Id = applicationUser.Id;
@@ -69,19 +60,15 @@ namespace Task_management_system.Pages.Management
             IsVisible = true;
             StateHasChanged();
         }
-
         private void CloseDialog()
         {
             IsVisible = false;
             StateHasChanged();
         }
-
         private async void SaveUser()
         {
             if (editContext.Validate())
-
             {
-
                 if ((await UserService.GetApplicationUserByIdAsync(inputModel.Id)) != null)
                 {
                     ApplicationUser User = await UserService.ToExistingApplicationUser(inputModel);
@@ -103,12 +90,9 @@ namespace Task_management_system.Pages.Management
                         toast.sfErrorToast.Title = result;
                         _ = toast.sfErrorToast.ShowAsync();
                     }
-
                     await CallbackAfterSubmit.InvokeAsync();
-
                 }
             }
         }
-
     }
 }

@@ -2,19 +2,16 @@
 using Microsoft.AspNetCore.Components.Forms;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Popups;
-using System;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
 using Task_management_system.Services.Common;
-
 namespace Task_management_system.Pages.Projects
 {
     public partial class ProjectModal
     {
         [Parameter]
         public EventCallback CallbackAfterSubmit { get; set; }
-
         [Inject]
         private IProjectService ProjectService { get; set; }
         [Inject]
@@ -25,7 +22,6 @@ namespace Task_management_system.Pages.Projects
         private IUserService UserService { get; set; }
         [Inject]
         private IIssueService IssueService { get; set; }
-
         private readonly bool IsUserNew = false;
         private bool IsVisible = false;
         private readonly DateTime MinDate = new DateTime(1900, 1, 1);
@@ -42,9 +38,7 @@ namespace Task_management_system.Pages.Projects
         private SfMultiSelect<ApplicationUser[], ApplicationUser> projectParticipantsSfMultiSelect { get; set; } = new SfMultiSelect<ApplicationUser[], ApplicationUser>();
         [System.Text.Json.Serialization.JsonIgnore]
         private ApplicationUser[] projectParticipants { get; set; }
-
         public async void OpenDialog(Project project)
-
         {
             originalProject = ProjectService.GetProjectById(project.ProjectId);
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
@@ -59,11 +53,8 @@ namespace Task_management_system.Pages.Projects
                 {
                     project.ProjectOwner = loggedUser;
                 }
-
             }
-
             this.project = new Project() { ProjectId = project.ProjectId, ProjectParticipants = project.ProjectParticipants, Issues = project.Issues, ProjectOwner = project.ProjectOwner, ProjectType = project.ProjectType, EndDate = project.EndDate, ProjectDescription = project.ProjectDescription, ProjectName = project.ProjectName, StartDate = project.StartDate };
-
             projectParticipantsSfMultiSelect.DataSource = users;
             if (this.project.ProjectParticipants != null)
             {
@@ -73,7 +64,6 @@ namespace Task_management_system.Pages.Projects
             {
                 projectParticipants = new ApplicationUser[] { };
             }
-
             editContext = new EditContext(this.project);
             IsVisible = true;
             StateHasChanged();
@@ -88,8 +78,6 @@ namespace Task_management_system.Pages.Projects
                         UserId = x.Id,
                         ProjectId = project.ProjectId
                     });
-
-
                 project.ProjectParticipants = participants.ToList();
             }
             else
@@ -102,7 +90,6 @@ namespace Task_management_system.Pages.Projects
             IsVisible = false;
             StateHasChanged();
         }
-
         private void UpdateDialog()
         {
             projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
@@ -113,24 +100,18 @@ namespace Task_management_system.Pages.Projects
                 //TODO:Да го фикснеш;
                 // this.project.ProjectParticipants.Remove(x => x.);
                 projectParticipants = project.ProjectParticipants.Select(x => x.User).Where(x => x != null).ToArray();
-
             }
             else
             {
                 projectParticipants = new ApplicationUser[] { };
             }
-
             editContext = new EditContext(project);
-
             StateHasChanged();
         }
         private async void SaveProject()
         {
-
             if (editContext.Validate())
-
             {
-
                 if (!(project.ProjectId == 0))
                 {
                     if (updateParticipants)
@@ -141,7 +122,6 @@ namespace Task_management_system.Pages.Projects
                         {
                             toast.sfSuccessToast.Title = result;
                             _ = toast.sfSuccessToast.ShowAsync();
-
                             UpdateDialog();
                         }
                         else
@@ -149,12 +129,11 @@ namespace Task_management_system.Pages.Projects
                             toast.sfErrorToast.Title = result;
                             _ = toast.sfErrorToast.ShowAsync();
                         }
-
                         UpdateDialog();
                     }
                     else
                     {
-                        this.project.ProjectParticipants = originalProject.ProjectParticipants;
+                        project.ProjectParticipants = originalProject.ProjectParticipants;
                         UpdateDialog();
                     }
                 }
@@ -165,7 +144,6 @@ namespace Task_management_system.Pages.Projects
                     {
                         toast.sfSuccessToast.Title = result;
                         _ = toast.sfSuccessToast.ShowAsync();
-
                         UpdateDialog();
                     }
                     else
@@ -173,44 +151,38 @@ namespace Task_management_system.Pages.Projects
                         toast.sfErrorToast.Title = result;
                         _ = toast.sfErrorToast.ShowAsync();
                     }
-
                     await CallbackAfterSubmit.InvokeAsync();
-
                 }
             }
             else
             {
                 toast.sfErrorToast.Title = editContext.GetValidationMessages().FirstOrDefault();
                 _ = toast.sfErrorToast.ShowAsync();
-
             }
         }
-
         private void ValidateParticipants()
         {
-            if (this.project.ProjectParticipants == null)
+            if (project.ProjectParticipants == null)
             {
-
-                this.toast.sfErrorToast.Title = "Моля въведете участници в проекта!";
-                _ = this.toast.sfErrorToast.ShowAsync();
+                toast.sfErrorToast.Title = "Моля въведете участници в проекта!";
+                _ = toast.sfErrorToast.ShowAsync();
             }
-            else if (this.project.ProjectParticipants.Count() == 0)
+            else if (project.ProjectParticipants.Count() == 0)
             {
-                this.toast.sfErrorToast.Title = "Моля въведете участници в проекта!";
-                _ = this.toast.sfErrorToast.ShowAsync();
+                toast.sfErrorToast.Title = "Моля въведете участници в проекта!";
+                _ = toast.sfErrorToast.ShowAsync();
             }
             else
             {
                 if (originalProject != null)
                 {
-
-                    foreach (var participant in this.originalProject.ProjectParticipants)
+                    foreach (ApplicationUserProject participant in originalProject.ProjectParticipants)
                     {
                         if (IssueService.GetAllIssuesByProjectAndApplicationUser(project.ProjectId, participant.UserId).Any() && !project.ProjectParticipants.Where(x => x.UserId == participant.UserId).Any())
                         {
-                            this.toast.sfErrorToast.Title = "Опитвате се да премахнете потребители, които имат възложени задачи! Моля, първо изтрийте задачите!";
+                            toast.sfErrorToast.Title = "Опитвате се да премахнете потребители, които имат възложени задачи! Моля, първо изтрийте задачите!";
                             updateParticipants = false;
-                            _ = this.toast.sfErrorToast.ShowAsync();
+                            _ = toast.sfErrorToast.ShowAsync();
                             return;
                         }
                     }

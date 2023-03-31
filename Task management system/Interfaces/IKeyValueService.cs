@@ -1,5 +1,4 @@
 ﻿using Task_management_system.Models;
-
 namespace Task_management_system.Interfaces
 {
     public interface IKeyValueService
