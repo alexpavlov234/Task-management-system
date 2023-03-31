@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Forms;
 using Syncfusion.Blazor.DropDowns;
 using Syncfusion.Blazor.Popups;
+using System;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
@@ -11,40 +12,36 @@ namespace Task_management_system.Pages.Projects
 {
     public partial class ProjectModal
     {
-        protected EditContext editContext;
-        private Project project = new Project();
+        [Parameter]
+        public EventCallback CallbackAfterSubmit { get; set; }
+
+        [Inject]
+        private IProjectService ProjectService { get; set; }
+        [Inject]
+        private BaseHelper BaseHelper { get; set; }
+        [Inject]
+        private IKeyValueService keyValueService { get; set; }
+        [Inject]
+        private IUserService UserService { get; set; }
+        [Inject]
+        private IIssueService IssueService { get; set; }
+
         private readonly bool IsUserNew = false;
         private bool IsVisible = false;
         private readonly DateTime MinDate = new DateTime(1900, 1, 1);
         private ToastMsg toast = new ToastMsg();
         private readonly SfDialog sfDialog = new SfDialog();
         private bool updateParticipants = false;
-        bool isLoggedUserAdmin = false;
-        private ApplicationUser loggedUser { get; set; }
-        private SfMultiSelect<ApplicationUser[], ApplicationUser> projectParticipantsSfMultiSelect { get; set; } =
-            new SfMultiSelect<ApplicationUser[], ApplicationUser>();
-
+        private bool isLoggedUserAdmin = false;
+        private EditContext editContext;
+        private Project project = new Project();
         private Project originalProject;
-
         private List<KeyValue> projectTypes { get; set; }
         private List<ApplicationUser> users { get; set; }
+        private ApplicationUser loggedUser { get; set; }
+        private SfMultiSelect<ApplicationUser[], ApplicationUser> projectParticipantsSfMultiSelect { get; set; } = new SfMultiSelect<ApplicationUser[], ApplicationUser>();
         [System.Text.Json.Serialization.JsonIgnore]
         private ApplicationUser[] projectParticipants { get; set; }
-
-        [Parameter]
-        public EventCallback CallbackAfterSubmit { get; set; }
-
-        [Inject]
-        private BaseHelper BaseHelper { get; set; }
-
-        [Inject]
-        private IKeyValueService keyValueService { get; set; }
-
-        [Inject]
-        private IUserService UserService { get; set; }
-
-        [Inject]
-        private IIssueService IssueService { get; set; }
 
         public async void OpenDialog(Project project)
 
@@ -64,7 +61,6 @@ namespace Task_management_system.Pages.Projects
                 }
 
             }
-
 
             this.project = new Project() { ProjectId = project.ProjectId, ProjectParticipants = project.ProjectParticipants, Issues = project.Issues, ProjectOwner = project.ProjectOwner, ProjectType = project.ProjectType, EndDate = project.EndDate, ProjectDescription = project.ProjectDescription, ProjectName = project.ProjectName, StartDate = project.StartDate };
 
@@ -131,7 +127,6 @@ namespace Task_management_system.Pages.Projects
         private async void SaveProject()
         {
 
-            // project.ProjectParticipants = new List<ApplicationUser>(projectParticipants);
             if (editContext.Validate())
 
             {

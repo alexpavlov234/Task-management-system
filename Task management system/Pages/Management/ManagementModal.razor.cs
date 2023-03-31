@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using System;
 using Task_management_system.Areas.Identity;
+using Task_management_system.Interfaces;
 using Task_management_system.Models;
 using Task_management_system.Services.Common;
 
@@ -8,23 +10,31 @@ namespace Task_management_system.Pages.Management
 {
     public partial class ManagementModal
     {
-        protected EditContext editContext;
-        private readonly InputModel inputModel = new InputModel();
-        private bool IsUserNew = false;
-        private bool IsVisible = false;
 
-        private readonly List<Role> Roles = new List<Role> {
-            new Role() { ID= "Admin", Text= "Администратор" },
-             new Role() { ID= "User", Text= "Потребител" }
-        };
-
-        private ToastMsg toast = new ToastMsg();
 
         [Parameter]
         public EventCallback CallbackAfterSubmit { get; set; }
 
         [Inject]
+        private IUserService UserService { get; set; }
+        [Inject]
         private BaseHelper BaseHelper { get; set; }
+
+        protected EditContext editContext;
+        private readonly InputModel inputModel = new InputModel();
+        private bool IsUserNew = false;
+        private bool IsVisible = false;
+        private readonly List<Role> Roles = new List<Role> {
+            new Role() { ID= "Admin", Text= "Администратор" },
+            new Role() { ID= "User", Text= "Потребител" }
+        };
+        private ToastMsg toast = new ToastMsg();
+
+        public class Role
+        {
+            public string ID { get; set; }
+            public string Text { get; set; }
+        }
 
         public void GeneratePassword()
         {
@@ -100,10 +110,5 @@ namespace Task_management_system.Pages.Management
             }
         }
 
-        public class Role
-        {
-            public string ID { get; set; }
-            public string Text { get; set; }
-        }
     }
 }

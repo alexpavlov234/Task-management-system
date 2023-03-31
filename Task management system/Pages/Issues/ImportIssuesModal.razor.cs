@@ -12,14 +12,17 @@ namespace Task_management_system.Pages.Issues
 {
     public partial class ImportIssuesModal
     {
-        [Inject]
-        private IKeyValueService keyValueService { get; set; }
-
-        [Inject]
-        private IIssueService IssueService { get; set; }
-
         [Parameter]
         public EventCallback CallbackAfterSubmit { get; set; }
+
+        [Inject]
+        private IProjectService ProjectService { get; set; }
+        [Inject]
+        private IUserService UserService { get; set; }
+        [Inject]
+        private IKeyValueService KeyValueService { get; set; }
+        [Inject]
+        private IIssueService IssueService { get; set; }
 
         private bool _isVisible = false;
         private List<Issue> issues = new List<Issue>();
@@ -30,13 +33,11 @@ namespace Task_management_system.Pages.Issues
         private string statusLineColor = "";
         private SfDropDownList<string, KeyValue> statusDropDownList = new SfDropDownList<string, KeyValue>();
         private SfDropDownList<string, KeyValue> priorityDropDownList = new SfDropDownList<string, KeyValue>();
-        //public string? issueProjectName { get; set; }
         private List<KeyValue> statuses = new List<KeyValue>();
         private List<KeyValue> priorities = new List<KeyValue>();
         private SfGrid<Issue> sfGrid = new SfGrid<Issue>();
         private List<Project> projects { get; set; }
         private bool _isIssueNew = true;
-
         private Project project;
         private int _progressPercentage = 0;
         private int currentIssueIndex = 0;
@@ -48,6 +49,7 @@ namespace Task_management_system.Pages.Issues
         bool isLoggedUserAdmin = false;
         private bool _showOverlay = false;
         private ApplicationUser loggedUser { get; set; }
+
         public void OpenDialog(Project project)
 
         {
@@ -55,8 +57,8 @@ namespace Task_management_system.Pages.Issues
             this.project = project;
             isLoggedUserAdmin = UserService.IsLoggedUserAdmin();
             loggedUser = UserService.GetLoggedUser();
-            statuses = keyValueService.GetAllKeyValuesByKeyType("IssueStatus");
-            priorities = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
+            statuses = KeyValueService.GetAllKeyValuesByKeyType("IssueStatus");
+            priorities = KeyValueService.GetAllKeyValuesByKeyType("IssuePriority");
             users = ProjectService.GetProjectById(this.project.ProjectId).ProjectParticipants.ToList().Select(x => x.User).ToList();
             editContext = new EditContext(issue);
             _isVisible = true;

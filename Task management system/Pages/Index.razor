@@ -7,25 +7,10 @@
 @using Task_management_system.Pages.Issues;
 @using Task_management_system.Pages.Projects
 @using Task_management_system.Services
-@inject IIssueService IssueService
-@inject IJSRuntime JSRuntime
+
 @page "/"
 
 
-
-@*
-@if (loginState.IsLoggedIn.Equals(false))
-{
-    NavToLogin();
-}
-else
-{
-    <h1 style="text-align:center">Successful Login!</h1>
-    <div style="text-align:center">
-        <p> Thanks for logging in @loginState.loggedUser.Username!</p>
-    </div>
-}
-*@
 <AuthorizeView>
     <Authorized>
         <PageTitle>Моят ден</PageTitle>
@@ -179,90 +164,5 @@ else
 
 </style>
 <IssueModal @ref="issueModal" CallbackAfterSubmit="UpdateAfterIssueModalSubmitAsync" />
-@code {
 
-    String userFullName = null;
-    [Inject]
-    private IUserService userService { get; set; }
-    private List<Issue> issues { get; set; }
-    CurrentCondition response;
-    String image = "";
-    String result = "";
-    private IssueModal issueModal = new IssueModal();
-    protected override async Task OnInitializedAsync()
-    {
-        if (userService.GetLoggedUser() != null)
-        {
-            issues = IssueService.GetAllIssues(userService.GetLoggedUser().Id);
-        }
-        if (userService.GetLoggedUser() != null)
-        {
-            var user = userService.GetLoggedUser();
-            userFullName = user.FirstName + " " + user.LastName;
-        }
-        //try
-        //{
-        //    CurrentConditions currentConditions = new CurrentConditions("bXyjKZghQjnIwBB2WKEHdNsVyZdaJECK", "bg-bg");
-        //    result = await currentConditions.Get(51097, false);
-        //    response = currentConditions.ConvertData(result);
-        //}
-        //catch
-        //{
-        response = new CurrentCondition();
-        response.Temperature = new Temperature();
-        response.Temperature.Metric = new Metric();
-
-        response.Temperature.Metric.Value = 12;
-        response.Temperature.Metric.Unit = "C";
-        response.WeatherText = "Гръмотевични бури";
-        response.WeatherIcon = 17;
-        response.Link = "https://www.accuweather.com/bg/bg/sofia/51097/weather-forecast/51097";
-        //}
-        image = "img/icons/" + response.WeatherIcon + ".svg";
-
-    }
-    public async void GetWeather()
-    {
-
-        StateHasChanged();
-    }
-
-    string theTime;
-    string theDate;
-    Timer aTimer;
-
-    ElementReference timeDiv;
-    ElementReference dateDiv;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JSRuntime.InvokeVoidAsync("startTime1", timeDiv);
-            await JSRuntime.InvokeVoidAsync("startTime2", dateDiv);
-        }
-    }
-
-    private async Task UpdateAfterIssueModalSubmitAsync()
-    {
-        if (userService.GetLoggedUser() != null)
-        {
-            issues = IssueService.GetAllIssues(userService.GetLoggedUser().Id);
-        }
-        this.StateHasChanged();
-    }
-    public void Dispose()
-    {
-        JSRuntime.InvokeVoidAsync("stopTime");
-    }
-
-
-    public void OnPopupOpen(PopupOpenEventArgs<Issue> args)
-    {
-
-        args.Cancel = true;
-        issueModal.OpenDialog(args.Data);
-    }
-
-}
 

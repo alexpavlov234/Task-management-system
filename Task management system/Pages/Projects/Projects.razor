@@ -12,17 +12,10 @@
 @using Task_management_system.Pages
 @using Task_management_system.Pages.Shared
 @using System.Globalization
-@inject RoleManager<IdentityRole> roleManager
-@inject UserManager<ApplicationUser> userManager
-@inject SignInManager<ApplicationUser> signInManager
-@inject IUserService userService
-@inject IKeyValueService keyValueService
-@inject IProjectService projectService
+
 @attribute [Authorize(Roles = "Admin,User")]
 
 <div class="content-wrapper">
-
-
     <div>
         @if (ShowHeader)
         {
@@ -245,92 +238,3 @@
 <ProjectModal @ref="projectModal" CallbackAfterSubmit="UpdateAfterProjectModalSubmitAsync" />
 
 
-@code {
-    //https://learn.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-7.0
-
-    private List<KeyValue> projectTypes { get; set; }
-    private List<Project> projects { get; set; }
-    private ProjectModal projectModal = new();
-    private ToastMsg toast = new();
-
-    bool isLoggedUserAdmin = false;
-    private ApplicationUser loggedUser { get; set; }
-
-    [Parameter]
-    public bool ShowHeader { get; set; } = true;
-
-    protected override async Task OnInitializedAsync()
-    {
-        projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
-        loggedUser = userService.GetLoggedUser();
-        isLoggedUserAdmin = userService.IsLoggedUserAdmin();
-
-        if (isLoggedUserAdmin)
-        {
-            projects = projectService.GetAllProjects();
-        }
-        else
-        {
-            projects = projectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
-                                                                  || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
-        }
-
-    }
-    private void AddNewProjectClickHandler()
-    {
-        projectModal.OpenDialog(new Project { StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(1), ProjectParticipants = null, ProjectOwner = null });
-
-    }
-
-
-    private void UpdateAfterProjectModalSubmitAsync()
-    {
-        projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
-        if (isLoggedUserAdmin)
-        {
-            projects = projectService.GetAllProjects();
-        }
-        else
-        {
-            projects = projectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
-                                                                  || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
-        }
-        this.StateHasChanged();
-
-    }
-    private void DeleteProject(Project project)
-    {
-
-        var result = projectService.DeleteProject(project.ProjectId);
-        if (result.StartsWith("Успешно"))
-        {
-            toast.sfSuccessToast.Title = result;
-            toast.sfSuccessToast.ShowAsync();
-
-
-        }
-        else
-        {
-            toast.sfErrorToast.Title = result;
-            toast.sfErrorToast.ShowAsync();
-        }
-        projectTypes = keyValueService.GetAllKeyValuesByKeyType("ProjectType");
-        if (isLoggedUserAdmin)
-        {
-            projects = projectService.GetAllProjects();
-        }
-        else
-        {
-            projects = projectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
-                                                                  || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
-        }
-        this.StateHasChanged();
-
-    }
-
-    private void EditProject(Project project)
-    {
-        projectModal.OpenDialog(project);
-    }
-
-}

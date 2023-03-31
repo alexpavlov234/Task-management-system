@@ -10,41 +10,35 @@ namespace Task_management_system.Pages.Issues
 {
     public partial class SubtaskModal
     {
-        protected EditContext editContext;
-        private Subtask subtask = new Subtask();
-        private string statusLineColor = "";
-        private SfDropDownList<string, KeyValue> statusDropDownList = new SfDropDownList<string, KeyValue>();
-        public string? issueAssignedToUserName { get; set; }
-        //public string? issueProjectName { get; set; }
-        private List<KeyValue> statuses = new List<KeyValue>();
-        private List<Project> projects { get; set; }
-        private readonly bool IsUserNew = false;
-        private bool IsVisible = false;
-        private readonly DateTime MinDate = new DateTime(1900, 1, 1);
-        private ToastMsg toast = new ToastMsg();
-        private List<KeyValue> projectTypes { get; set; }
-        private List<ApplicationUser> users { get; set; }
-        private ApplicationUser[] projectParticipants { get; set; }
-
         [Parameter]
         public EventCallback CallbackAfterSubmit { get; set; }
 
         [Inject]
-        private BaseHelper BaseHelper { get; set; }
-
+        private IProjectService ProjectService { get; set; }
         [Inject]
-        private IKeyValueService keyValueService { get; set; }
-
+        private IKeyValueService KeyValueService { get; set; }
         [Inject]
         private IUserService UserService { get; set; }
-
         [Inject]
         private IIssueService IssueService { get; set; }
-
+        public string? issueAssignedToUserName { get; set; }
+        protected EditContext editContext;
+        private Subtask subtask = new Subtask();
+        private readonly bool IsUserNew = false;
+        private bool IsVisible = false;
+        private readonly DateTime MinDate = new DateTime(1900, 1, 1);
+        private ToastMsg toast = new ToastMsg();
+        private string statusLineColor = "";
+        private SfDropDownList<string, KeyValue> statusDropDownList = new SfDropDownList<string, KeyValue>();
+        private List<KeyValue> statuses = new List<KeyValue>();
+        private List<Project> projects { get; set; }
+        private List<KeyValue> projectTypes { get; set; }
+        private List<ApplicationUser> users { get; set; }
+        private ApplicationUser[] projectParticipants { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
-            projectTypes = keyValueService.GetAllKeyValuesByKeyType("IssueType");
+            projectTypes = KeyValueService.GetAllKeyValuesByKeyType("IssueType");
             users = UserService.GetAllUsers();
         }
 
@@ -85,7 +79,7 @@ namespace Task_management_system.Pages.Issues
         {
             statuses.Clear();
 
-            List<KeyValue> keyValues = keyValueService.GetAllKeyValuesByKeyType("IssueStatus");
+            List<KeyValue> keyValues = KeyValueService.GetAllKeyValuesByKeyType("IssueStatus");
             if (status == keyValues.Where(x => x.KeyValueIntCode == "New").First().Name)
             {
                 statusLineColor = "task-line-blue";
@@ -117,7 +111,6 @@ namespace Task_management_system.Pages.Issues
             StateHasChanged();
         }
 
-
         private void OnValueSelectHandlerStatus(ChangeEventArgs<string, KeyValue> args)
         {
             _ = GetStatus(args.Value);
@@ -127,24 +120,13 @@ namespace Task_management_system.Pages.Issues
             IsVisible = false;
             StateHasChanged();
         }
-
         private async void SaveIssue()
         {
-
-
             if (editContext.Validate())
-
             {
-
-
                 if (IssueService.GetSubtaskById(subtask.SubtaskId) != null)
                 {
-
-
-                    //subtask.Project = projects.Where(x => x.ProjectName == issueProjectName).First();
-                    //subtask.ProjectId = subtask.Project.ProjectId;
                     string result = IssueService.UpdateSubtask(subtask);
-
                     await CallbackAfterSubmit.InvokeAsync();
                     if (result.StartsWith("Успешно"))
                     {
@@ -156,14 +138,10 @@ namespace Task_management_system.Pages.Issues
                         toast.sfErrorToast.Title = result;
                         _ = toast.sfErrorToast.ShowAsync();
                     }
-
                 }
                 else
                 {
-
-
                     string result = IssueService.CreateSubtask(subtask);
-
                     if (result.StartsWith("Успешно"))
                     {
                         toast.sfSuccessToast.Title = result;
@@ -174,14 +152,9 @@ namespace Task_management_system.Pages.Issues
                         toast.sfErrorToast.Title = result;
                         _ = toast.sfErrorToast.ShowAsync();
                     }
-
                     await CallbackAfterSubmit.InvokeAsync();
-
                 }
             }
-
         }
-
-
     }
 }

@@ -11,41 +11,41 @@ namespace Task_management_system.Pages.Issues
 {
     public partial class IssueModal
     {
-        protected EditContext editContext;
-        private Issue issue = new Issue();
-        private string statusLineColor = "";
-        private SfDropDownList<string, KeyValue> statusDropDownList = new SfDropDownList<string, KeyValue>();
-        private SfDropDownList<string, KeyValue> priorityDropDownList = new SfDropDownList<string, KeyValue>();
-        //public string? issueProjectName { get; set; }
-        private List<KeyValue> statuses = new List<KeyValue>();
-        private List<KeyValue> priorities = new List<KeyValue>();
-        private SfGrid<Subtask> subtasksGrid = new SfGrid<Subtask>();
-        private List<Project> projects { get; set; }
-        private bool _isIssueNew = true;
-        private bool _isVisible = false;
-        private readonly DateTime MinDate = new DateTime(1900, 1, 1);
-        private ToastMsg toast = new ToastMsg();
-        private SubtaskModal subtaskModal = new SubtaskModal();
-        private List<ApplicationUser> users { get; set; }
-        private ApplicationUser[] projectParticipants { get; set; }
-
-        bool isLoggedUserAdmin = false;
-        private ApplicationUser loggedUser { get; set; }
-
         [Parameter]
         public EventCallback CallbackAfterSubmit { get; set; }
 
         [Inject]
-        private BaseHelper BaseHelper { get; set; }
+        private IProjectService ProjectService { get; set; }
 
         [Inject]
-        private IKeyValueService keyValueService { get; set; }
+        private IKeyValueService KeyValueService { get; set; }
 
         [Inject]
         private IUserService UserService { get; set; }
 
         [Inject]
         private IIssueService IssueService { get; set; }
+
+        private bool _isIssueNew = true;
+        private bool _isVisible = false;
+        private readonly DateTime MinDate = new DateTime(1900, 1, 1);
+        bool isLoggedUserAdmin = false;
+
+        private EditContext editContext;
+        private Issue issue = new Issue();
+        private string statusLineColor = "";
+        private SfDropDownList<string, KeyValue> statusDropDownList = new SfDropDownList<string, KeyValue>();
+        private SfDropDownList<string, KeyValue> priorityDropDownList = new SfDropDownList<string, KeyValue>();
+        private List<KeyValue> statuses = new List<KeyValue>();
+        private List<KeyValue> priorities = new List<KeyValue>();
+        private SfGrid<Subtask> subtasksGrid = new SfGrid<Subtask>();
+        private List<Project> projects { get; set; }
+        private ToastMsg toast = new ToastMsg();
+        private SubtaskModal subtaskModal = new SubtaskModal();
+        private List<ApplicationUser> users { get; set; }
+        private ApplicationUser[] projectParticipants { get; set; }
+        private ApplicationUser loggedUser { get; set; }
+
 
         private void UpdateData()
         {
@@ -108,7 +108,7 @@ namespace Task_management_system.Pages.Issues
                 loggedUser = UserService.GetLoggedUser();
                 UpdateData();
                 statuses = new List<KeyValue>();
-                priorities = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
+                priorities = KeyValueService.GetAllKeyValuesByKeyType("IssuePriority");
                 this.issue = issue;
                 if (_isIssueNew)
                 {
@@ -148,7 +148,7 @@ namespace Task_management_system.Pages.Issues
         {
             statuses.Clear();
 
-            List<KeyValue> keyValues = keyValueService.GetAllKeyValuesByKeyType("IssueStatus");
+            List<KeyValue> keyValues = KeyValueService.GetAllKeyValuesByKeyType("IssueStatus");
             if (status == keyValues.Where(x => x.KeyValueIntCode == "New").First().Name)
             {
                 statusLineColor = "task-line-blue";

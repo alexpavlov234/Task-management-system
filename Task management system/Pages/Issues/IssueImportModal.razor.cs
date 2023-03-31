@@ -11,35 +11,34 @@ namespace Task_management_system.Pages.Issues
 {
     public partial class IssueImportModal
     {
+        [Parameter]
+        public EventCallback<Issue> CallbackAfterSubmit { get; set; }
+
+        [Inject]
+        private IProjectService ProjectService { get; set; }
+        [Inject]
+        private IKeyValueService KeyValueService { get; set; }
+        [Inject]
+        private IUserService UserService { get; set; }
+
         protected EditContext editContext;
         private Issue issue = new Issue();
         private string statusLineColor = "";
         private SfDropDownList<string, KeyValue> statusDropDownList = new SfDropDownList<string, KeyValue>();
         private SfDropDownList<string, KeyValue> priorityDropDownList = new SfDropDownList<string, KeyValue>();
-        //public string? issueProjectName { get; set; }
         private List<KeyValue> statuses = new List<KeyValue>();
         private List<KeyValue> priorities = new List<KeyValue>();
         private SfGrid<Subtask> subtasksGrid = new SfGrid<Subtask>();
         private List<Project> projects { get; set; }
         private bool _isIssueNew = true;
         private bool _isVisible = false;
+        private bool isLoggedUserAdmin = false;
         private readonly DateTime MinDate = new DateTime(1900, 1, 1);
         private ToastMsg toast = new ToastMsg();
         private SubtaskModal subtaskModal = new SubtaskModal();
         private List<ApplicationUser> users { get; set; }
         private ApplicationUser[] projectParticipants { get; set; }
-
-        bool isLoggedUserAdmin = false;
         private ApplicationUser loggedUser { get; set; }
-
-        [Parameter]
-        public EventCallback<Issue> CallbackAfterSubmit { get; set; }
-
-        [Inject]
-        private IKeyValueService keyValueService { get; set; }
-
-        [Inject]
-        private IUserService UserService { get; set; }
 
         private void UpdateData()
         {
@@ -53,11 +52,6 @@ namespace Task_management_system.Pages.Issues
                                                                       || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).OrderBy(x => x.ProjectName).ToList();
             }
         }
-
-
-
-
-
         public void OpenDialog(Issue issue)
 
         {
@@ -66,7 +60,7 @@ namespace Task_management_system.Pages.Issues
             loggedUser = UserService.GetLoggedUser();
             UpdateData();
             statuses = new List<KeyValue>();
-            priorities = keyValueService.GetAllKeyValuesByKeyType("IssuePriority");
+            priorities = KeyValueService.GetAllKeyValuesByKeyType("IssuePriority");
             this.issue = issue;
 
 
@@ -82,7 +76,7 @@ namespace Task_management_system.Pages.Issues
         {
             statuses.Clear();
 
-            List<KeyValue> keyValues = keyValueService.GetAllKeyValuesByKeyType("IssueStatus");
+            List<KeyValue> keyValues = KeyValueService.GetAllKeyValuesByKeyType("IssueStatus");
             if (status == keyValues.Where(x => x.KeyValueIntCode == "New").First().Name)
             {
                 statusLineColor = "task-line-blue";
@@ -113,7 +107,6 @@ namespace Task_management_system.Pages.Issues
 
             StateHasChanged();
         }
-
         private void OnValueSelectHandlerProject(ChangeEventArgs<int, Project> args)
         {
             issue.Project = projects.Where(x => x.ProjectId == args.Value).First();
@@ -128,7 +121,6 @@ namespace Task_management_system.Pages.Issues
                 issue.EndTime = DateTime.Now.AddMonths(1);
             }
         }
-
         private void OnValueSelectHandlerAssignedTo(ChangeEventArgs<string, KeyValue> args)
         {
             this.issue.AssignedТo = users.Find(x => x.Id == args.Value)!;
@@ -142,11 +134,8 @@ namespace Task_management_system.Pages.Issues
             _isVisible = false;
             StateHasChanged();
         }
-
         private async void SaveIssue()
         {
-
-
             if (editContext.Validate())
 
             {

@@ -13,13 +13,7 @@
 @using Task_management_system.Pages
 @using Syncfusion.Blazor.Schedule
 @using Task_management_system.Pages.Issues
-@inject RoleManager<IdentityRole> roleManager
-@inject UserManager<ApplicationUser> userManager
-@inject SignInManager<ApplicationUser> signInManager
-@inject IKeyValueService keyValueService
-@inject IProjectService projectService
-@inject IUserService userService
-@inject IIssueService IssueService
+
 @attribute [Authorize(Roles = "Admin, User")]
 
 <div class="content-wrapper">
@@ -36,7 +30,7 @@
 
         <div class="m-3">
             <SfSchedule TValue="Issue" Height="auto" Width="auto" SelectedDate="@DateTime.Now" CurrentView="View.Month">
-                <ScheduleEventSettings  DataSource="@issues" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
+                <ScheduleEventSettings DataSource="@issues" AllowAdding="false" AllowDeleting="false"></ScheduleEventSettings>
                 <ScheduleEvents TValue="Issue" OnPopupOpen="OnPopupOpen" Dragged="OnDragged" Resized="OnResized"></ScheduleEvents>
                 <ScheduleViews>
                     <ScheduleView Option="View.Day"></ScheduleView>
@@ -55,8 +49,6 @@
 
 
 <style>
-
-
     .e-popup-footer {
         display: none !important;
     }
@@ -67,55 +59,3 @@
 </style>
 <ToastMsg @ref="toast" />
 <IssueModal @ref="issueModal" CallbackAfterSubmit="UpdateAfterIssueModalSubmitAsync" />
-@code {
-    DateTime CurrentDate = DateTime.Now;
-    //https://learn.microsoft.com/en-us/aspnet/core/blazor/security/?view=aspnetcore-7.0
-    private ToastMsg toast = new ToastMsg();
-    private List<Issue> issues { get; set; }
-    private IssueModal issueModal = new IssueModal();
-
-    public void OnResized(ResizeEventArgs<Issue> args)
-    {
-        args.Cancel = true;
-
-
-    }
-    public async Task OnDragged(DragEventArgs<Issue> args)
-    {
-        args.Cancel = true;
-        //var result = IssueService.UpdateIssue(args.Data);
-        //if (result.StartsWith("Успешно"))
-        //{
-        //    toast.sfSuccessToast.Title = result;
-        //    _ = toast.sfSuccessToast.ShowAsync();
-        //}
-        //else
-        //{
-        //    toast.sfErrorToast.Title = result;
-        //    _ = toast.sfErrorToast.ShowAsync();
-        //}
-
-    }
-
-
-    protected async override Task OnInitializedAsync()
-    {
-        issues = IssueService.GetAllIssues(userService.GetLoggedUser().Id);
-
-
-    }
-    public void OnPopupOpen(PopupOpenEventArgs<Issue> args)
-    {
-
-        args.Cancel = true;
-        issueModal.OpenDialog(args.Data);
-
-    }
-   
-    private async Task UpdateAfterIssueModalSubmitAsync()
-    {
-        issues = IssueService.GetAllIssues(userService.GetLoggedUser().Id);
-        this.StateHasChanged();
-    }
-    
-}
