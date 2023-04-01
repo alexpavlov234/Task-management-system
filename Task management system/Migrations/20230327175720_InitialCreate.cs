@@ -8,7 +8,7 @@ namespace Task_management_system.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            _ = migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -19,10 +19,10 @@ namespace Task_management_system.Migrations
                 },
                 constraints: table =>
                 {
-                    _ = table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
                 });
 
-            _ = migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -46,10 +46,10 @@ namespace Task_management_system.Migrations
                 },
                 constraints: table =>
                 {
-                    _ = table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
-            _ = migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "KeyType",
                 columns: table => new
                 {
@@ -62,10 +62,10 @@ namespace Task_management_system.Migrations
                 },
                 constraints: table =>
                 {
-                    _ = table.PrimaryKey("PK_KeyType", x => x.IdKeyType);
+                    table.PrimaryKey("PK_KeyType", x => x.IdKeyType);
                 });
 
-            _ = migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -77,8 +77,8 @@ namespace Task_management_system.Migrations
                 },
                 constraints: table =>
                 {
-                    _ = table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
-                    _ = table.ForeignKey(
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.ForeignKey(
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
@@ -86,7 +86,7 @@ namespace Task_management_system.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            _ = migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -98,8 +98,8 @@ namespace Task_management_system.Migrations
                 },
                 constraints: table =>
                 {
-                    _ = table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    _ = table.ForeignKey(
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
@@ -107,7 +107,7 @@ namespace Task_management_system.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            _ = migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
@@ -118,8 +118,8 @@ namespace Task_management_system.Migrations
                 },
                 constraints: table =>
                 {
-                    _ = table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    _ = table.ForeignKey(
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
@@ -127,7 +127,7 @@ namespace Task_management_system.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            _ = migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
@@ -136,14 +136,14 @@ namespace Task_management_system.Migrations
                 },
                 constraints: table =>
                 {
-                    _ = table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
-                    _ = table.ForeignKey(
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    _ = table.ForeignKey(
+                    table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
@@ -151,7 +151,7 @@ namespace Task_management_system.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            _ = migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
@@ -162,8 +162,8 @@ namespace Task_management_system.Migrations
                 },
                 constraints: table =>
                 {
-                    _ = table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
-                    _ = table.ForeignKey(
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
@@ -171,7 +171,7 @@ namespace Task_management_system.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            _ = migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "Project",
                 columns: table => new
                 {
@@ -186,8 +186,8 @@ namespace Task_management_system.Migrations
                 },
                 constraints: table =>
                 {
-                    _ = table.PrimaryKey("PK_Project", x => x.ProjectId);
-                    _ = table.ForeignKey(
+                    table.PrimaryKey("PK_Project", x => x.ProjectId);
+                    table.ForeignKey(
                         name: "FK_Project_AspNetUsers_ProjectOwnerId",
                         column: x => x.ProjectOwnerId,
                         principalTable: "AspNetUsers",
@@ -195,7 +195,7 @@ namespace Task_management_system.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            _ = migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "KeyValue",
                 columns: table => new
                 {
@@ -217,8 +217,8 @@ namespace Task_management_system.Migrations
                 },
                 constraints: table =>
                 {
-                    _ = table.PrimaryKey("PK_KeyValue", x => x.IdKeyValue);
-                    _ = table.ForeignKey(
+                    table.PrimaryKey("PK_KeyValue", x => x.IdKeyValue);
+                    table.ForeignKey(
                         name: "FK_KeyValue_KeyType_IdKeyType",
                         column: x => x.IdKeyType,
                         principalTable: "KeyType",
@@ -226,7 +226,7 @@ namespace Task_management_system.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            _ = migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "ApplicationUserProjects",
                 columns: table => new
                 {
@@ -235,20 +235,20 @@ namespace Task_management_system.Migrations
                 },
                 constraints: table =>
                 {
-                    _ = table.PrimaryKey("PK_ApplicationUserProjects", x => new { x.UserId, x.ProjectId });
-                    _ = table.ForeignKey(
+                    table.PrimaryKey("PK_ApplicationUserProjects", x => new { x.UserId, x.ProjectId });
+                    table.ForeignKey(
                         name: "FK_ApplicationUserProjects_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                    _ = table.ForeignKey(
+                    table.ForeignKey(
                         name: "FK_ApplicationUserProjects_Project_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Project",
                         principalColumn: "ProjectId");
                 });
 
-            _ = migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "Issue",
                 columns: table => new
                 {
@@ -271,25 +271,25 @@ namespace Task_management_system.Migrations
                 },
                 constraints: table =>
                 {
-                    _ = table.PrimaryKey("PK_Issue", x => x.IssueId);
-                    _ = table.ForeignKey(
+                    table.PrimaryKey("PK_Issue", x => x.IssueId);
+                    table.ForeignKey(
                         name: "FK_Issue_AspNetUsers_AssignedТoId",
                         column: x => x.AssignedТoId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                    _ = table.ForeignKey(
+                    table.ForeignKey(
                         name: "FK_Issue_AspNetUsers_AssigneeId",
                         column: x => x.AssigneeId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                    _ = table.ForeignKey(
+                    table.ForeignKey(
                         name: "FK_Issue_Project_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Project",
                         principalColumn: "ProjectId");
                 });
 
-            _ = migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "Subtask",
                 columns: table => new
                 {
@@ -309,8 +309,8 @@ namespace Task_management_system.Migrations
                 },
                 constraints: table =>
                 {
-                    _ = table.PrimaryKey("PK_Subtask", x => x.SubtaskId);
-                    _ = table.ForeignKey(
+                    table.PrimaryKey("PK_Subtask", x => x.SubtaskId);
+                    table.ForeignKey(
                         name: "FK_Subtask_Issue_IssueId",
                         column: x => x.IssueId,
                         principalTable: "Issue",
@@ -318,88 +318,88 @@ namespace Task_management_system.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_ApplicationUserProjects_ProjectId",
                 table: "ApplicationUserProjects",
                 column: "ProjectId");
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true,
                 filter: "[NormalizedName] IS NOT NULL");
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
                 table: "AspNetUserClaims",
                 column: "UserId");
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
                 table: "AspNetUserLogins",
                 column: "UserId");
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_Issue_AssignedТoId",
                 table: "Issue",
                 column: "AssignedТoId");
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_Issue_AssigneeId",
                 table: "Issue",
                 column: "AssigneeId");
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_Issue_ProjectId",
                 table: "Issue",
                 column: "ProjectId");
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_KeyType_KeyTypeIntCode",
                 table: "KeyType",
                 column: "KeyTypeIntCode",
                 unique: true);
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_KeyValue_IdKeyType",
                 table: "KeyValue",
                 column: "IdKeyType");
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_KeyValue_KeyValueIntCode",
                 table: "KeyValue",
                 column: "KeyValueIntCode",
                 unique: true);
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_Project_ProjectOwnerId",
                 table: "Project",
                 column: "ProjectOwnerId");
 
-            _ = migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_Subtask_IssueId",
                 table: "Subtask",
                 column: "IssueId");
@@ -407,43 +407,43 @@ namespace Task_management_system.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            _ = migrationBuilder.DropTable(
+            migrationBuilder.DropTable(
                 name: "ApplicationUserProjects");
 
-            _ = migrationBuilder.DropTable(
+            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
-            _ = migrationBuilder.DropTable(
+            migrationBuilder.DropTable(
                 name: "AspNetUserClaims");
 
-            _ = migrationBuilder.DropTable(
+            migrationBuilder.DropTable(
                 name: "AspNetUserLogins");
 
-            _ = migrationBuilder.DropTable(
+            migrationBuilder.DropTable(
                 name: "AspNetUserRoles");
 
-            _ = migrationBuilder.DropTable(
+            migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
 
-            _ = migrationBuilder.DropTable(
+            migrationBuilder.DropTable(
                 name: "KeyValue");
 
-            _ = migrationBuilder.DropTable(
+            migrationBuilder.DropTable(
                 name: "Subtask");
 
-            _ = migrationBuilder.DropTable(
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
-            _ = migrationBuilder.DropTable(
+            migrationBuilder.DropTable(
                 name: "KeyType");
 
-            _ = migrationBuilder.DropTable(
+            migrationBuilder.DropTable(
                 name: "Issue");
 
-            _ = migrationBuilder.DropTable(
+            migrationBuilder.DropTable(
                 name: "Project");
 
-            _ = migrationBuilder.DropTable(
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
         }
     }

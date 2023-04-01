@@ -182,7 +182,7 @@
                 </div>
                 break;
             case 2:
-                <SfKanban @ref="sfKanban" KeyField="Status" DataSource="issues">
+                <SfKanban @ref="sfKanban" KeyField="Status" DataSource="personalIssues">
                     <KanbanColumns>
                         @foreach (Syncfusion.Blazor.Kanban.ColumnModel item in columnData)
                         {
@@ -220,7 +220,7 @@
                                                 @{
                                                     var hasItems = false;
                                                 }
-                                                @foreach (var issue in issues)
+                                                @foreach (var issue in personalIssues)
                                                 {
                                                     @if (issue.Priority == priorityType.Name)
                                                     {

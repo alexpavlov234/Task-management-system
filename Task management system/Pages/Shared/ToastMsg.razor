@@ -1,0 +1,17 @@
+﻿@using Syncfusion.Blazor.Notifications
+<SfToast @ref="sfSuccessToast" CssClass="e-toast-success" ShowProgressBar="true" Timeout="5000" ShowCloseButton="true">
+    <ToastPosition X="Right"></ToastPosition>
+</SfToast>
+<SfToast @ref="sfErrorToast" CssClass="e-toast-danger" ShowProgressBar="true" Timeout="5000" ShowCloseButton="true">
+    <ToastPosition X="Right"></ToastPosition>
+</SfToast>
+<style>
+    .e-toast-progress {
+        background-color: white !important;
+        opacity: 0.5;
+    }
+</style>
+@code {
+    public SfToast sfSuccessToast = new SfToast();
+    public SfToast sfErrorToast = new SfToast();
+}

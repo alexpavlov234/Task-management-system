@@ -88,11 +88,14 @@
                                                                             <i class="fa-solid fa-pen-to-square"></i>
                                                                         </button>
                                                                     </SfTooltip>
-                                                                    <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                                                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
-                                                                            <i class="fa-solid fa-trash"></i>
-                                                                        </button>
-                                                                    </SfTooltip>
+                                                                    @if (project.ProjectOwner.Id == loggedUser.Id)
+                                                                    {
+                                                                        <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                                                            <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
+                                                                                <i class="fa-solid fa-trash"></i>
+                                                                            </button>
+                                                                        </SfTooltip>
+                                                                    }
                                                                 }
                                                                 else
                                                                 {
@@ -156,7 +159,7 @@
                                                 {
                                                     hasItems = true;
                                                     <li class="list-group-item rounded d-flex justify-content-between align-items-center" style="border-top-width: 1px; margin-top: 2px; margin-bottom: 2px">
-                                                        <div style="width:  450px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                                        <div style="max-width:  450px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                                                             @project.ProjectName
                                                         </div>
                                                         <div>
@@ -168,11 +171,14 @@
                                                                             <i class="fa-solid fa-pen-to-square"></i>
                                                                         </button>
                                                                     </SfTooltip>
-                                                                    <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
-                                                                        <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
-                                                                            <i class="fa-solid fa-trash"></i>
-                                                                        </button>
-                                                                    </SfTooltip>
+                                                                    @if (project.ProjectOwner.Id == loggedUser.Id)
+                                                                    {
+                                                                        <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
+                                                                            <button type="button" class="btn btn-outline-danger waves-effect md-trigger m-1" @onclick="(() => DeleteProject(project))">
+                                                                                <i class="fa-solid fa-trash"></i>
+                                                                            </button>
+                                                                        </SfTooltip>
+                                                                    }
                                                                 }
                                                                 else
                                                                 {

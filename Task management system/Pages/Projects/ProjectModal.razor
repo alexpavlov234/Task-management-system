@@ -5,6 +5,7 @@
 @using Task_management_system.Areas.Identity
 @using Task_management_system.Models
 @using Task_management_system.Services.Common
+@using Task_management_system.Pages.Shared
 @using Syncfusion.Blazor.Popups
 @using Task_management_system.Interfaces
 <SfDialog Width="60%" Height="600px" IsModal="true" ShowCloseIcon="true" EnableResize="true" AllowDragging="true" @bind-Visible="@IsVisible">
@@ -39,7 +40,7 @@
                         </div>
                         <div class="col-md-4">
                             <label for="type">Тип проект</label>
-                            <SfDropDownList Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" ID="type" TValue="string" TItem="KeyValue" @bind-Value="project.ProjectType" PopupHeight="150px" PopupWidth="350px" Placeholder="Изберете тип" DataSource="@projectTypes">
+                            <SfDropDownList Enabled="project.ProjectOwner == null || (project.ProjectOwner.Id == loggedUser.Id)" ID="type" TValue="string" TItem="KeyValue" @bind-Value="project.ProjectType" PopupHeight="150px" PopupWidth="350px" Placeholder="Изберете тип" DataSource="@projectTypes">
                                 <DropDownListFieldSettings Value="Name" Text="Name"></DropDownListFieldSettings>
                             </SfDropDownList>
                         </div>
@@ -50,10 +51,11 @@
                             <SfTextBox Enabled="project.ProjectOwner == null || (isLoggedUserAdmin || project.ProjectOwner.Id == loggedUser.Id)" id="description" Multiline="true" Placeholder="Въведете описание" @bind-Value="@project.ProjectDescription"></SfTextBox>
                         </div>
                     </div>
+
                     <div class="row my-1">
                         <div class="col-md-12">
                             <label for="owner">Собственик на проекта</label>
-                            <SfDropDownList ID="owner" TValue="ApplicationUser" Enabled="project.ProjectOwner != null ? isLoggedUserAdmin : true " TItem="ApplicationUser" @bind-Value="project.ProjectOwner" PopupHeight="150px" PopupWidth="350px" Placeholder="Изберете собственик" DataSource="@users">
+                            <SfDropDownList ID="owner" TValue="ApplicationUser" Enabled="project.ProjectOwner != null ? project.ProjectOwner.Id == loggedUser.Id : true " TItem="ApplicationUser" @bind-Value="project.ProjectOwner" PopupHeight="150px" PopupWidth="350px" Placeholder="Изберете собственик" DataSource="@users">
                                 <DropDownListFieldSettings Value="UserName" Text="Identifier"></DropDownListFieldSettings>
                             </SfDropDownList>
                         </div>

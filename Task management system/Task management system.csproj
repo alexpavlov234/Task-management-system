@@ -79,7 +79,7 @@
     <None Include="Pages\_Host.cshtml" />
     <None Include="Pages\_Layout.cshtml" />
     <None Include="Pages\_ViewImports.cshtml" />
-    <None Include="Services\Common\ToastMsg.razor" />
+    <None Include="Pages\Shared\ToastMsg.razor" />
     <None Include="Shared\AdminNavMenu.razor" />
     <None Include="Shared\LoginDisplay.razor" />
     <None Include="Shared\MainLayout.razor" />

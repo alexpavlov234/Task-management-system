@@ -5,7 +5,7 @@ using Task_management_system.Interfaces;
 using Task_management_system.Models;
 using Task_management_system.Pages.Issues;
 using Task_management_system.Pages.Projects;
-using Task_management_system.Services.Common;
+using Task_management_system.Pages.Shared;
 namespace Task_management_system.Pages
 {
     public partial class Search
@@ -74,7 +74,7 @@ namespace Task_management_system.Pages
                 projects = ProjectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
                                                                       || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
                 issues = IssueService.GetAllIssues()
-         .Where(i => projects.Any(p => p.ProjectId == i.ProjectId) && (i.AssignedТo.Id == loggedUser.Id || i.Assignee.Id == loggedUser.Id))
+         .Where(i => projects.Any(p => p.ProjectId == i.ProjectId))
          .ToList();
             }
         }
@@ -102,8 +102,7 @@ namespace Task_management_system.Pages
                 toast.sfErrorToast.Title = result;
                 _ = toast.sfErrorToast.ShowAsync();
             }
-            projects = ProjectService.GetAllProjects();
-            StateHasChanged();
+            UpdateData();
         }
         private void EditIssue(Issue issue)
         {
@@ -122,16 +121,7 @@ namespace Task_management_system.Pages
                 toast.sfErrorToast.Title = result;
                 _ = toast.sfErrorToast.ShowAsync();
             }
-            if (isLoggedUserAdmin)
-            {
-                projects = ProjectService.GetAllProjects();
-            }
-            else
-            {
-                projects = ProjectService.GetAllProjects().Where(p => p.ProjectOwner.Id == loggedUser.Id
-                                                                      || p.ProjectParticipants.Any(ap => ap.UserId == loggedUser.Id)).ToList();
-            }
-            StateHasChanged();
+            UpdateData();
         }
         private void EditProject(Project project)
         {

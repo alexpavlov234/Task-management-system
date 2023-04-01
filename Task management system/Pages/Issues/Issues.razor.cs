@@ -6,7 +6,7 @@ using Syncfusion.XlsIO;
 using Task_management_system.Areas.Identity;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
-using Task_management_system.Services.Common;
+using Task_management_system.Pages.Shared;
 namespace Task_management_system.Pages.Issues
 {
     public partial class Issues
@@ -29,6 +29,7 @@ namespace Task_management_system.Pages.Issues
         private IJSRuntime JSRuntime { get; set; }
         private List<Project> projects { get; set; }
         private List<Issue> issues { get; set; }
+        private List<Issue> personalIssues { get; set; }
         private List<KeyValue> priorityTypes { get; set; }
         private SfKanban<Issue> sfKanban { get; set; }
         private IssueModal taskModal = new IssueModal();
@@ -60,7 +61,11 @@ namespace Task_management_system.Pages.Issues
                 issues = IssueService.GetAllIssues()
           .Where(i => projects.Any(p => p.ProjectId == i.ProjectId) && (i.AssignedТo.Id == loggedUser.Id || i.Assignee.Id == loggedUser.Id))
           .ToList();
+
             }
+            personalIssues = IssueService.GetAllIssues()
+          .Where(i => projects.Any(p => p.ProjectId == i.ProjectId) && (i.AssignedТo.Id == loggedUser.Id))
+          .ToList();
         }
         private void ChangeTab(int index)
         {
