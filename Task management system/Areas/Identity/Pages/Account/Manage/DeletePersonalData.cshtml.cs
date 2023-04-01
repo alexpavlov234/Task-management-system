@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace Task_management_system.Areas.Identity.Pages.Account.Manage
@@ -83,7 +84,7 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
                     return Page();
                 }
             }
-
+            try { 
             IdentityResult result = await _userManager.DeleteAsync(user);
             string userId = await _userManager.GetUserIdAsync(user);
             if (!result.Succeeded)
@@ -96,6 +97,12 @@ namespace Task_management_system.Areas.Identity.Pages.Account.Manage
             _logger.LogInformation("Потребителя с ID '{UserId}' вече е изтрит.", userId);
 
             return Redirect("~/");
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError(string.Empty, "Неуспешно изтриване, понеже потребителят е свързан с проект/задача!");
+                return Page();
+            }
         }
     }
 }

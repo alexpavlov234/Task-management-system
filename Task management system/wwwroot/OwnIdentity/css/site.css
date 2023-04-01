@@ -88,6 +88,9 @@ nav.navbar.navbar-expand-sm.navbar-toggleable-sm.navbar-light.bg-white.border-bo
     background-image: linear-gradient(90deg, rgb(5, 39, 103) 0%, #3a0647 70%) !important;
 }
 
+.alert ul {
+    margin: 0;
+}
 button.navbar-toggler {
     color: white;
     background: white
