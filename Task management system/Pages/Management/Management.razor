@@ -47,7 +47,7 @@
                             }
                         </Template>
                     </GridColumn>
-                    <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" Width="120px">
+                    <GridColumn Field=@nameof(ApplicationUser.FirstName) HeaderText="Име" HideAtMedia="(min-width: 1120px)" Width="120px">
                         <Template>
                             @{
                                 var user = (context as ApplicationUser);
@@ -62,7 +62,7 @@
                             }
                         </Template>
                     </GridColumn>
-                    <GridColumn Field=@nameof(ApplicationUser.LastName) HeaderText="Фамилия" Width="120px">
+                    <GridColumn Field=@nameof(ApplicationUser.LastName) HeaderText="Фамилия" HideAtMedia="(min-width: 1120px)" Width="120px">
                         <Template>
                             @{
                                 var user = (context as ApplicationUser);
@@ -92,7 +92,7 @@
                             }
                         </Template>
                     </GridColumn>
-                    <GridColumn Field=@nameof(ApplicationUser.PhoneNumber) HeaderText="Телефон" Width="150px">
+                    <GridColumn Field=@nameof(ApplicationUser.PhoneNumber) HeaderText="Телефон"  HideAtMedia="(min-width: 1300px)" Width="150px">
                         <Template>
                             @{
                                 var user = (context as ApplicationUser);
@@ -107,7 +107,7 @@
                             }
                         </Template>
                     </GridColumn>
-                    <GridColumn HeaderText="Роля" Width="180px">
+                    <GridColumn HeaderText="Роля" HideAtMedia="(min-width: 900px)" Width="180px">
                         <Template>
                             @{
                                 var user = (context as ApplicationUser);
@@ -119,7 +119,7 @@
                             }
                         </Template>
                     </GridColumn>
-                    <GridColumn Width="100px">
+                    <GridColumn Width="60px">
                         <Template>
                             <SfTooltip Position="Position.BottomCenter" Content="Редактиране" OpensOn="Hover">
                                 <button type="button" class="btn btn-outline-warning waves-effect md-trigger" @onclick="(() => EditUser(context as ApplicationUser))">
@@ -128,7 +128,7 @@
                             </SfTooltip>
                         </Template>
                     </GridColumn>
-                    <GridColumn Width="100px">
+                    <GridColumn Width="6s0px">
                         <Template>
                             <SfTooltip Position="Position.BottomCenter" Content="Изтриване" OpensOn="Hover">
                                 <button type="button" class="btn btn-outline-danger waves-effect md-trigger" @onclick="(() => DeleteUser(context as ApplicationUser))">

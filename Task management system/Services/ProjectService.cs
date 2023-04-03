@@ -129,7 +129,6 @@ public class ProjectService : Controller, IProjectService
             Project? local = _context.Set<Project>().Local.FirstOrDefault(entry => entry.ProjectId.Equals(project.ProjectId));
             if (local != null)
             {
-                // detach
                 _context.Entry(local).State = EntityState.Detached;
             }
             _context.Entry(project).State = EntityState.Modified;
@@ -145,7 +144,6 @@ public class ProjectService : Controller, IProjectService
                 ApplicationUserProject? localApplicationUserProject = _context.Set<ApplicationUserProject>().Local.FirstOrDefault(entry => entry.ProjectId.Equals(applicationUserProject.Project.ProjectId) && entry.UserId.Equals(applicationUserProject.User.Id));
                 if (localApplicationUserProject != null)
                 {
-                    // detach
                     _context.Entry(applicationUserProject).State = EntityState.Detached;
                 }
                 _context.Entry(applicationUserProject).State = EntityState.Added;
