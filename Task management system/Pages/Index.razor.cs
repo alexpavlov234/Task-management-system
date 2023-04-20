@@ -4,6 +4,8 @@ using Syncfusion.Blazor.Schedule;
 using Task_management_system.Interfaces;
 using Task_management_system.Models;
 using Task_management_system.Pages.Issues;
+using Task_management_system.Services;
+
 namespace Task_management_system.Pages
 {
     public partial class Index
@@ -18,7 +20,7 @@ namespace Task_management_system.Pages
         private IUserService userService { get; set; }
         string userFullName = "";
         string image = "";
-        readonly string result = "";
+        string result = "";
         readonly string theTime;
         readonly string theDate;
         private List<Issue> issues { get; set; }
@@ -42,29 +44,29 @@ namespace Task_management_system.Pages
                 Areas.Identity.ApplicationUser user = userService.GetLoggedUser();
                 userFullName = user.FirstName + " " + user.LastName;
             }
-            //try
-            //{
-            //    CurrentConditions currentConditions = new CurrentConditions("bXyjKZghQjnIwBB2WKEHdNsVyZdaJECK", "bg-bg");
-            //    result = await currentConditions.Get(51097, false);
-            //    response = currentConditions.ConvertData(result);
-            //}
-            //catch
-            //{
-            response = new CurrentCondition
+            try
             {
-                Temperature = new Temperature
+                CurrentConditions currentConditions = new CurrentConditions("bXyjKZghQjnIwBB2WKEHdNsVyZdaJECK", "bg-bg");
+                result = await currentConditions.Get(51097, false);
+                response = currentConditions.ConvertData(result);
+            }
+            catch
+            {
+                response = new CurrentCondition
                 {
-                    Metric = new Metric
+                    Temperature = new Temperature
                     {
-                        Value = 12,
-                        Unit = "C"
-                    }
-                },
-                WeatherText = "Гръмотевични бури",
-                WeatherIcon = 17,
-                Link = "https://www.accuweather.com/bg/bg/sofia/51097/weather-forecast/51097"
-            };
-            //}
+                        Metric = new Metric
+                        {
+                            Value = 12,
+                            Unit = "C"
+                        }
+                    },
+                    WeatherText = "Гръмотевични бури",
+                    WeatherIcon = 17,
+                    Link = "https://www.accuweather.com/bg/bg/sofia/51097/weather-forecast/51097"
+                };
+            }
             image = "img/icons/" + response.WeatherIcon + ".svg";
         }
         public async void GetWeather()
