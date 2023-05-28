@@ -44,14 +44,14 @@ namespace Task_management_system.Pages
                 Areas.Identity.ApplicationUser user = userService.GetLoggedUser();
                 userFullName = user.FirstName + " " + user.LastName;
             }
-            try
-            {
-                CurrentConditions currentConditions = new CurrentConditions("bXyjKZghQjnIwBB2WKEHdNsVyZdaJECK", "bg-bg");
-                result = await currentConditions.Get(51097, false);
-                response = currentConditions.ConvertData(result);
-            }
-            catch
-            {
+            //try
+            //{
+            //    CurrentConditions currentConditions = new CurrentConditions("bXyjKZghQjnIwBB2WKEHdNsVyZdaJECK", "bg-bg");
+            //    result = await currentConditions.Get(51097, false);
+            //    response = currentConditions.ConvertData(result);
+            //}
+            //catch
+            //{
                 response = new CurrentCondition
                 {
                     Temperature = new Temperature
@@ -66,7 +66,7 @@ namespace Task_management_system.Pages
                     WeatherIcon = 17,
                     Link = "https://www.accuweather.com/bg/bg/sofia/51097/weather-forecast/51097"
                 };
-            }
+            //}
             image = "img/icons/" + response.WeatherIcon + ".svg";
         }
         public async void GetWeather()

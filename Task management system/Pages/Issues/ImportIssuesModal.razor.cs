@@ -30,6 +30,8 @@ namespace Task_management_system.Pages.Issues
         private readonly string statusLineColor = "";
         private readonly SfDropDownList<string, KeyValue> statusDropDownList = new SfDropDownList<string, KeyValue>();
         private readonly SfDropDownList<string, KeyValue> priorityDropDownList = new SfDropDownList<string, KeyValue>();
+        List<KeyType> keyTypes;
+        KeyValue[] keyValues;
         private List<KeyValue> statuses = new List<KeyValue>();
         private List<KeyValue> priorities = new List<KeyValue>();
         private readonly SfGrid<Issue> sfGrid = new SfGrid<Issue>();
@@ -54,6 +56,26 @@ namespace Task_management_system.Pages.Issues
             priorities = KeyValueService.GetAllKeyValuesByKeyType("IssuePriority");
             users = ProjectService.GetProjectById(this.project.ProjectId).ProjectParticipants.ToList().Select(x => x.User).ToList();
             editContext = new EditContext(issue);
+            keyTypes = new List<KeyType>()
+            {
+                new KeyType { KeyTypeName = "Тип на проект", KeyTypeIntCode = "ProjectType", Description = "Тип на проекта", IsSystem = true },
+                new KeyType { KeyTypeName = "Статус на задача", KeyTypeIntCode = "IssueStatus", Description = "Статус на задача", IsSystem = true },
+                new KeyType { KeyTypeName = "Приоритет на задача", KeyTypeIntCode = "IssuePriority", Description = "Приоритет на задача", IsSystem = true }
+            };
+            keyValues = new KeyValue[]
+            {
+                new KeyValue { KeyType = keyTypes[1], Name = "Нова", NameEN = "New", IsActive = true, KeyValueIntCode = "New", Description = "Нова" },
+                new KeyValue { KeyType = keyTypes[1], Name = "В изпълнение", NameEN = "In execution", IsActive = true, KeyValueIntCode = "InExecution", Description = "В изпълнение" },
+                new KeyValue { KeyType = keyTypes[1], Name = "За преглед", NameEN = "For review", IsActive = true, KeyValueIntCode = "ForReview", Description = "За преглед" },
+                new KeyValue { KeyType = keyTypes[1], Name = "Затворена", NameEN = "Closed", IsActive = true, KeyValueIntCode = "Closed", Description = "Затворена" },
+                new KeyValue { KeyType = keyTypes[1], Name = "Върната за корекция", NameEN = "Returned for correction", IsActive = true, KeyValueIntCode = "ReturnedForCorrection", Description = "Върната за корекция" },
+                new KeyValue { KeyType = keyTypes[0], Name = "Работен", NameEN = "Working", IsActive = true, KeyValueIntCode = "Working", Description = "Проект свързан с работа" },
+                new KeyValue { KeyType = keyTypes[0], Name = "Учебен", NameEN = "Educational", IsActive = true, KeyValueIntCode = "Educational", Description = "Проект свързан с учебен процес/училище" },
+                new KeyValue { KeyType = keyTypes[0], Name = "Личен", NameEN = "Personal", IsActive = true, KeyValueIntCode = "Personal", Description = "Проект свързан с личния живот" },
+                new KeyValue { KeyType = keyTypes[2], Name = "Висок", NameEN = "High", IsActive = true, KeyValueIntCode = "High", Description = "Висок приоритет" },
+                new KeyValue { KeyType = keyTypes[2], Name = "Нисък", NameEN = "Low", IsActive = true, KeyValueIntCode = "Low", Description = "Нисък приоритет" },
+                new KeyValue { KeyType = keyTypes[2], Name = "Нормален", NameEN = "Normal", IsActive = true, KeyValueIntCode = "Normal", Description = "Нормален приоритет" }
+            };
             _isVisible = true;
             StateHasChanged();
         }
@@ -76,57 +98,85 @@ namespace Task_management_system.Pages.Issues
                 // Get the data range
                 IRange dataRange = worksheet.UsedRange;
                 // Loop through the rows and map the data to Issue objects
-                for (int i = 2; i <= dataRange.Rows.Count() + 1; i++)
+                for (int i = 2; i <= dataRange.Rows.Count(); i++)
                 {
-                    string subject = dataRange[i, 1].Value.Trim();
-                    string description = dataRange[i, 2].Value.Trim();
-                    string assignedTo = dataRange[i, 3].Value.Trim();
-                    string status = dataRange[i, 4].Value.Trim();
-                    DateTime startTime = dataRange[i, 5].DateTime;
-                    DateTime endTime = dataRange[i, 6].DateTime;
-                    string priority = dataRange[i, 7].Value.Trim();
-                    if (string.IsNullOrEmpty(subject) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(assignedTo) || string.IsNullOrEmpty(status) || string.IsNullOrEmpty(priority))
+                    try
                     {
-                        message = "Съществуват задачи/задача с празни данни! Невалидните данни са премахнати!";
-                        hasErrors = true;
-                        continue;
-                    }
-                    else
-                    {
-                        bool isUserValid = false;
-                        foreach (ApplicationUserProject participant in project.ProjectParticipants)
+                        string subject = dataRange[i, 1].Value.Trim();
+                        string description = dataRange[i, 2].Value.Trim();
+                        string assignedTo = dataRange[i, 3].Value.Trim();
+                        string status = dataRange[i, 4].Value.Trim();
+                        DateTime startTime = dataRange[i, 5].DateTime;
+                        DateTime endTime = dataRange[i, 6].DateTime;
+                        string priority = dataRange[i, 7].Value.Trim();
+                        if (string.IsNullOrEmpty(subject) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(assignedTo) || string.IsNullOrEmpty(status) || string.IsNullOrEmpty(priority) || dataRange[i, 5].DateTime == DateTime.MinValue || dataRange[i, 6].DateTime == DateTime.MinValue)
                         {
-                            if (participant.User.UserName == assignedTo)
-                            {
-                                isUserValid = true;
-                            }
-                        }
-                        if (!isUserValid)
-                        {
-                            message = "Съществуват задачи/задача с невалидни потребители! Невалидните данни са премахнати!";
+                            message = "Съществуват задачи/задача с празни данни! Невалидните данни са премахнати!";
                             hasErrors = true;
                             continue;
                         }
+                        else
+                        {
+                            bool isUserValid = false;
+                            foreach (ApplicationUserProject participant in project.ProjectParticipants)
+                            {
+                                if (participant.User.UserName == assignedTo)
+                                {
+                                    isUserValid = true;
+                                }
+                            }
+                            bool isStatusValid = false;
+                            bool isPriorityValid = false;
+                            for (int j = 0; j < keyValues.Length; j++)
+                            {
+                                if (keyValues[j].Name == status)
+                                {
+                                    isStatusValid = true;
+                                }
+                                if (keyValues[j].Name == priority)
+                                {
+                                    isPriorityValid = true;
+                                }
+                            }
+                            if (!isUserValid)
+                            {
+                                message = "Съществуват задачи/задача с невалидни потребители! Невалидните данни са премахнати!";
+                                hasErrors = true;
+                                continue;
+                            }
+                            else if (!isStatusValid || !isPriorityValid)
+                            {
+                                message = "Невалидните данни са премахнати!";
+                                hasErrors = true;
+                                continue;
+                            }
+                        }
+                        Issue issue = new Issue
+                        {
+                            Subject = subject,
+                            Description = description,
+                            AssignedТo = new ApplicationUser { UserName = assignedTo },
+                            Status = status,
+                            StartTime = startTime,
+                            EndTime = endTime,
+                            Priority = priority
+                        };
+                        issue.AssignedТoId = (await UserService.GetApplicationUserByUsernameAsync(issue.AssignedТo.UserName)) != null ? (await UserService.GetApplicationUserByUsernameAsync(issue.AssignedТo.UserName)).Id : null;
+                        issue.AssignedТo = await UserService.GetApplicationUserByIdAsync(issue.AssignedТoId);
+                        issue.Assignee = UserService.GetLoggedUser();
+                        issue.ProjectId = project.ProjectId;
+                        issue.Location = "";
+                        issue.RecurrenceException = "";
+                        issue.RecurrenceRule = "";
+                        issue.Subtasks = new List<Subtask>();
+                        issues.Add(issue);
                     }
-                    Issue issue = new Issue
+                    catch
                     {
-                        Subject = subject,
-                        Description = description,
-                        AssignedТo = new ApplicationUser { UserName = assignedTo },
-                        Status = status,
-                        StartTime = startTime,
-                        EndTime = endTime,
-                        Priority = priority
-                    };
-                    issue.AssignedТoId = (await UserService.GetApplicationUserByUsernameAsync(issue.AssignedТo.UserName)) != null ? (await UserService.GetApplicationUserByUsernameAsync(issue.AssignedТo.UserName)).Id : null;
-                    issue.AssignedТo = await UserService.GetApplicationUserByIdAsync(issue.AssignedТoId);
-                    issue.Assignee = UserService.GetLoggedUser();
-                    issue.ProjectId = project.ProjectId;
-                    issue.Location = "";
-                    issue.RecurrenceException = "";
-                    issue.RecurrenceRule = "";
-                    issue.Subtasks = new List<Subtask>();
-                    issues.Add(issue);
+                        message = "Невалидните данни са премахнати!";
+                        hasErrors = true;
+                        continue;
+                    }
                 }
                 workbook.Close();
             }
