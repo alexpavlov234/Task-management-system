@@ -33,6 +33,7 @@ public class UserService : Controller, IUserService
         _context.DetachAllEntities();
         _ = applicationUser.FirstName.Trim();
         _ = applicationUser.LastName.Trim();
+        _ = applicationUser.EmailConfirmed = true;
         // Използване на метода CreateAsync от UserManager за създаване на нов потребител
         IdentityResult result = await _userManager.CreateAsync(applicationUser, Password);
         // Отделяне на потребителя от локалния контекст
